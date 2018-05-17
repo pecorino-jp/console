@@ -57,9 +57,9 @@
                             <tbody>
                                 <% actions.forEach(function(action){ %>
                                     <tr>
-                                        <th scope="row">
+                                        <td>
                                             <%= (action.fromLocation.accountNumber === accountNumber) ? '出' : '入' %>
-                                        </th>
+                                        </td>
                                         <td>
                                             <%= action.typeOf %>
                                                 <br>

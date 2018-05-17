@@ -7,6 +7,7 @@ import * as express from 'express';
 import accountsRouter from './accounts';
 import authRouter from './auth';
 import homeRouter from './home';
+import transactionsRouter from './transactions';
 
 const router = express.Router();
 
@@ -19,5 +20,6 @@ const router = express.Router();
 router.use(authRouter);
 router.use(homeRouter);
 router.use('/accounts', accountsRouter);
+router.use('/transactions', transactionsRouter);
 
 export default router;

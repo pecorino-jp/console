@@ -38,7 +38,7 @@
                     <form role="form" method="get">
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="accountNumbers[]">口座番号</label>
+                                <label for="accountNumber">口座番号</label>
                                 <input type="text" class="form-control" id="accountNumber" name="accountNumber" placeholder="口座番号" value="<%= query.accountNumber %>">
                             </div>
                             <div class="form-group">
@@ -92,9 +92,9 @@
                             <tbody>
                                 <% accounts.forEach(function(account){ %>
                                     <tr>
-                                        <th scope="row">
+                                        <td>
                                             <%= account.accountNumber %>
-                                        </th>
+                                        </td>
                                         <td>
                                             <%= account.name %>
                                         </td>
