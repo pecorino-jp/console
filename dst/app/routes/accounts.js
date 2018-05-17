@@ -13,7 +13,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @ignore
  */
 const pecorinoapi = require("@motionpicture/pecorino-api-nodejs-client");
+const createDebug = require("debug");
 const express = require("express");
+const debug = createDebug('pecorino-console:routes:account');
 const accountsRouter = express.Router();
 const authClient = new pecorinoapi.auth.ClientCredentials({
     domain: process.env.PECORINO_API_AUTHORIZE_SERVER_DOMAIN,
@@ -31,8 +33,19 @@ const accountService = new pecorinoapi.service.Account({
  */
 accountsRouter.get('/', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
-        const accounts = yield accountService.search(req.query);
-        res.render('accounts/index', { accounts: accounts });
+        debug('searching accounts...', req.query);
+        const accounts = yield accountService.search({
+            accountNumbers: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0) ?
+                [req.query.accountNumber] :
+                [],
+            statuses: [],
+            name: req.query.name,
+            limit: 100
+        });
+        res.render('accounts/index', {
+            query: req.query,
+            accounts: accounts
+        });
     }
     catch (error) {
         next(error);

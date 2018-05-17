@@ -1,89 +1,141 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous">
-
-    <title>Pecorino Console</title>
-</head>
-
-<body>
-    <h1>
-        <%= accountNumber %>の転送アクション検索</h1>
-
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">出入</th>
-                    <th scope="col">アクションタイプ</th>
-                    <th scope="col">完了日時</th>
-                    <th scope="col">ステータス</th>
-                    <th scope="col">取引</th>
-                    <th scope="col">from</th>
-                    <th scope="col">to</th>
-                    <th scope="col">金額</th>
-                    <th scope="col">説明</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% actions.forEach(function(action){ %>
-                    <tr>
-                        <th scope="row">
-                            <%= (action.fromLocation.accountNumber === accountNumber) ? '出' : '入' %>
-                        </th>
-                        <td>
-                            <%= action.typeOf %>
-                                <br>
-                                <%= action.id %>
-                        </td>
-                        <td>
-                            <%= action.endDate %>
-                        </td>
-                        <td>
-                            <%= action.actionStatus %>
-                        </td>
-                        <td>
-                            <%= action.purpose.typeOf %>
-                                <br>
-                                <%= action.purpose.id %>
-                        </td>
-                        <td>
-                            <%= action.fromLocation.name %>
-                                <br>
-                                <%= action.fromLocation.accountNumber %>
-                        </td>
-                        <td>
-                            <%= action.toLocation.name %>
-                                <br>
-                                <%= action.toLocation.accountNumber %>
-                        </td>
-                        <td>
-                            <%= action.amount %>
-                        </td>
-                        <td>
-                            <%= action.description %>
-                        </td>
-                    </tr>
-                    <% }) %>
-            </tbody>
-        </table>
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">
+                    口座番号[
+                    <%= accountNumber %>]の転送アクション検索</h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a href="/">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/accounts?accountNumber=<%= accountNumber %>">口座番号[
+                            <%= accountNumber %>]</a>
+                    </li>
+                    <li class="breadcrumb-item active">転送アクション検索</li>
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
     </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
-</body>
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">口座検索結果</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive">
+                        <table id="actions-table" class="table table-bordered table-hover dataTable">
+                            <thead>
+                                <tr>
+                                    <th>出入</th>
+                                    <th>アクションタイプ</th>
+                                    <th>完了日時</th>
+                                    <th>ステータス</th>
+                                    <th>取引</th>
+                                    <th>from</th>
+                                    <th>to</th>
+                                    <th>金額</th>
+                                    <th>説明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% actions.forEach(function(action){ %>
+                                    <tr>
+                                        <th scope="row">
+                                            <%= (action.fromLocation.accountNumber === accountNumber) ? '出' : '入' %>
+                                        </th>
+                                        <td>
+                                            <%= action.typeOf %>
+                                                <br>
+                                                <%= action.id %>
+                                        </td>
+                                        <td>
+                                            <%= action.endDate %>
+                                        </td>
+                                        <td>
+                                            <%= action.actionStatus %>
+                                        </td>
+                                        <td>
+                                            <%= action.purpose.typeOf %>
+                                                <br>
+                                                <%= action.purpose.id %>
+                                        </td>
+                                        <td>
+                                            <%= action.fromLocation.name %>
+                                                <br>
+                                                <%= action.fromLocation.accountNumber %>
+                                        </td>
+                                        <td>
+                                            <%= action.toLocation.name %>
+                                                <br>
+                                                <%= action.toLocation.accountNumber %>
+                                        </td>
+                                        <td>
+                                            <%= action.amount %>
+                                        </td>
+                                        <td>
+                                            <%= action.description %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>出入</th>
+                                    <th>アクションタイプ</th>
+                                    <th>完了日時</th>
+                                    <th>ステータス</th>
+                                    <th>取引</th>
+                                    <th>from</th>
+                                    <th>to</th>
+                                    <th>金額</th>
+                                    <th>説明</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
 
-</html>
+<!-- DataTables -->
+<link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables/dataTables.bootstrap4.css">
+
+<!-- page script -->
+<script>
+    $(function () {
+        // $("#actions-table").DataTable();
+        $('#actions-table').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true
+        });
+    });
+</script>

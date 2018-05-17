@@ -3,8 +3,10 @@
  * @ignore
  */
 import * as pecorinoapi from '@motionpicture/pecorino-api-nodejs-client';
+import * as createDebug from 'debug';
 import * as express from 'express';
 
+const debug = createDebug('pecorino-console:routes:account');
 const accountsRouter = express.Router();
 const authClient = new pecorinoapi.auth.ClientCredentials({
     domain: <string>process.env.PECORINO_API_AUTHORIZE_SERVER_DOMAIN,
@@ -25,8 +27,20 @@ accountsRouter.get(
     '/',
     async (req, res, next) => {
         try {
-            const accounts = await accountService.search(req.query);
-            res.render('accounts/index', { accounts: accounts });
+            debug('searching accounts...', req.query);
+            const accounts = await accountService.search({
+                accountNumbers: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0) ?
+                    [req.query.accountNumber] :
+                    [],
+                statuses: [],
+                name: req.query.name,
+                limit: 100
+
+            });
+            res.render('accounts/index', {
+                query: req.query,
+                accounts: accounts
+            });
         } catch (error) {
             next(error);
         }
