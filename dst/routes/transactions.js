@@ -42,9 +42,9 @@ transactionsRouter.get('/', (req, _, next) => __awaiter(this, void 0, void 0, fu
     }
 }));
 /**
- * 入金取引
+ * 入金取引開始
  */
-transactionsRouter.all('/deposit/new', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+transactionsRouter.all('/deposit/start', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         let values = {};
         let message;
@@ -72,19 +72,49 @@ transactionsRouter.all('/deposit/new', (req, res, next) => __awaiter(this, void 
                     toAccountNumber: values.toAccountNumber
                 });
                 debug('取引が開始されました。', transaction.id);
-                // 確定
-                yield depositTransactionService.confirm({
-                    transactionId: transaction.id
-                });
-                debug('取引確定です。');
-                message = '入金取引を実行しました。';
+                // セッションに取引追加
+                req.session[`transaction:${transaction.id}`] = transaction;
+                res.redirect(`/transactions/deposit/${transaction.id}/confirm`);
+                return;
             }
             catch (error) {
                 message = error.message;
             }
         }
-        res.render('transactions/deposit/new', {
+        res.render('transactions/deposit/start', {
             values: values,
+            message: message
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * 入金取引確認
+ */
+transactionsRouter.all('/deposit/:transactionId/confirm', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        let message;
+        const transaction = req.session[`transaction:${req.params.transactionId}`];
+        if (transaction === undefined) {
+            throw new pecorinoapi.factory.errors.NotFound('Transaction in session');
+        }
+        if (req.method === 'POST') {
+            // 確定
+            yield depositTransactionService.confirm({
+                transactionId: transaction.id
+            });
+            debug('取引確定です。');
+            message = '入金取引を実行しました。';
+            // セッション削除
+            delete req.session[`transaction:${req.params.transactionId}`];
+            req.flash('message', '入金取引を実行しました。');
+            res.redirect('/transactions/deposit/start');
+            return;
+        }
+        res.render('transactions/deposit/confirm', {
+            transaction: transaction,
             message: message
         });
     }

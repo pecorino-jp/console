@@ -1,14 +1,12 @@
 /**
- * redis cacheクライアント
- * @module
+ * Redis Cacheクライアント
  */
+import * as redis from 'redis';
 
-import * as redis from 'ioredis';
-
-export default new redis({
+export default redis.createClient({
     host: <string>process.env.REDIS_HOST,
     // tslint:disable-next-line:no-magic-numbers
     port: parseInt(<string>process.env.REDIS_PORT, 10),
     password: <string>process.env.REDIS_KEY,
-    tls: <any>{ servername: <string>process.env.REDIS_HOST }
+    tls: { servername: <string>process.env.REDIS_HOST }
 });
