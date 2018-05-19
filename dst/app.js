@@ -3,6 +3,7 @@
  * Expressアプリケーション
  * @ignore
  */
+const middlewares = require("@motionpicture/express-middleware");
 const bodyParser = require("body-parser");
 // import * as createDebug from 'debug';
 const cookieParser = require("cookie-parser");
@@ -15,6 +16,14 @@ const notFoundHandler_1 = require("./middlewares/notFoundHandler");
 const session_1 = require("./middlewares/session");
 // const debug = createDebug('pecorino-console:*');
 const app = express();
+app.use(middlewares.basicAuth({
+    name: process.env.BASIC_AUTH_NAME,
+    pass: process.env.BASIC_AUTH_PASS
+    // unauthorizedHandler: (__, res, next) => {
+    //     res.setHeader('WWW-Authenticate', 'Basic realm="sskts-api Authentication"');
+    //     next(new Error());
+    // }
+}));
 app.set('trust proxy', 1); // trust first proxy
 app.use(session_1.default);
 app.use(flash());

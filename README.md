@@ -30,6 +30,8 @@
 | `REDIS_KEY`                            | true     |                    | ログイン状態保持ストレージ          |
 | `USER_EXPIRES_IN_SECONDS`              | true     |                    | ユーザーセッション保持期間          |
 | `REFRESH_TOKEN_EXPIRES_IN_SECONDS`     | true     |                    | リフレッシュトークン保管期間         |
+| `BASIC_AUTH_NAME`                      | false    |                    | ベーシック認証                |
+| `BASIC_AUTH_PASS`                      | false    |                    | ベーシック認証                |
 
 ## Jsdoc
 

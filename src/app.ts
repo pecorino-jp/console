@@ -2,6 +2,7 @@
  * Expressアプリケーション
  * @ignore
  */
+import * as middlewares from '@motionpicture/express-middleware';
 import * as bodyParser from 'body-parser';
 // import * as createDebug from 'debug';
 import * as cookieParser from 'cookie-parser';
@@ -17,6 +18,15 @@ import session from './middlewares/session';
 // const debug = createDebug('pecorino-console:*');
 
 const app = express();
+
+app.use(middlewares.basicAuth({ // ベーシック認証
+    name: process.env.BASIC_AUTH_NAME,
+    pass: process.env.BASIC_AUTH_PASS
+    // unauthorizedHandler: (__, res, next) => {
+    //     res.setHeader('WWW-Authenticate', 'Basic realm="sskts-api Authentication"');
+    //     next(new Error());
+    // }
+}));
 
 app.set('trust proxy', 1); // trust first proxy
 app.use(session);
