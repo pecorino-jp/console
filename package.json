@@ -11,7 +11,7 @@
   "config": {},
   "dependencies": {
     "@motionpicture/express-middleware": "^0.1.0",
-    "@motionpicture/pecorino-api-nodejs-client": "0.0.0-alpha.11",
+    "@motionpicture/pecorino-api-nodejs-client": "0.0.0-alpha.12",
     "admin-lte": "^3.0.0-alpha.2",
     "aws-sdk": "^2.240.1",
     "body-parser": "^1.18.3",

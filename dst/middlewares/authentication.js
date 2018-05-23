@@ -1,9 +1,4 @@
 "use strict";
-/**
- * oauthミドルウェア
- * @module middlewares.authentication
- * @see https://aws.amazon.com/blogs/mobile/integrating-amazon-cognito-user-pools-with-api-gateway/
- */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -13,97 +8,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_middleware_1 = require("@motionpicture/express-middleware");
-const http_status_1 = require("http-status");
-// import * as request from 'request-promise-native';
-const url_1 = require("url");
 const user_1 = require("../user");
 exports.default = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
-        // const event: LINE.IWebhookEvent | undefined = (req.body.events !== undefined) ? req.body.events[0] : undefined;
-        // if (event === undefined) {
-        //     throw new Error('Invalid request.');
-        // }
-        // const userId = event.source.userId;
         req.user = new user_1.default({
             host: req.hostname,
-            userId: '',
-            state: JSON.stringify(req.body)
+            session: req.session
         });
-        // ユーザー認証無効化の設定の場合
-        if (process.env.USER_REFRESH_TOKEN !== undefined) {
-            // ログイン状態をセットしてnext
-            req.user.setCredentials({
-                access_token: '',
-                refresh_token: process.env.USER_REFRESH_TOKEN,
-                token_type: 'Bearer'
-            });
-            next();
+        if (!req.user.isAuthenticated()) {
+            // ログインページへリダイレクト
+            res.redirect(req.user.generateAuthUrl());
             return;
         }
-        const credentials = yield req.user.getCredentials();
-        if (credentials === null) {
-            // ログインボタンを送信
-            yield sendLoginButton(req.user);
-            res.status(http_status_1.OK).send('ok');
-            return;
-        }
-        // RedisからBearerトークンを取り出す
-        yield express_middleware_1.cognitoAuth({
-            issuers: [process.env.API_TOKEN_ISSUER],
-            authorizedHandler: () => __awaiter(this, void 0, void 0, function* () {
-                // ログイン状態をセットしてnext
-                req.user.setCredentials(credentials);
-                next();
-            }),
-            unauthorizedHandler: () => __awaiter(this, void 0, void 0, function* () {
-                // ログインボタンを送信
-                yield sendLoginButton(req.user);
-                res.status(http_status_1.OK).send('ok');
-            }),
-            tokenDetecter: () => __awaiter(this, void 0, void 0, function* () { return credentials.access_token; })
-        })(req, res, next);
+        yield req.user.retrieveProfile();
+        res.locals.user = req.user;
+        next();
     }
     catch (error) {
         next(error);
     }
 });
-function sendLoginButton(user) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // tslint:disable-next-line:no-multiline-string
-        const signInUrl = new url_1.URL(user.generateAuthUrl());
-        const actions = [
-            {
-                type: 'uri',
-                label: 'Sign In',
-                uri: signInUrl.href
-            }
-        ];
-        const refreshToken = yield user.getRefreshToken();
-        const faces = yield user.searchFaces();
-        // リフレッシュトークン保管済、かつ、顔画像登録済であればFace Login使用可能
-        if (refreshToken !== null && faces.length > 0) {
-            // actions.push({
-            //     type: 'postback',
-            //     label: 'Face Login',
-            //     data: `action=loginByFace&state=${user.state}`
-            // });
-            actions.push({
-                type: 'uri',
-                label: 'Face Login',
-                uri: 'line://nv/camera/'
-            });
-        }
-        // 会員として未使用であれば会員登録ボタン表示
-        if (refreshToken === null) {
-            // const signUpUrl = new URL(signInUrl.href);
-            // signUpUrl.pathname = 'signup';
-            // actions.push({
-            //     type: 'uri',
-            //     label: '会員登録',
-            //     uri: signUpUrl.href
-            // });
-        }
-    });
-}
-exports.sendLoginButton = sendLoginButton;

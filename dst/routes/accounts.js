@@ -17,22 +17,15 @@ const createDebug = require("debug");
 const express = require("express");
 const debug = createDebug('pecorino-console:routes:account');
 const accountsRouter = express.Router();
-const authClient = new pecorinoapi.auth.ClientCredentials({
-    domain: process.env.PECORINO_API_AUTHORIZE_SERVER_DOMAIN,
-    clientId: process.env.PECORINO_API_CLIENT_ID,
-    clientSecret: process.env.PECORINO_API_CLIENT_SECRET,
-    scopes: [],
-    state: ''
-});
-const accountService = new pecorinoapi.service.Account({
-    endpoint: process.env.PECORINO_API_ENDPOINT,
-    auth: authClient
-});
 /**
  * 口座検索
  */
 accountsRouter.get('/', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
+        const accountService = new pecorinoapi.service.Account({
+            endpoint: process.env.PECORINO_API_ENDPOINT,
+            auth: req.user.authClient
+        });
         debug('searching accounts...', req.query);
         const accounts = yield accountService.search({
             accountNumbers: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0) ?
@@ -56,6 +49,10 @@ accountsRouter.get('/', (req, res, next) => __awaiter(this, void 0, void 0, func
  */
 accountsRouter.get('/:accountNumber/actions/MoneyTransfer', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
+        const accountService = new pecorinoapi.service.Account({
+            endpoint: process.env.PECORINO_API_ENDPOINT,
+            auth: req.user.authClient
+        });
         const actions = yield accountService.searchMoneyTransferActions({ accountNumber: req.params.accountNumber });
         res.render('accounts/actions/moneyTransfer', {
             accountNumber: req.params.accountNumber,

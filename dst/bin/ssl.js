@@ -11,7 +11,7 @@ const debug = createDebug('pecorino-console:server');
 /**
  * Get port from environment and store in Express.
  */
-const port = normalizePort((process.env.PORT === undefined) ? '44301' : process.env.PORT);
+const port = normalizePort((process.env.PORT === undefined) ? '443' : process.env.PORT);
 app.set('port', port);
 /**
  * Create HTTP server.

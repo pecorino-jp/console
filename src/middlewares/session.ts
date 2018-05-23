@@ -6,6 +6,7 @@ import * as session from 'express-session';
 
 import redisClient from '../redis';
 
+const EXPIRES = parseInt(<string>process.env.USER_EXPIRES_IN_SECONDS, 10);
 export default session({
     secret: 'pecorino-console-session-secret',
     resave: false,
@@ -17,6 +18,7 @@ export default session({
     cookie: {
         secure: true,
         httpOnly: true,
-        maxAge: 3600000
+        // tslint:disable-next-line:no-magic-numbers
+        maxAge: EXPIRES * 1000
     }
 });

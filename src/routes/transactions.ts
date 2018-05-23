@@ -9,17 +9,6 @@ import * as moment from 'moment';
 
 const debug = createDebug('pecorino-console:routes:account');
 const transactionsRouter = express.Router();
-const authClient = new pecorinoapi.auth.ClientCredentials({
-    domain: <string>process.env.PECORINO_API_AUTHORIZE_SERVER_DOMAIN,
-    clientId: <string>process.env.PECORINO_API_CLIENT_ID,
-    clientSecret: <string>process.env.PECORINO_API_CLIENT_SECRET,
-    scopes: [],
-    state: ''
-});
-const depositTransactionService = new pecorinoapi.service.transaction.Deposit({
-    endpoint: <string>process.env.PECORINO_API_ENDPOINT,
-    auth: authClient
-});
 
 /**
  * 取引検索
@@ -48,6 +37,10 @@ transactionsRouter.all(
                 values = req.body;
 
                 try {
+                    const depositTransactionService = new pecorinoapi.service.transaction.Deposit({
+                        endpoint: <string>process.env.PECORINO_API_ENDPOINT,
+                        auth: req.user.authClient
+                    });
                     debug('取引が開始します...', values);
                     const transaction = await depositTransactionService.start({
                         // tslint:disable-next-line:no-magic-numbers
@@ -104,6 +97,10 @@ transactionsRouter.all(
 
             if (req.method === 'POST') {
                 // 確定
+                const depositTransactionService = new pecorinoapi.service.transaction.Deposit({
+                    endpoint: <string>process.env.PECORINO_API_ENDPOINT,
+                    auth: req.user.authClient
+                });
                 await depositTransactionService.confirm({
                     transactionId: transaction.id
                 });

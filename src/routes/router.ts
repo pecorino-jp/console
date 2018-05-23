@@ -4,6 +4,8 @@
  */
 import * as express from 'express';
 
+import authentication from '../middlewares/authentication';
+
 import accountsRouter from './accounts';
 import authRouter from './auth';
 import homeRouter from './home';
@@ -18,6 +20,8 @@ const router = express.Router();
 // })
 
 router.use(authRouter);
+
+router.use(authentication);
 router.use(homeRouter);
 router.use('/accounts', accountsRouter);
 router.use('/transactions', transactionsRouter);

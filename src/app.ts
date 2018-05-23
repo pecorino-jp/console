@@ -10,7 +10,6 @@ import * as express from 'express';
 import * as expressLayouts from 'express-ejs-layouts';
 // tslint:disable-next-line:no-require-imports no-var-requires
 const flash = require('express-flash');
-
 import errorHandler from './middlewares/errorHandler';
 import notFoundHandler from './middlewares/notFoundHandler';
 import session from './middlewares/session';

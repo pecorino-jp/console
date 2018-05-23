@@ -86,7 +86,10 @@
                         <img src="https://motionpicture.jp/images/common/logo_01.svg" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Tetsu Yamazaki</a>
+                        <a href="#" class="d-block">
+                            <%= user.profile.given_name %>
+                                <%= user.profile.family_name %>
+                        </a>
                     </div>
                 </div>
 
@@ -120,6 +123,16 @@
                                 <i class="nav-icon fa fa-edit"></i>
                                 <p>
                                     入金
+                                    <span class="badge badge-info right"></span>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-header">アカウント</li>
+                        <li class="nav-item">
+                            <a href="<%= user.generateLogoutUrl() %>" class="nav-link">
+                                <i class="nav-icon fa fa-edit"></i>
+                                <p>
+                                    ログアウト
                                     <span class="badge badge-info right"></span>
                                 </p>
                             </a>
