@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">入金取引内容確認</h1>
+                <h1 class="m-0 text-dark">出金取引内容確認</h1>
             </div>
             <!-- /.col -->
             <div class="col-sm-6">
@@ -11,7 +11,7 @@
                     <li class="breadcrumb-item">
                         <a href="/">Home</a>
                     </li>
-                    <li class="breadcrumb-item active">入金取引内容確認</li>
+                    <li class="breadcrumb-item active">出金取引内容確認</li>
                 </ol>
             </div>
             <!-- /.col -->
@@ -36,7 +36,7 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="fa fa-text-width"></i>
-                            下記内容で入金取引を実行しようとしています...
+                            下記内容で出金取引を実行しようとしています...
                         </h3>
                     </div>
                     <!-- /.card-header -->
@@ -46,15 +46,13 @@
                             <dd>
                                 <%= transaction.id %>
                             </dd>
-                            <dt>入金者名</dt>
+                            <dt>出金者名</dt>
                             <dd>
                                 <%= transaction.agent.name %>
                             </dd>
-                            <dt>入金先</dt>
+                            <dt>出金先</dt>
                             <dd>
-                                <%= transaction.object.toAccountNumber %>
-                                    <br>
-                                    <%= toAccount.name %>
+                                <%= transaction.object.fromAccountNumber %>
                             </dd>
                             <dt>金額</dt>
                             <dd>
@@ -71,7 +69,7 @@
                     <!-- form start -->
                     <form role="form" method="post">
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">確認して入金取引確定</button>
+                            <button type="submit" class="btn btn-primary">確認して出金取引確定</button>
                         </div>
                     </form>
                 </div>

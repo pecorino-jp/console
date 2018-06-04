@@ -41,10 +41,9 @@ transactionsRouter.all(
                         endpoint: <string>process.env.PECORINO_API_ENDPOINT,
                         auth: req.user.authClient
                     });
-                    debug('取引が開始します...', values);
+                    debug('取引を開始します...', values);
                     const transaction = await depositTransactionService.start({
-                        // tslint:disable-next-line:no-magic-numbers
-                        expires: moment().add(5, 'minutes').toDate(),
+                        expires: moment().add(1, 'minutes').toDate(),
                         agent: {
                             typeOf: 'Organization',
                             id: 'agent-id',
@@ -90,7 +89,9 @@ transactionsRouter.all(
     async (req, res, next) => {
         try {
             let message;
-            const transaction = (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
+            let toAccount: pecorinoapi.factory.account.IAccount;
+            const transaction = <pecorinoapi.factory.transaction.deposit.ITransaction>
+                (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
             if (transaction === undefined) {
                 throw new pecorinoapi.factory.errors.NotFound('Transaction in session');
             }
@@ -112,9 +113,122 @@ transactionsRouter.all(
                 res.redirect('/transactions/deposit/start');
 
                 return;
+            } else {
+
+                // 入金先口座情報を検索
+                const accountService = new pecorinoapi.service.Account({
+                    endpoint: <string>process.env.PECORINO_API_ENDPOINT,
+                    auth: req.user.authClient
+                });
+                const accounts = await accountService.search({
+                    accountNumbers: [transaction.object.toAccountNumber],
+                    statuses: [],
+                    limit: 1
+                });
+                const account = accounts.shift();
+                if (account === undefined) {
+                    throw new Error('to account not found');
+                }
+                toAccount = account;
             }
 
             res.render('transactions/deposit/confirm', {
+                transaction: transaction,
+                message: message,
+                toAccount: toAccount
+            });
+        } catch (error) {
+            next(error);
+        }
+    });
+
+/**
+ * 出金取引開始
+ */
+transactionsRouter.all(
+    '/withdraw/start',
+    async (req, res, next) => {
+        try {
+            let values: any = {};
+            let message;
+            if (req.method === 'POST') {
+                values = req.body;
+
+                try {
+                    const withdrawService = new pecorinoapi.service.transaction.Withdraw({
+                        endpoint: <string>process.env.PECORINO_API_ENDPOINT,
+                        auth: req.user.authClient
+                    });
+                    debug('取引を開始します...', values);
+                    const transaction = await withdrawService.start({
+                        expires: moment().add(1, 'minutes').toDate(),
+                        agent: {
+                            name: values.fromName
+                        },
+                        recipient: {
+                            typeOf: 'Person',
+                            id: 'recipient-id',
+                            name: 'recipient name',
+                            url: ''
+                        },
+                        amount: parseInt(values.amount, 10),
+                        notes: values.notes,
+                        fromAccountNumber: values.fromAccountNumber
+                    });
+                    debug('取引が開始されました。', transaction.id);
+                    // セッションに取引追加
+                    (<Express.Session>req.session)[`transaction:${transaction.id}`] = transaction;
+
+                    res.redirect(`/transactions/withdraw/${transaction.id}/confirm`);
+
+                    return;
+                } catch (error) {
+                    message = error.message;
+                }
+            }
+
+            res.render('transactions/withdraw/start', {
+                values: values,
+                message: message
+            });
+        } catch (error) {
+            next(error);
+        }
+    });
+
+/**
+ * 出金取引確認
+ */
+transactionsRouter.all(
+    '/withdraw/:transactionId/confirm',
+    async (req, res, next) => {
+        try {
+            let message;
+            const transaction = (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
+            if (transaction === undefined) {
+                throw new pecorinoapi.factory.errors.NotFound('Transaction in session');
+            }
+
+            if (req.method === 'POST') {
+                // 確定
+                const withdrawService = new pecorinoapi.service.transaction.Withdraw({
+                    endpoint: <string>process.env.PECORINO_API_ENDPOINT,
+                    auth: req.user.authClient
+                });
+                await withdrawService.confirm({
+                    transactionId: transaction.id
+                });
+                debug('取引確定です。');
+                message = '出金取引を実行しました。';
+                // セッション削除
+                delete (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
+                req.flash('message', '出金取引を実行しました。');
+                res.redirect('/transactions/withdraw/start');
+
+                return;
+            }
+
+            res.render('transactions/withdraw/confirm', {
                 transaction: transaction,
                 message: message
             });
