@@ -114,7 +114,6 @@ transactionsRouter.all(
 
                 return;
             } else {
-
                 // 入金先口座情報を検索
                 const accountService = new pecorinoapi.service.Account({
                     endpoint: <string>process.env.PECORINO_API_ENDPOINT,
@@ -204,7 +203,9 @@ transactionsRouter.all(
     async (req, res, next) => {
         try {
             let message;
-            const transaction = (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
+            let fromAccount: pecorinoapi.factory.account.IAccount;
+            const transaction = <pecorinoapi.factory.transaction.withdraw.ITransaction>
+                (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
             if (transaction === undefined) {
                 throw new pecorinoapi.factory.errors.NotFound('Transaction in session');
             }
@@ -226,11 +227,28 @@ transactionsRouter.all(
                 res.redirect('/transactions/withdraw/start');
 
                 return;
+            } else {
+                // 入金先口座情報を検索
+                const accountService = new pecorinoapi.service.Account({
+                    endpoint: <string>process.env.PECORINO_API_ENDPOINT,
+                    auth: req.user.authClient
+                });
+                const accounts = await accountService.search({
+                    accountNumbers: [transaction.object.fromAccountNumber],
+                    statuses: [],
+                    limit: 1
+                });
+                const account = accounts.shift();
+                if (account === undefined) {
+                    throw new Error('to account not found');
+                }
+                fromAccount = account;
             }
 
             res.render('transactions/withdraw/confirm', {
                 transaction: transaction,
-                message: message
+                message: message,
+                fromAccount: fromAccount
             });
         } catch (error) {
             next(error);

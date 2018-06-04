@@ -192,6 +192,7 @@ transactionsRouter.all('/withdraw/start', (req, res, next) => __awaiter(this, vo
 transactionsRouter.all('/withdraw/:transactionId/confirm', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         let message;
+        let fromAccount;
         const transaction = req.session[`transaction:${req.params.transactionId}`];
         if (transaction === undefined) {
             throw new pecorinoapi.factory.errors.NotFound('Transaction in session');
@@ -213,9 +214,27 @@ transactionsRouter.all('/withdraw/:transactionId/confirm', (req, res, next) => _
             res.redirect('/transactions/withdraw/start');
             return;
         }
+        else {
+            // 入金先口座情報を検索
+            const accountService = new pecorinoapi.service.Account({
+                endpoint: process.env.PECORINO_API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const accounts = yield accountService.search({
+                accountNumbers: [transaction.object.fromAccountNumber],
+                statuses: [],
+                limit: 1
+            });
+            const account = accounts.shift();
+            if (account === undefined) {
+                throw new Error('to account not found');
+            }
+            fromAccount = account;
+        }
         res.render('transactions/withdraw/confirm', {
             transaction: transaction,
-            message: message
+            message: message,
+            fromAccount: fromAccount
         });
     }
     catch (error) {
