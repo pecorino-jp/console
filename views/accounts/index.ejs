@@ -147,14 +147,9 @@
 <!-- page script -->
 <script>
     $(function () {
-        $("#accounts-table").DataTable();
-        // $('#accounts-table').DataTable({
-        //     "paging": true,
-        //     "lengthChange": false,
-        //     "searching": false,
-        //     "ordering": true,
-        //     "info": true,
-        //     "autoWidth": false
-        // });
+        $("#accounts-table").DataTable({
+            "order": [[4, 'desc']], // デフォルトは開設日時降順
+            "ordering": true
+        });
     });
 </script>
