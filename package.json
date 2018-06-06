@@ -11,7 +11,7 @@
   "config": {},
   "dependencies": {
     "@motionpicture/express-middleware": "^0.1.0",
-    "@motionpicture/pecorino-api-nodejs-client": "0.0.0-alpha.15",
+    "@motionpicture/pecorino-api-nodejs-client": "0.0.0",
     "admin-lte": "^3.0.0-alpha.2",
     "aws-sdk": "^2.250.1",
     "body-parser": "^1.18.3",
@@ -52,11 +52,9 @@
     "@types/request-promise-native": "^1.0.14",
     "@types/sinon": "^4.3.3",
     "@types/supertest": "^2.0.4",
-    "ink-docstrap": "^1.3.2",
-    "jsdoc": "^3.5.5",
     "mocha": "^5.2.0",
     "nsp": "^3.2.1",
-    "nyc": "^11.9.0",
+    "nyc": "^12.0.2",
     "rimraf": "^2.6.2",
     "sinon": "^5.0.10",
     "snyk": "^1.82.1",
@@ -78,8 +76,8 @@
   "scripts": {
     "build": "tsc",
     "check": "npm run tslint && nsp check",
-    "clean": "rimraf ./dst ./doc ./coverage \"npm-debug.log*\" ./.nyc_output",
-    "doc": "jsdoc -c jsdoc.json",
+    "clean": "rimraf ./dst ./docs ./coverage \"npm-debug.log*\" ./.nyc_output",
+    "doc": "echo \"implementing...\" && exit 0",
     "mocha": "mocha",
     "nyc": "nyc mocha",
     "coverage": "npm run nyc -- \"src/**/*.spec.ts\"",
@@ -87,9 +85,9 @@
     "start:development": "node ./dst/bin/ssl",
     "test": "npm run check && npm run coverage",
     "tslint": "tslint --project tsconfig.json -c tslint.json src/**/*.ts --exclude **/*.spec.ts",
-    "preversion": "npm run clean && npm run build && npm test",
+    "preversion": "npm run clean && npm run build && npm test && npm run doc",
     "version": "git add -A",
     "postversion": "git push origin --tags"
   },
-  "version": "0.0.2"
+  "version": "0.0.0"
 }
