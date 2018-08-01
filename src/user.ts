@@ -1,4 +1,4 @@
-import * as pecorinoapi from '@motionpicture/pecorino-api-nodejs-client';
+import * as pecorinoapi from '@pecorino/api-nodejs-client';
 import * as createDebug from 'debug';
 import * as jwt from 'jsonwebtoken';
 

@@ -4,8 +4,10 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark">
-                    口座番号[
-                    <%= accountNumber %>]の転送アクション検索</h1>
+                    <span class="badge badge-info">
+                        <%= accountType %>
+                    </span>
+                    <%= accountNumber %>の転送アクション検索</h1>
             </div>
             <!-- /.col -->
             <div class="col-sm-6">
@@ -14,8 +16,12 @@
                         <a href="/">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/accounts?accountNumber=<%= accountNumber %>">口座番号[
-                            <%= accountNumber %>]</a>
+                        <a href="/accounts?accountType=<%= accountType %>&accountNumber=<%= accountNumber %>">
+                            <span class="badge badge-info">
+                                <%= accountType %>
+                            </span>
+                            <%= accountNumber %>
+                        </a>
                     </li>
                     <li class="breadcrumb-item active">転送アクション検索</li>
                 </ol>
@@ -77,14 +83,40 @@
                                                 <%= action.purpose.id %>
                                         </td>
                                         <td>
-                                            <%= action.fromLocation.name %>
-                                                <br>
-                                                <%= action.fromLocation.accountNumber %>
+                                            <span class="badge badge-success">
+                                                <%= action.fromLocation.typeOf %>
+                                            </span>
+                                            <br>
+                                            <span class="<% if (action.fromLocation.typeOf === 'Account') { %>badge badge-info<% } %>">
+                                                <%= action.fromLocation.accountType %>
+                                            </span>
+                                            <span>
+                                                <a target="_blank" href="/accounts?accountType=<%= action.fromLocation.accountType %>&accountNumber=<%= action.fromLocation.accountNumber %>">
+                                                    <%= action.fromLocation.accountNumber %>
+                                                </a>
+                                            </span>
+                                            <br>
+                                            <span>
+                                                <%= action.fromLocation.name %>
+                                            </span>
                                         </td>
                                         <td>
-                                            <%= action.toLocation.name %>
-                                                <br>
-                                                <%= action.toLocation.accountNumber %>
+                                            <span class="badge badge-success">
+                                                <%= action.toLocation.typeOf %>
+                                            </span>
+                                            <br>
+                                            <span class="<% if (action.toLocation.typeOf === 'Account') { %>badge badge-info<% } %>">
+                                                <%= action.toLocation.accountType %>
+                                            </span>
+                                            <span>
+                                                <a target="_blank" href="/accounts?accountType=<%= action.toLocation.accountType %>&accountNumber=<%= action.toLocation.accountNumber %>">
+                                                    <%= action.toLocation.accountNumber %>
+                                                </a>
+                                            </span>
+                                            <br>
+                                            <span>
+                                                <%= action.toLocation.name %>
+                                            </span>
                                         </td>
                                         <td>
                                             <%= action.amount %>
