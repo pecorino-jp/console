@@ -2,7 +2,7 @@
  * 取引ルーター
  * @ignore
  */
-import * as pecorinoapi from '@motionpicture/pecorino-api-nodejs-client';
+import * as pecorinoapi from '@pecorino/api-nodejs-client';
 import * as createDebug from 'debug';
 import * as express from 'express';
 import * as moment from 'moment';
@@ -57,6 +57,7 @@ transactionsRouter.all(
                             url: ''
                         },
                         amount: parseInt(values.amount, 10),
+                        accountType: values.accountType,
                         notes: values.notes,
                         toAccountNumber: values.toAccountNumber
                     });
@@ -89,8 +90,8 @@ transactionsRouter.all(
     async (req, res, next) => {
         try {
             let message;
-            let toAccount: pecorinoapi.factory.account.IAccount;
-            const transaction = <pecorinoapi.factory.transaction.deposit.ITransaction>
+            let toAccount: pecorinoapi.factory.account.IAccount<pecorinoapi.factory.account.AccountType>;
+            const transaction = <pecorinoapi.factory.transaction.deposit.ITransaction<pecorinoapi.factory.account.AccountType>>
                 (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
             if (transaction === undefined) {
                 throw new pecorinoapi.factory.errors.NotFound('Transaction in session');
@@ -120,6 +121,7 @@ transactionsRouter.all(
                     auth: req.user.authClient
                 });
                 const accounts = await accountService.search({
+                    accountType: transaction.object.accountType,
                     accountNumbers: [transaction.object.toAccountNumber],
                     statuses: [],
                     limit: 1
@@ -162,6 +164,8 @@ transactionsRouter.all(
                     const transaction = await withdrawService.start({
                         expires: moment().add(1, 'minutes').toDate(),
                         agent: {
+                            typeOf: 'Person',
+                            id: req.user.profile.sub,
                             name: values.fromName
                         },
                         recipient: {
@@ -171,6 +175,7 @@ transactionsRouter.all(
                             url: ''
                         },
                         amount: parseInt(values.amount, 10),
+                        accountType: values.accountType,
                         notes: values.notes,
                         fromAccountNumber: values.fromAccountNumber
                     });
@@ -203,8 +208,8 @@ transactionsRouter.all(
     async (req, res, next) => {
         try {
             let message;
-            let fromAccount: pecorinoapi.factory.account.IAccount;
-            const transaction = <pecorinoapi.factory.transaction.withdraw.ITransaction>
+            let fromAccount: pecorinoapi.factory.account.IAccount<pecorinoapi.factory.account.AccountType>;
+            const transaction = <pecorinoapi.factory.transaction.withdraw.ITransaction<pecorinoapi.factory.account.AccountType>>
                 (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
             if (transaction === undefined) {
                 throw new pecorinoapi.factory.errors.NotFound('Transaction in session');
@@ -234,6 +239,7 @@ transactionsRouter.all(
                     auth: req.user.authClient
                 });
                 const accounts = await accountService.search({
+                    accountType: transaction.object.accountType,
                     accountNumbers: [transaction.object.fromAccountNumber],
                     statuses: [],
                     limit: 1

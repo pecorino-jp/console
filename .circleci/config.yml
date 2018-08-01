@@ -17,16 +17,16 @@ jobs:
       # - run:
       #     name: Update npm
       #     command: 'sudo npm install -g npm@latest'
-      - run:
-          name: configure npm for private modules
-          command: |
-            npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
-            npm whoami
+      # - run:
+      #     name: configure npm for private modules
+      #     command: |
+      #       npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
+      #       npm whoami
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: install npm packages
-          command: npm install
+          command: npm ci
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
@@ -37,7 +37,7 @@ jobs:
   test:
     docker:
       - image: circleci/node:latest
-      - image: circleci/mongo:3.2
+      - image: mongo:3.4.4
     steps:
       - checkout
       - restore_cache:

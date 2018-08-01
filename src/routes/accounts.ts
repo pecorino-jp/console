@@ -2,7 +2,7 @@
  * 口座ルーター
  * @ignore
  */
-import * as pecorinoapi from '@motionpicture/pecorino-api-nodejs-client';
+import * as pecorinoapi from '@pecorino/api-nodejs-client';
 import * as createDebug from 'debug';
 import * as express from 'express';
 
@@ -23,6 +23,7 @@ accountsRouter.get(
 
             debug('searching accounts...', req.query);
             const accounts = await accountService.search({
+                accountType: req.query.accountType,
                 accountNumbers: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0) ?
                     [req.query.accountNumber] :
                     [],
@@ -44,7 +45,7 @@ accountsRouter.get(
  * 口座に対する転送アクション検索
  */
 accountsRouter.get(
-    '/:accountNumber/actions/MoneyTransfer',
+    '/:accountType/:accountNumber/actions/MoneyTransfer',
     async (req, res, next) => {
         try {
             const accountService = new pecorinoapi.service.Account({
@@ -52,8 +53,12 @@ accountsRouter.get(
                 auth: req.user.authClient
             });
 
-            const actions = await accountService.searchMoneyTransferActions({ accountNumber: req.params.accountNumber });
+            const actions = await accountService.searchMoneyTransferActions({
+                accountType: req.params.accountType,
+                accountNumber: req.params.accountNumber
+            });
             res.render('accounts/actions/moneyTransfer', {
+                accountType: req.params.accountType,
                 accountNumber: req.params.accountNumber,
                 actions: actions
             });

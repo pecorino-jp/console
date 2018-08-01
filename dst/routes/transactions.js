@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * 取引ルーター
  * @ignore
  */
-const pecorinoapi = require("@motionpicture/pecorino-api-nodejs-client");
+const pecorinoapi = require("@pecorino/api-nodejs-client");
 const createDebug = require("debug");
 const express = require("express");
 const moment = require("moment");
@@ -60,6 +60,7 @@ transactionsRouter.all('/deposit/start', (req, res, next) => __awaiter(this, voi
                         url: ''
                     },
                     amount: parseInt(values.amount, 10),
+                    accountType: values.accountType,
                     notes: values.notes,
                     toAccountNumber: values.toAccountNumber
                 });
@@ -117,6 +118,7 @@ transactionsRouter.all('/deposit/:transactionId/confirm', (req, res, next) => __
                 auth: req.user.authClient
             });
             const accounts = yield accountService.search({
+                accountType: transaction.object.accountType,
                 accountNumbers: [transaction.object.toAccountNumber],
                 statuses: [],
                 limit: 1
@@ -155,6 +157,8 @@ transactionsRouter.all('/withdraw/start', (req, res, next) => __awaiter(this, vo
                 const transaction = yield withdrawService.start({
                     expires: moment().add(1, 'minutes').toDate(),
                     agent: {
+                        typeOf: 'Person',
+                        id: req.user.profile.sub,
                         name: values.fromName
                     },
                     recipient: {
@@ -164,6 +168,7 @@ transactionsRouter.all('/withdraw/start', (req, res, next) => __awaiter(this, vo
                         url: ''
                     },
                     amount: parseInt(values.amount, 10),
+                    accountType: values.accountType,
                     notes: values.notes,
                     fromAccountNumber: values.fromAccountNumber
                 });
@@ -221,6 +226,7 @@ transactionsRouter.all('/withdraw/:transactionId/confirm', (req, res, next) => _
                 auth: req.user.authClient
             });
             const accounts = yield accountService.search({
+                accountType: transaction.object.accountType,
                 accountNumbers: [transaction.object.fromAccountNumber],
                 statuses: [],
                 limit: 1
