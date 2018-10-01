@@ -12,15 +12,15 @@ $(function () {
         var balance = account.balance;
         var datas = moneyTransferActions.reduce(
             (a, b) => {
+                a.push({
+                    x: moment(b.endDate).toISOString(),
+                    y: balance,
+                });
                 if (b.fromLocation.accountNumber === account.accountNumber) {
                     balance += b.amount;
                 } else {
                     balance -= b.amount;
                 }
-                a.push({
-                    x: moment(b.endDate).toISOString(),
-                    y: balance,
-                });
 
                 return a;
             },
