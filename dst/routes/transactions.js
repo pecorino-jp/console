@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 取引ルーター
- * @ignore
  */
 const pecorinoapi = require("@pecorino/api-nodejs-client");
 const createDebug = require("debug");

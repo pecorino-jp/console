@@ -53,6 +53,7 @@
     "@types/sinon": "^4.3.3",
     "@types/supertest": "^2.0.6",
     "mocha": "^5.2.0",
+    "node-sass": "^4.9.3",
     "nsp": "^3.2.1",
     "nyc": "^12.0.2",
     "rimraf": "^2.6.2",
@@ -75,6 +76,7 @@
   "repository": {},
   "scripts": {
     "build": "tsc",
+    "build:css": "node-sass scss/default.scss public/css/default.css",
     "check": "npm run tslint && nsp check",
     "clean": "rimraf ./dst ./docs ./coverage \"npm-debug.log*\" ./.nyc_output",
     "doc": "echo \"implementing...\" && exit 0",

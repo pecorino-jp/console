@@ -52,12 +52,12 @@
                             </dd>
                             <dt>入金先</dt>
                             <dd>
-                                <span class="badge badge-info">
+                                <span class="badge <%= transaction.object.accountType %>">
                                     <%= transaction.object.accountType %>
                                 </span>
                                 <%= transaction.object.toAccountNumber %>
-                                    <br>
-                                    <%= toAccount.name %>
+                                <br>
+                                <%= toAccount.name %>
                             </dd>
                             <dt>金額</dt>
                             <dd>
@@ -98,7 +98,3 @@
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
-
-<!-- page script -->
-<script>
-</script>

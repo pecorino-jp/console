@@ -1,6 +1,5 @@
 /**
  * 取引ルーター
- * @ignore
  */
 import * as pecorinoapi from '@pecorino/api-nodejs-client';
 import * as createDebug from 'debug';

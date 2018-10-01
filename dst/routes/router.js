@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * ルーター
- * @ignore
  */
 const express = require("express");
 const authentication_1 = require("../middlewares/authentication");
