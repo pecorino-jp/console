@@ -8,8 +8,7 @@ import { NextFunction, Request, Response } from 'express';
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'http-status';
 
 export default (err: any, __: Request, res: Response, next: NextFunction) => {
-    console.error('kwskfs-api:iddleware:errorHandler', err);
-
+    // console.error('kwskfs-api:iddleware:errorHandler', err);
     if (res.headersSent) {
         next(err);
 
