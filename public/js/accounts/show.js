@@ -3,29 +3,31 @@ var moneyTransferActions = [];
 var searchedAllMoneyTransferActions = false;
 var limit = 100;
 var page = 0;
+var balanceChart;
 
 $(function () {
     console.log('searching moneyTransferActions...', page);
     searchMoneyTransferActions(function () {
         console.log('creating line chart...');
-        // var datas = orders.reduce(
-        //     (a, b) => {
-        //         numberOfSeats -= b.acceptedOffers.length;
-        //         // 予約開始からの時間
-        //         // const diff = moment(b.orderDate).diff(moment(reservationStartDate), 'hours', true);
-        //         a.push({
-        //             x: moment(b.orderDate).toISOString(),
-        //             y: numberOfSeats,
-        //         });
+        var balance = account.balance;
+        var datas = moneyTransferActions.reduce(
+            (a, b) => {
+                if (b.fromLocation.accountNumber === account.accountNumber) {
+                    balance += b.amount;
+                } else {
+                    balance -= b.amount;
+                }
+                a.push({
+                    x: moment(b.endDate).toISOString(),
+                    y: balance,
+                });
 
-        //         return a;
-        //     },
-        //     [
-        //         { x: moment(reservationStartDate).toISOString(), y: numberOfSeats },
-        //         { x: moment(event.endDate).toISOString(), y: null }
-        //     ],
-        // );
-        // createBalanceChart(datas);
+                return a;
+            },
+            [
+            ],
+        );
+        createBalanceChart(datas);
     });
 
     // $("#actions-table").DataTable();
@@ -124,15 +126,15 @@ function searchMoneyTransferActions(cb) {
 }
 function createBalanceChart(datas) {
     console.log('creating chart...datas:', datas.length);
-    remainingAttendeeCapacityChart2 = new Morris.Line({
-        element: 'remainingAttendeeCapacityChart2',
+    balanceChart = new Morris.Line({
+        element: 'balanceChart',
         resize: true,
         data: datas.map(function (data) {
-            return { y: data.x, remainingCapacity: data.y }
+            return { y: data.x, balance: data.y }
         }),
         xkey: 'y',
-        ykeys: ['remainingCapacity'],
-        labels: ['残席数遷移'],
+        ykeys: ['balance'],
+        labels: ['残高遷移'],
         lineColors: ['#efefef'],
         lineWidth: 2,
         hideHover: 'auto',
@@ -142,6 +144,7 @@ function createBalanceChart(datas) {
         pointStrokeColors: ['#efefef'],
         gridLineColor: '#efefef',
         gridTextFamily: 'Open Sans',
-        gridTextSize: 10
+        gridTextSize: 10,
+        smooth: false
     });
 }
