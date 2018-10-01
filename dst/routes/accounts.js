@@ -66,14 +66,46 @@ accountsRouter.get('/:accountType/:accountNumber', (req, res, next) => __awaiter
             endpoint: process.env.PECORINO_API_ENDPOINT,
             auth: req.user.authClient
         });
-        const actions = yield accountService.searchMoneyTransferActions({
+        const searchAccountsResult = yield accountService.search({
+            limit: 1,
+            statuses: [],
             accountType: req.params.accountType,
-            accountNumber: req.params.accountNumber
+            accountNumbers: [req.params.accountNumber]
         });
+        const account = searchAccountsResult[0];
+        if (account === undefined) {
+            throw new pecorinoapi.factory.errors.NotFound('Account');
+        }
         res.render('accounts/show', {
+            message: '',
+            account: account
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * 取引検索
+ */
+accountsRouter.get('/:accountType/:accountNumber/actions/moneyTransfer', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const accountService = new pecorinoapi.service.Account({
+            endpoint: process.env.PECORINO_API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const actions = yield accountService.searchMoneyTransferActions({
+            limit: req.query.limit,
+            page: req.query.page,
             accountType: req.params.accountType,
             accountNumber: req.params.accountNumber,
-            actions: actions
+            sort: {
+                endDate: -1
+            }
+        });
+        res.json({
+            totalCount: 100,
+            data: actions
         });
     }
     catch (error) {
