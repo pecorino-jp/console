@@ -13,7 +13,8 @@ exports.default = (req, res, next) => __awaiter(this, void 0, void 0, function* 
     try {
         req.user = new user_1.default({
             host: req.hostname,
-            session: req.session
+            session: req.session,
+            state: req.originalUrl
         });
         if (!req.user.isAuthenticated()) {
             // ログインページへリダイレクト

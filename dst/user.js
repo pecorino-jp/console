@@ -19,6 +19,7 @@ class User {
     constructor(configurations) {
         this.host = configurations.host;
         this.session = configurations.session;
+        this.state = configurations.state;
         this.authClient = new pecorinoapi.auth.OAuth2({
             domain: process.env.PECORINO_API_AUTHORIZE_SERVER_DOMAIN,
             clientId: process.env.PECORINO_API_CLIENT_ID,
