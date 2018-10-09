@@ -119,13 +119,13 @@ transactionsRouter.all(
                     endpoint: <string>process.env.PECORINO_API_ENDPOINT,
                     auth: req.user.authClient
                 });
-                const accounts = await accountService.search({
+                const searchAccountsResult = await accountService.searchWithTotalCount({
                     accountType: transaction.object.accountType,
                     accountNumbers: [transaction.object.toAccountNumber],
                     statuses: [],
                     limit: 1
                 });
-                const account = accounts.shift();
+                const account = searchAccountsResult.data.shift();
                 if (account === undefined) {
                     throw new Error('to account not found');
                 }
@@ -237,13 +237,13 @@ transactionsRouter.all(
                     endpoint: <string>process.env.PECORINO_API_ENDPOINT,
                     auth: req.user.authClient
                 });
-                const accounts = await accountService.search({
+                const searchAccountsResult = await accountService.searchWithTotalCount({
                     accountType: transaction.object.accountType,
                     accountNumbers: [transaction.object.fromAccountNumber],
                     statuses: [],
                     limit: 1
                 });
-                const account = accounts.shift();
+                const account = searchAccountsResult.data.shift();
                 if (account === undefined) {
                     throw new Error('to account not found');
                 }

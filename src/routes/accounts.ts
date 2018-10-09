@@ -32,12 +32,12 @@ accountsRouter.get(
             };
             if (req.query.format === 'datatable') {
                 debug('searching accounts...', req.query);
-                const accounts = await accountService.search(searchConditions);
+                const { totalCount, data } = await accountService.searchWithTotalCount(searchConditions);
                 res.json({
                     draw: req.query.draw,
-                    recordsTotal: 100,
-                    recordsFiltered: accounts.length,
-                    data: accounts
+                    recordsTotal: totalCount,
+                    recordsFiltered: totalCount,
+                    data: data
                 });
             } else {
                 res.render('accounts/index', {
@@ -60,16 +60,16 @@ accountsRouter.get(
                 endpoint: <string>process.env.PECORINO_API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const searchAccountsResult = await accountService.search({
+            const { totalCount, data } = await accountService.searchWithTotalCount({
                 limit: 1,
                 statuses: [],
                 accountType: req.params.accountType,
                 accountNumbers: [req.params.accountNumber]
             });
-            const account = searchAccountsResult[0];
-            if (account === undefined) {
+            if (totalCount < 1) {
                 throw new pecorinoapi.factory.errors.NotFound('Account');
             }
+            const account = data[0];
             res.render('accounts/show', {
                 message: '',
                 account: account
@@ -90,19 +90,16 @@ accountsRouter.get(
                 endpoint: <string>process.env.PECORINO_API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const actions = await accountService.searchMoneyTransferActions({
+            const searchActionsResult = await accountService.searchMoneyTransferActionsWithTotalCount({
                 limit: req.query.limit,
                 page: req.query.page,
                 accountType: req.params.accountType,
                 accountNumber: req.params.accountNumber,
                 sort: {
-                    endDate: -1
+                    endDate: pecorinoapi.factory.sortType.Descending
                 }
             });
-            res.json({
-                totalCount: 100,
-                data: actions
-            });
+            res.json(searchActionsResult);
         } catch (error) {
             next(error);
         }

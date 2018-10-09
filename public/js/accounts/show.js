@@ -54,7 +54,7 @@ function searchMoneyTransferActions(cb) {
             var html =
                 '<td>'
                 + action.typeOf + '<br>'
-                + '<a href="#">' + action.id + '</a>'
+                + '<a href="#">' + action.id + '</a>' + '<br>'
                 + action.endDate + '<br>'
                 + '<span class="badge ' + action.actionStatus + '">'
                 + action.actionStatus
@@ -140,7 +140,7 @@ function createBalanceChart(datas) {
         hideHover: 'auto',
         gridTextColor: '#fff',
         gridStrokeWidth: 0.4,
-        pointSize: 4,
+        pointSize: 2,
         pointStrokeColors: ['#efefef'],
         gridLineColor: '#efefef',
         gridTextFamily: 'Open Sans',

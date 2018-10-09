@@ -116,13 +116,13 @@ transactionsRouter.all('/deposit/:transactionId/confirm', (req, res, next) => __
                 endpoint: process.env.PECORINO_API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const accounts = yield accountService.search({
+            const searchAccountsResult = yield accountService.searchWithTotalCount({
                 accountType: transaction.object.accountType,
                 accountNumbers: [transaction.object.toAccountNumber],
                 statuses: [],
                 limit: 1
             });
-            const account = accounts.shift();
+            const account = searchAccountsResult.data.shift();
             if (account === undefined) {
                 throw new Error('to account not found');
             }
@@ -224,13 +224,13 @@ transactionsRouter.all('/withdraw/:transactionId/confirm', (req, res, next) => _
                 endpoint: process.env.PECORINO_API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const accounts = yield accountService.search({
+            const searchAccountsResult = yield accountService.searchWithTotalCount({
                 accountType: transaction.object.accountType,
                 accountNumbers: [transaction.object.fromAccountNumber],
                 statuses: [],
                 limit: 1
             });
-            const account = accounts.shift();
+            const account = searchAccountsResult.data.shift();
             if (account === undefined) {
                 throw new Error('to account not found');
             }

@@ -19,8 +19,10 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
-                        + '<li><span class="badge ' + data.accountType + '">' + data.accountType + '</span></li>'
-                        + '<li><a target="_blank" href="/accounts/' + data.accountType + '/' + data.accountNumber + '">' + data.accountNumber + '</a></li>'
+                        + '<li>'
+                        + '<span class="badge ' + data.accountType + '">' + data.accountType + '</span>'
+                        + ' <a target="_blank" href="/accounts/' + data.accountType + '/' + data.accountNumber + '">' + data.accountNumber + '</a>'
+                        + '</li>'
                         + '<span class="badge ' + data.status + '">' + data.status + '</span>'
                         + '</ul>';
                 }
@@ -53,9 +55,14 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li>' + data.openDate + '</li>'
-                        + '</ul>';
+                    var html = '<ul class="list-unstyled">'
+                        + '<li>' + data.openDate + '</li>';
+                    if (data.closeDate !== undefined) {
+                        html += '<li>' + data.closeDate + '</li>'
+                    }
+                    html += '</ul>';
+
+                    return html;
                 }
             }
         ]
