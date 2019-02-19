@@ -89,7 +89,7 @@ transactionsRouter.all(
     async (req, res, next) => {
         try {
             let message;
-            let toAccount: pecorinoapi.factory.account.IAccount<pecorinoapi.factory.account.AccountType>;
+            let toAccount: pecorinoapi.factory.account.IAccount<pecorinoapi.factory.account.AccountType> | undefined;
             const transaction = <pecorinoapi.factory.transaction.deposit.ITransaction<pecorinoapi.factory.account.AccountType>>
                 (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
             if (transaction === undefined) {
@@ -120,16 +120,15 @@ transactionsRouter.all(
                     auth: req.user.authClient
                 });
                 const searchAccountsResult = await accountService.searchWithTotalCount({
-                    accountType: transaction.object.accountType,
-                    accountNumbers: [transaction.object.toAccountNumber],
+                    accountType: transaction.object.toLocation.accountType,
+                    accountNumbers: [transaction.object.toLocation.accountNumber],
                     statuses: [],
                     limit: 1
                 });
-                const account = searchAccountsResult.data.shift();
-                if (account === undefined) {
-                    throw new Error('to account not found');
+                toAccount = searchAccountsResult.data.shift();
+                if (toAccount === undefined) {
+                    throw new Error('To Location Not Found');
                 }
-                toAccount = account;
             }
 
             res.render('transactions/deposit/confirm', {
@@ -207,7 +206,7 @@ transactionsRouter.all(
     async (req, res, next) => {
         try {
             let message;
-            let fromAccount: pecorinoapi.factory.account.IAccount<pecorinoapi.factory.account.AccountType>;
+            let fromAccount: pecorinoapi.factory.account.IAccount<pecorinoapi.factory.account.AccountType> | undefined;
             const transaction = <pecorinoapi.factory.transaction.withdraw.ITransaction<pecorinoapi.factory.account.AccountType>>
                 (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
             if (transaction === undefined) {
@@ -238,16 +237,15 @@ transactionsRouter.all(
                     auth: req.user.authClient
                 });
                 const searchAccountsResult = await accountService.searchWithTotalCount({
-                    accountType: transaction.object.accountType,
-                    accountNumbers: [transaction.object.fromAccountNumber],
+                    accountType: transaction.object.fromLocation.accountType,
+                    accountNumbers: [transaction.object.fromLocation.accountNumber],
                     statuses: [],
                     limit: 1
                 });
-                const account = searchAccountsResult.data.shift();
-                if (account === undefined) {
-                    throw new Error('to account not found');
+                fromAccount = searchAccountsResult.data.shift();
+                if (fromAccount === undefined) {
+                    throw new Error('From Location Not Found');
                 }
-                fromAccount = account;
             }
 
             res.render('transactions/withdraw/confirm', {

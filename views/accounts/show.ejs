@@ -12,7 +12,8 @@
                         <a href="/">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/accounts?accountType=<%= account.accountType %>&accountNumber=<%= account.accountNumber %>">口座検索</a>
+                        <a
+                            href="/accounts?accountType=<%= account.accountType %>&accountNumber=<%= account.accountNumber %>">口座検索</a>
                     </li>
                     <li class="breadcrumb-item active">口座詳細</li>
                 </ol>
@@ -112,10 +113,14 @@
                 <div class="card">
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
-                            <li class="nav-item"><a class="nav-link active" href="#balanceTransition" data-toggle="tab">残高遷移</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#moneyTransferActions" data-toggle="tab">取引履歴</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#jsonViewer" data-toggle="tab">JSON Viewer</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="#balanceTransition"
+                                    data-toggle="tab">残高遷移</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#moneyTransferActions"
+                                    data-toggle="tab">取引履歴</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#jsonViewer" data-toggle="tab">JSON
+                                    Viewer</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a>
+                            </li>
                             <li class="nav-item"><a class="nav-link" href="#others" data-toggle="tab">その他の操作</a></li>
                         </ul>
                     </div><!-- /.card-header -->
@@ -143,11 +148,11 @@
                                     <table class="table m-0">
                                         <thead>
                                             <tr>
-                                                <th>アクションタイプ<br>完了日時<br>ステータス</th>
-                                                <th>取引</th>
-                                                <th>from</th>
-                                                <th>to</th>
-                                                <th>金額<br>説明</th>
+                                                <th>Action Type<br>Start Date<br>End Date<br>Status</th>
+                                                <th>From</th>
+                                                <th>To</th>
+                                                <th>Amount<br>Description</th>
+                                                <th>Transaction</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -159,7 +164,8 @@
 
                             <div class="tab-pane" id="jsonViewer">
                                 <div class="form-group">
-                                    <textarea class="form-control" rows="20" placeholder="" disabled=""><%= JSON.stringify(account, null, '\t') %></textarea>
+                                    <textarea class="form-control" rows="20" placeholder=""
+                                        disabled=""><%= JSON.stringify(account, null, '\t') %></textarea>
                                 </div>
                             </div>
                             <!-- /.tab-pane -->

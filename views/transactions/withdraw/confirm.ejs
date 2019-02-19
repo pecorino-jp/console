@@ -52,10 +52,10 @@
                             </dd>
                             <dt>出金先</dt>
                             <dd>
-                                <span class="badge <%= transaction.object.accountType %>">
-                                    <%= transaction.object.accountType %>
+                                <span class="badge badge-secondary <%= transaction.object.accountType %>">
+                                    <%= transaction.object.fromLocation.accountType %>
                                 </span>
-                                <%= transaction.object.fromAccountNumber %>
+                                <%= transaction.object.fromLocation.accountNumber %>
                                 <br>
                                 <%= fromAccount.name %>
                             </dd>
@@ -65,7 +65,7 @@
                             </dd>
                             <dt>説明</dt>
                             <dd>
-                                <%= transaction.object.notes %>
+                                <%= transaction.object.description %>
                             </dd>
                         </dl>
                     </div>

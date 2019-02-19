@@ -53,27 +53,24 @@ function searchMoneyTransferActions(cb) {
             moneyTransferActions.push(action);
             var html =
                 '<td>'
-                + action.typeOf + '<br>'
+                + '<span class="badge badge-secondary ' + action.typeOf + '">'
+                + action.typeOf
+                + '</span>'
+                + '<br>'
                 + '<a href="#">' + action.id + '</a>' + '<br>'
+                + action.startDate + '<br>'
                 + action.endDate + '<br>'
-                + '<span class="badge ' + action.actionStatus + '">'
+                + '<span class="badge badge-secondary ' + action.actionStatus + '">'
                 + action.actionStatus
                 + '</span>'
                 + '</td>'
                 + '<td>'
-                + '<span class="badge ' + action.purpose.typeOf + '">'
-                + action.purpose.typeOf
-                + '</span>'
-                + '<br>'
-                + '<a href="#">' + action.purpose.id + '</a>'
-                + '</td>'
-                + '<td>'
-                + '<span class="badge ' + action.fromLocation.typeOf + '">'
+                + '<span class="badge badge-secondary ' + action.fromLocation.typeOf + '">'
                 + action.fromLocation.typeOf
                 + '</span>';
             if (action.fromLocation.accountType !== undefined) {
                 html += '<br>'
-                    + '<span class="badge ' + action.fromLocation.accountType + '">'
+                    + '<span class="badge badge-secondary ' + action.fromLocation.accountType + '">'
                     + action.fromLocation.accountType
                     + '</span>'
                     + '<span>'
@@ -88,17 +85,17 @@ function searchMoneyTransferActions(cb) {
                 + '</span>'
                 + '</td>'
                 + '<td>'
-                + '<span class="badge ' + action.toLocation.typeOf + '">'
+                + '<span class="badge badge-secondary ' + action.toLocation.typeOf + '">'
                 + action.toLocation.typeOf
                 + '</span>';
 
             if (action.toLocation.accountType !== undefined) {
                 html += '<br>'
-                    + '<span class="badge ' + action.toLocation.accountType + '">'
+                    + '<span class="badge badge-secondary ' + action.toLocation.accountType + '">'
                     + action.toLocation.accountType
                     + '</span>'
                     + '<span>'
-                    + '<a target="_blank" href="/accounts/' + action.toLocation.accountType + '/' + action.toLocation.accountNumber + '">'
+                    + ' <a target="_blank" href="/accounts/' + action.toLocation.accountType + '/' + action.toLocation.accountNumber + '">'
                     + action.toLocation.accountNumber
                     + '</a>'
                     + '</span>';
@@ -111,6 +108,13 @@ function searchMoneyTransferActions(cb) {
                 + '<td>'
                 + action.amount + '<br>'
                 + action.description
+                + '</td>'
+                + '<td>'
+                + '<span class="badge badge-secondary ' + action.purpose.typeOf + '">'
+                + action.purpose.typeOf
+                + '</span>'
+                + '<br>'
+                + '<a href="#">' + action.purpose.id + '</a>'
                 + '</td>';
 
             $('<tr>').html(html).appendTo("#moneyTransferActions tbody");

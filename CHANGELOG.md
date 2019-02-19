@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Changed
 
 - ログイン時にstateを継承するように変更。
+- install @pecorino/api-nodeje-client@2.0.0
 
 ### Deprecated
 

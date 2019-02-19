@@ -117,16 +117,15 @@ transactionsRouter.all('/deposit/:transactionId/confirm', (req, res, next) => __
                 auth: req.user.authClient
             });
             const searchAccountsResult = yield accountService.searchWithTotalCount({
-                accountType: transaction.object.accountType,
-                accountNumbers: [transaction.object.toAccountNumber],
+                accountType: transaction.object.toLocation.accountType,
+                accountNumbers: [transaction.object.toLocation.accountNumber],
                 statuses: [],
                 limit: 1
             });
-            const account = searchAccountsResult.data.shift();
-            if (account === undefined) {
-                throw new Error('to account not found');
+            toAccount = searchAccountsResult.data.shift();
+            if (toAccount === undefined) {
+                throw new Error('To Location Not Found');
             }
-            toAccount = account;
         }
         res.render('transactions/deposit/confirm', {
             transaction: transaction,
@@ -225,16 +224,15 @@ transactionsRouter.all('/withdraw/:transactionId/confirm', (req, res, next) => _
                 auth: req.user.authClient
             });
             const searchAccountsResult = yield accountService.searchWithTotalCount({
-                accountType: transaction.object.accountType,
-                accountNumbers: [transaction.object.fromAccountNumber],
+                accountType: transaction.object.fromLocation.accountType,
+                accountNumbers: [transaction.object.fromLocation.accountNumber],
                 statuses: [],
                 limit: 1
             });
-            const account = searchAccountsResult.data.shift();
-            if (account === undefined) {
-                throw new Error('to account not found');
+            fromAccount = searchAccountsResult.data.shift();
+            if (fromAccount === undefined) {
+                throw new Error('From Location Not Found');
             }
-            fromAccount = account;
         }
         res.render('transactions/withdraw/confirm', {
             transaction: transaction,
