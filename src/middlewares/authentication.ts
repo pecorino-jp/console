@@ -9,7 +9,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     try {
         req.user = new User({
             host: req.hostname,
-            session: <Express.Session>req.session
+            session: <Express.Session>req.session,
+            state: req.originalUrl
         });
 
         if (!req.user.isAuthenticated()) {

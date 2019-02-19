@@ -1,7 +1,6 @@
 "use strict";
 /**
  * Expressアプリケーション
- * @ignore
  */
 const middlewares = require("@motionpicture/express-middleware");
 const bodyParser = require("body-parser");

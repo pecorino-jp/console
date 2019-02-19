@@ -7,8 +7,11 @@
     <title>Pecorino | Console</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/default.css">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="/node_modules/admin-lte/plugins/font-awesome/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="/node_modules/admin-lte/plugins/font-awesome/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+        crossorigin="anonymous">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
@@ -83,12 +86,13 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="https://motionpicture.jp/images/common/logo_01.svg" class="img-circle elevation-2" alt="User Image">
+                        <img src="https://motionpicture.jp/images/common/logo_01.svg" class="img-circle elevation-2"
+                            alt="User Image">
                     </div>
                     <div class="info">
                         <a href="#" class="d-block">
                             <%= user.profile.given_name %>
-                                <%= user.profile.family_name %>
+                            <%= user.profile.family_name %>
                         </a>
                     </div>
                 </div>
@@ -100,7 +104,7 @@
                with font-awesome or any other icon font library -->
                         <li class="nav-item">
                             <a href="/" class="nav-link">
-                                <i class="nav-icon fa fa-dashboard"></i>
+                                <i class="nav-icon fa fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
                                     <span class="badge badge-info right"></span>
@@ -110,7 +114,7 @@
                         <li class="nav-header">検索</li>
                         <li class="nav-item">
                             <a href="/accounts" class="nav-link">
-                                <i class="nav-icon fa fa-table"></i>
+                                <i class="nav-icon fa fa-piggy-bank"></i>
                                 <p>
                                     口座
                                     <span class="badge badge-info right"></span>
@@ -120,7 +124,7 @@
                         <li class="nav-header">取引</li>
                         <li class="nav-item">
                             <a href="/transactions/deposit/start" class="nav-link">
-                                <i class="nav-icon fa fa-edit"></i>
+                                <i class="nav-icon fa fa-exchange-alt"></i>
                                 <p>
                                     入金
                                     <span class="badge badge-info right"></span>
@@ -129,7 +133,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="/transactions/withdraw/start" class="nav-link">
-                                <i class="nav-icon fa fa-edit"></i>
+                                <i class="nav-icon fa fa-exchange-alt"></i>
                                 <p>
                                     出金
                                     <span class="badge badge-info right"></span>
@@ -139,7 +143,7 @@
                         <li class="nav-header">アカウント</li>
                         <li class="nav-item">
                             <a href="<%= user.generateLogoutUrl() %>" class="nav-link">
-                                <i class="nav-icon fa fa-edit"></i>
+                                <i class="nav-icon fa fa-sign-out-alt"></i>
                                 <p>
                                     ログアウト
                                     <span class="badge badge-info right"></span>

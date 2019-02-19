@@ -1,0 +1,51 @@
+@import "../node_modules/bootstrap/scss/bootstrap";
+.badge.ActiveActionStatus {
+    @extend .badge-primary;
+}
+.badge.CompletedActionStatus {
+    @extend .badge-success;
+}
+.badge.CanceledActionStatus {
+    @extend .badge-warning;
+}
+.badge.FailedActionStatus {
+    @extend .badge-danger;
+}
+
+.badge.Withdraw  {
+    @extend .badge-danger;
+}
+.badge.Deposit {
+    @extend .badge-success;
+}
+.badge.Transfer {
+    @extend .badge-warning;
+}
+
+.badge.Opened {
+    @extend .badge-success;
+}
+.badge.Closed {
+    @extend .badge-danger;
+}
+
+.badge.Coin {
+    @extend .badge-primary;
+}
+.badge.Point {
+    @extend .badge-primary;
+}
+
+.badge.Account {
+    @extend .badge-info;
+}
+.badge.Person {
+    @extend .badge-secondary;
+}
+.badge.Organization {
+    @extend .badge-secondary;
+}
+
+.badge.MoneyTransfer {
+    @extend .badge-info;
+}

@@ -1,6 +1,5 @@
 /**
  * 認証ルーター
- * @ignore
  */
 import * as express from 'express';
 // import * as request from 'request-promise-native';
@@ -8,7 +7,6 @@ import * as express from 'express';
 import User from '../user';
 
 const authRouter = express.Router();
-
 /**
  * サインイン
  * Cognitoからリダイレクトしてくる
@@ -19,19 +17,19 @@ authRouter.get(
     '/signIn',
     async (req, res, next) => {
         try {
-            // stateにはイベントオブジェクトとして受け取ったリクエストボディが入っている
             const user = new User({
                 host: req.hostname,
-                session: <Express.Session>req.session
+                session: <Express.Session>req.session,
+                state: req.originalUrl
             });
-
             await user.signIn(req.query.code);
-            res.redirect('/');
+            const redirect = (req.query.state !== undefined) ? req.query.state : '/';
+            res.redirect(redirect);
         } catch (error) {
             next(error);
         }
-    });
-
+    }
+);
 /**
  * ログアウト
  */
@@ -43,13 +41,14 @@ authRouter.get(
         try {
             const user = new User({
                 host: req.hostname,
-                session: <Express.Session>req.session
+                session: <Express.Session>req.session,
+                state: req.originalUrl
             });
             user.logout();
             res.redirect('/');
         } catch (error) {
             next(error);
         }
-    });
-
+    }
+);
 export default authRouter;

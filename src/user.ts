@@ -6,13 +6,12 @@ const debug = createDebug('pecorino-console:user');
 
 /**
  * ユーザー設定インターフェース
- * @export
  */
 export interface IConfigurations {
     host: string;
     session: Express.Session;
+    state: string;
 }
-
 export interface IProfile {
     sub: string;
     iss: string;
@@ -22,7 +21,6 @@ export interface IProfile {
     family_name: string;
     email: string;
 }
-
 /**
  * リクエストユーザー
  */
@@ -36,6 +34,7 @@ export default class User {
     constructor(configurations: IConfigurations) {
         this.host = configurations.host;
         this.session = configurations.session;
+        this.state = configurations.state;
 
         this.authClient = new pecorinoapi.auth.OAuth2({
             domain: <string>process.env.PECORINO_API_AUTHORIZE_SERVER_DOMAIN,

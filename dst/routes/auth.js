@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 認証ルーター
- * @ignore
  */
 const express = require("express");
 // import * as request from 'request-promise-native';
@@ -24,13 +23,14 @@ const authRouter = express.Router();
 /* istanbul ignore next */
 authRouter.get('/signIn', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
-        // stateにはイベントオブジェクトとして受け取ったリクエストボディが入っている
         const user = new user_1.default({
             host: req.hostname,
-            session: req.session
+            session: req.session,
+            state: req.originalUrl
         });
         yield user.signIn(req.query.code);
-        res.redirect('/');
+        const redirect = (req.query.state !== undefined) ? req.query.state : '/';
+        res.redirect(redirect);
     }
     catch (error) {
         next(error);
@@ -45,7 +45,8 @@ authRouter.get('/logout', (req, res, next) => __awaiter(this, void 0, void 0, fu
     try {
         const user = new user_1.default({
             host: req.hostname,
-            session: req.session
+            session: req.session,
+            state: req.originalUrl
         });
         user.logout();
         res.redirect('/');
