@@ -18,6 +18,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Security
 
+## v1.2.1 - 2019-03-11
+
+### Changed
+
+- install @pecorino/api-nodejs-client@3.0.0
+
 ## v1.2.0 - 2019-03-11
 
 ### Added
