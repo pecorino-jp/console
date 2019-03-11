@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Added
 
+- 転送取引実行画面を追加
+
 ### Changed
 
 ### Deprecated
