@@ -18,6 +18,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Security
 
+## v1.2.0 - 2019-03-11
+
+### Added
+
+- 転送取引実行画面を追加
+
 ## v1.1.0 - 2019-02-19
 
 ### Added

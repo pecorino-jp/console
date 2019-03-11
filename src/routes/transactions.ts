@@ -258,4 +258,132 @@ transactionsRouter.all(
         }
     });
 
+/**
+ * 転送取引開始
+ */
+transactionsRouter.all(
+    '/transfer/start',
+    async (req, res, next) => {
+        try {
+            let values: any = {};
+            let message;
+            if (req.method === 'POST') {
+                values = req.body;
+
+                try {
+                    const transferService = new pecorinoapi.service.transaction.Transfer({
+                        endpoint: <string>process.env.PECORINO_API_ENDPOINT,
+                        auth: req.user.authClient
+                    });
+                    debug('取引を開始します...', values);
+                    const transaction = await transferService.start({
+                        expires: moment().add(1, 'minutes').toDate(),
+                        agent: {
+                            typeOf: 'Person',
+                            id: req.user.profile.sub,
+                            name: values.fromName
+                        },
+                        recipient: {
+                            typeOf: 'Person',
+                            id: 'recipient-id',
+                            name: 'recipient name',
+                            url: ''
+                        },
+                        amount: parseInt(values.amount, 10),
+                        accountType: values.accountType,
+                        notes: values.notes,
+                        fromAccountNumber: values.fromAccountNumber,
+                        toAccountNumber: values.toAccountNumber
+                    });
+                    debug('取引が開始されました。', transaction.id);
+                    // セッションに取引追加
+                    (<Express.Session>req.session)[`transaction:${transaction.id}`] = transaction;
+
+                    res.redirect(`/transactions/transfer/${transaction.id}/confirm`);
+
+                    return;
+                } catch (error) {
+                    message = error.message;
+                }
+            }
+
+            res.render('transactions/transfer/start', {
+                values: values,
+                message: message
+            });
+        } catch (error) {
+            next(error);
+        }
+    });
+
+/**
+ * 転送取引確認
+ */
+transactionsRouter.all(
+    '/transfer/:transactionId/confirm',
+    async (req, res, next) => {
+        try {
+            let message;
+            let fromAccount: pecorinoapi.factory.account.IAccount<pecorinoapi.factory.account.AccountType> | undefined;
+            let toAccount: pecorinoapi.factory.account.IAccount<pecorinoapi.factory.account.AccountType> | undefined;
+            const transaction = <pecorinoapi.factory.transaction.transfer.ITransaction<pecorinoapi.factory.account.AccountType>>
+                (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
+            if (transaction === undefined) {
+                throw new pecorinoapi.factory.errors.NotFound('Transaction in session');
+            }
+
+            if (req.method === 'POST') {
+                // 確定
+                const transferService = new pecorinoapi.service.transaction.Transfer({
+                    endpoint: <string>process.env.PECORINO_API_ENDPOINT,
+                    auth: req.user.authClient
+                });
+                await transferService.confirm({
+                    transactionId: transaction.id
+                });
+                debug('取引確定です。');
+                message = '転送取引を実行しました。';
+                // セッション削除
+                delete (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
+                req.flash('message', '転送取引を実行しました。');
+                res.redirect('/transactions/transfer/start');
+
+                return;
+            } else {
+                // 転送元、転送先口座情報を検索
+                const accountService = new pecorinoapi.service.Account({
+                    endpoint: <string>process.env.PECORINO_API_ENDPOINT,
+                    auth: req.user.authClient
+                });
+                let searchAccountsResult = await accountService.searchWithTotalCount({
+                    accountType: transaction.object.fromLocation.accountType,
+                    accountNumbers: [transaction.object.fromLocation.accountNumber],
+                    statuses: [],
+                    limit: 1
+                });
+                fromAccount = searchAccountsResult.data.shift();
+
+                searchAccountsResult = await accountService.searchWithTotalCount({
+                    accountType: transaction.object.toLocation.accountType,
+                    accountNumbers: [transaction.object.toLocation.accountNumber],
+                    statuses: [],
+                    limit: 1
+                });
+                toAccount = searchAccountsResult.data.shift();
+                if (toAccount === undefined) {
+                    throw new Error('To Location Not Found');
+                }
+            }
+
+            res.render('transactions/transfer/confirm', {
+                transaction: transaction,
+                message: message,
+                fromAccount: fromAccount,
+                toAccount: toAccount
+            });
+        } catch (error) {
+            next(error);
+        }
+    });
+
 export default transactionsRouter;
