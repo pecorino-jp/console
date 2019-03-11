@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
 
+- install @pecorino/api-nodejs-client@3.0.0
+
 ### Deprecated
 
 ### Removed

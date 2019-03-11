@@ -45,6 +45,7 @@ transactionsRouter.all('/deposit/start', (req, res, next) => __awaiter(this, voi
                 });
                 debug('取引を開始します...', values);
                 const transaction = yield depositTransactionService.start({
+                    typeOf: pecorinoapi.factory.transactionType.Deposit,
                     expires: moment().add(1, 'minutes').toDate(),
                     agent: {
                         typeOf: 'Organization',
@@ -58,10 +59,15 @@ transactionsRouter.all('/deposit/start', (req, res, next) => __awaiter(this, voi
                         name: 'recipient name',
                         url: ''
                     },
-                    amount: parseInt(values.amount, 10),
-                    accountType: values.accountType,
-                    notes: values.notes,
-                    toAccountNumber: values.toAccountNumber
+                    object: {
+                        amount: Number(values.amount),
+                        description: values.description,
+                        toLocation: {
+                            typeOf: pecorinoapi.factory.account.TypeOf.Account,
+                            accountType: values.accountType,
+                            accountNumber: values.toAccountNumber
+                        }
+                    }
                 });
                 debug('取引が開始されました。', transaction.id);
                 // セッションに取引追加
@@ -99,9 +105,7 @@ transactionsRouter.all('/deposit/:transactionId/confirm', (req, res, next) => __
                 endpoint: process.env.PECORINO_API_ENDPOINT,
                 auth: req.user.authClient
             });
-            yield depositTransactionService.confirm({
-                transactionId: transaction.id
-            });
+            yield depositTransactionService.confirm(transaction);
             debug('取引確定です。');
             message = '入金取引を実行しました。';
             // セッション削除
@@ -153,6 +157,7 @@ transactionsRouter.all('/withdraw/start', (req, res, next) => __awaiter(this, vo
                 });
                 debug('取引を開始します...', values);
                 const transaction = yield withdrawService.start({
+                    typeOf: pecorinoapi.factory.transactionType.Withdraw,
                     expires: moment().add(1, 'minutes').toDate(),
                     agent: {
                         typeOf: 'Person',
@@ -165,10 +170,15 @@ transactionsRouter.all('/withdraw/start', (req, res, next) => __awaiter(this, vo
                         name: 'recipient name',
                         url: ''
                     },
-                    amount: parseInt(values.amount, 10),
-                    accountType: values.accountType,
-                    notes: values.notes,
-                    fromAccountNumber: values.fromAccountNumber
+                    object: {
+                        amount: Number(values.amount),
+                        description: values.description,
+                        fromLocation: {
+                            typeOf: pecorinoapi.factory.account.TypeOf.Account,
+                            accountType: values.accountType,
+                            accountNumber: values.fromAccountNumber
+                        }
+                    }
                 });
                 debug('取引が開始されました。', transaction.id);
                 // セッションに取引追加
@@ -206,9 +216,7 @@ transactionsRouter.all('/withdraw/:transactionId/confirm', (req, res, next) => _
                 endpoint: process.env.PECORINO_API_ENDPOINT,
                 auth: req.user.authClient
             });
-            yield withdrawService.confirm({
-                transactionId: transaction.id
-            });
+            yield withdrawService.confirm(transaction);
             debug('取引確定です。');
             message = '出金取引を実行しました。';
             // セッション削除
@@ -260,6 +268,7 @@ transactionsRouter.all('/transfer/start', (req, res, next) => __awaiter(this, vo
                 });
                 debug('取引を開始します...', values);
                 const transaction = yield transferService.start({
+                    typeOf: pecorinoapi.factory.transactionType.Transfer,
                     expires: moment().add(1, 'minutes').toDate(),
                     agent: {
                         typeOf: 'Person',
@@ -272,11 +281,20 @@ transactionsRouter.all('/transfer/start', (req, res, next) => __awaiter(this, vo
                         name: 'recipient name',
                         url: ''
                     },
-                    amount: parseInt(values.amount, 10),
-                    accountType: values.accountType,
-                    notes: values.notes,
-                    fromAccountNumber: values.fromAccountNumber,
-                    toAccountNumber: values.toAccountNumber
+                    object: {
+                        amount: Number(values.amount),
+                        fromLocation: {
+                            typeOf: pecorinoapi.factory.account.TypeOf.Account,
+                            accountType: values.accountType,
+                            accountNumber: values.fromAccountNumber
+                        },
+                        toLocation: {
+                            typeOf: pecorinoapi.factory.account.TypeOf.Account,
+                            accountType: values.accountType,
+                            accountNumber: values.toAccountNumber
+                        },
+                        description: values.description
+                    }
                 });
                 debug('取引が開始されました。', transaction.id);
                 // セッションに取引追加
@@ -315,9 +333,7 @@ transactionsRouter.all('/transfer/:transactionId/confirm', (req, res, next) => _
                 endpoint: process.env.PECORINO_API_ENDPOINT,
                 auth: req.user.authClient
             });
-            yield transferService.confirm({
-                transactionId: transaction.id
-            });
+            yield transferService.confirm(transaction);
             debug('取引確定です。');
             message = '転送取引を実行しました。';
             // セッション削除

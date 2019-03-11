@@ -42,6 +42,7 @@ transactionsRouter.all(
                     });
                     debug('取引を開始します...', values);
                     const transaction = await depositTransactionService.start({
+                        typeOf: pecorinoapi.factory.transactionType.Deposit,
                         expires: moment().add(1, 'minutes').toDate(),
                         agent: {
                             typeOf: 'Organization',
@@ -55,10 +56,15 @@ transactionsRouter.all(
                             name: 'recipient name',
                             url: ''
                         },
-                        amount: parseInt(values.amount, 10),
-                        accountType: values.accountType,
-                        notes: values.notes,
-                        toAccountNumber: values.toAccountNumber
+                        object: {
+                            amount: Number(values.amount),
+                            description: values.description,
+                            toLocation: {
+                                typeOf: pecorinoapi.factory.account.TypeOf.Account,
+                                accountType: values.accountType,
+                                accountNumber: values.toAccountNumber
+                            }
+                        }
                     });
                     debug('取引が開始されました。', transaction.id);
                     // セッションに取引追加
@@ -102,9 +108,7 @@ transactionsRouter.all(
                     endpoint: <string>process.env.PECORINO_API_ENDPOINT,
                     auth: req.user.authClient
                 });
-                await depositTransactionService.confirm({
-                    transactionId: transaction.id
-                });
+                await depositTransactionService.confirm(transaction);
                 debug('取引確定です。');
                 message = '入金取引を実行しました。';
                 // セッション削除
@@ -160,6 +164,7 @@ transactionsRouter.all(
                     });
                     debug('取引を開始します...', values);
                     const transaction = await withdrawService.start({
+                        typeOf: pecorinoapi.factory.transactionType.Withdraw,
                         expires: moment().add(1, 'minutes').toDate(),
                         agent: {
                             typeOf: 'Person',
@@ -172,10 +177,15 @@ transactionsRouter.all(
                             name: 'recipient name',
                             url: ''
                         },
-                        amount: parseInt(values.amount, 10),
-                        accountType: values.accountType,
-                        notes: values.notes,
-                        fromAccountNumber: values.fromAccountNumber
+                        object: {
+                            amount: Number(values.amount),
+                            description: values.description,
+                            fromLocation: {
+                                typeOf: pecorinoapi.factory.account.TypeOf.Account,
+                                accountType: values.accountType,
+                                accountNumber: values.fromAccountNumber
+                            }
+                        }
                     });
                     debug('取引が開始されました。', transaction.id);
                     // セッションに取引追加
@@ -219,9 +229,7 @@ transactionsRouter.all(
                     endpoint: <string>process.env.PECORINO_API_ENDPOINT,
                     auth: req.user.authClient
                 });
-                await withdrawService.confirm({
-                    transactionId: transaction.id
-                });
+                await withdrawService.confirm(transaction);
                 debug('取引確定です。');
                 message = '出金取引を実行しました。';
                 // セッション削除
@@ -277,6 +285,7 @@ transactionsRouter.all(
                     });
                     debug('取引を開始します...', values);
                     const transaction = await transferService.start({
+                        typeOf: pecorinoapi.factory.transactionType.Transfer,
                         expires: moment().add(1, 'minutes').toDate(),
                         agent: {
                             typeOf: 'Person',
@@ -289,11 +298,20 @@ transactionsRouter.all(
                             name: 'recipient name',
                             url: ''
                         },
-                        amount: parseInt(values.amount, 10),
-                        accountType: values.accountType,
-                        notes: values.notes,
-                        fromAccountNumber: values.fromAccountNumber,
-                        toAccountNumber: values.toAccountNumber
+                        object: {
+                            amount: Number(values.amount),
+                            fromLocation: {
+                                typeOf: pecorinoapi.factory.account.TypeOf.Account,
+                                accountType: values.accountType,
+                                accountNumber: values.fromAccountNumber
+                            },
+                            toLocation: {
+                                typeOf: pecorinoapi.factory.account.TypeOf.Account,
+                                accountType: values.accountType,
+                                accountNumber: values.toAccountNumber
+                            },
+                            description: values.description
+                        }
                     });
                     debug('取引が開始されました。', transaction.id);
                     // セッションに取引追加
@@ -338,9 +356,7 @@ transactionsRouter.all(
                     endpoint: <string>process.env.PECORINO_API_ENDPOINT,
                     auth: req.user.authClient
                 });
-                await transferService.confirm({
-                    transactionId: transaction.id
-                });
+                await transferService.confirm(transaction);
                 debug('取引確定です。');
                 message = '転送取引を実行しました。';
                 // セッション削除
