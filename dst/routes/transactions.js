@@ -15,7 +15,7 @@ const pecorinoapi = require("@pecorino/api-nodejs-client");
 const createDebug = require("debug");
 const express = require("express");
 const moment = require("moment");
-const debug = createDebug('pecorino-console:routes:account');
+const debug = createDebug('pecorino-console:router');
 const transactionsRouter = express.Router();
 /**
  * 取引検索

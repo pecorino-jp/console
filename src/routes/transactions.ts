@@ -6,7 +6,7 @@ import * as createDebug from 'debug';
 import * as express from 'express';
 import * as moment from 'moment';
 
-const debug = createDebug('pecorino-console:routes:account');
+const debug = createDebug('pecorino-console:router');
 const transactionsRouter = express.Router();
 
 /**
