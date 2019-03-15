@@ -14,7 +14,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const pecorinoapi = require("@pecorino/api-nodejs-client");
 const createDebug = require("debug");
 const express = require("express");
-const debug = createDebug('pecorino-console:routes:account');
+const debug = createDebug('pecorino-console:router');
 const accountsRouter = express.Router();
 /**
  * 口座検索
@@ -30,6 +30,7 @@ accountsRouter.get('/',
         const searchConditions = {
             limit: req.query.limit,
             page: req.query.page,
+            sort: { openDate: pecorinoapi.factory.sortType.Descending },
             accountType: req.query.accountType,
             accountNumbers: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0) ?
                 [req.query.accountNumber] :
@@ -99,9 +100,7 @@ accountsRouter.get('/:accountType/:accountNumber/actions/moneyTransfer', (req, r
             page: req.query.page,
             accountType: req.params.accountType,
             accountNumber: req.params.accountNumber,
-            sort: {
-                endDate: pecorinoapi.factory.sortType.Descending
-            }
+            sort: { startDate: pecorinoapi.factory.sortType.Descending }
         });
         res.json(searchActionsResult);
     }
