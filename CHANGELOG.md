@@ -8,8 +8,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Added
 
-- 口座編集機能を追加
-
 ### Changed
 
 ### Deprecated
@@ -19,6 +17,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 
 ### Security
+
+## v1.4.0 - 2019-06-22
+
+### Added
+
+- 口座編集機能を追加
 
 ## v1.3.0 - 2019-03-15
 
