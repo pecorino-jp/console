@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Added
 
+- 口座編集機能を追加
+
 ### Changed
 
 ### Deprecated
