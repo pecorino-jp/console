@@ -4,6 +4,7 @@
 import * as pecorinoapi from '@pecorino/api-nodejs-client';
 import * as createDebug from 'debug';
 import * as express from 'express';
+import { NO_CONTENT } from 'http-status';
 
 const debug = createDebug('pecorino-console:router');
 const accountsRouter = express.Router();
@@ -53,10 +54,12 @@ accountsRouter.get(
 /**
  * 口座詳細
  */
-accountsRouter.get(
+accountsRouter.all(
     '/:accountType/:accountNumber',
     async (req, res, next) => {
         try {
+            let message;
+
             const accountService = new pecorinoapi.service.Account({
                 endpoint: <string>process.env.PECORINO_API_ENDPOINT,
                 auth: req.user.authClient
@@ -71,8 +74,30 @@ accountsRouter.get(
                 throw new pecorinoapi.factory.errors.NotFound('Account');
             }
             const account = data[0];
+
+            if (req.method === 'DELETE') {
+                res.status(NO_CONTENT)
+                    .end();
+
+                return;
+            } else if (req.method === 'POST') {
+                try {
+                    await accountService.update({
+                        accountType: req.params.accountType,
+                        accountNumber: req.params.accountNumber,
+                        name: req.body.name
+                    });
+                    req.flash('message', '更新しました');
+                    res.redirect(req.originalUrl);
+
+                    return;
+                } catch (error) {
+                    message = error.message;
+                }
+            }
+
             res.render('accounts/show', {
-                message: '',
+                message: message,
                 account: account
             });
         } catch (error) {

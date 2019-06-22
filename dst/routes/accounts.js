@@ -14,6 +14,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const pecorinoapi = require("@pecorino/api-nodejs-client");
 const createDebug = require("debug");
 const express = require("express");
+const http_status_1 = require("http-status");
 const debug = createDebug('pecorino-console:router');
 const accountsRouter = express.Router();
 /**
@@ -61,8 +62,9 @@ accountsRouter.get('/',
 /**
  * 口座詳細
  */
-accountsRouter.get('/:accountType/:accountNumber', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+accountsRouter.all('/:accountType/:accountNumber', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
+        let message;
         const accountService = new pecorinoapi.service.Account({
             endpoint: process.env.PECORINO_API_ENDPOINT,
             auth: req.user.authClient
@@ -77,8 +79,28 @@ accountsRouter.get('/:accountType/:accountNumber', (req, res, next) => __awaiter
             throw new pecorinoapi.factory.errors.NotFound('Account');
         }
         const account = data[0];
+        if (req.method === 'DELETE') {
+            res.status(http_status_1.NO_CONTENT)
+                .end();
+            return;
+        }
+        else if (req.method === 'POST') {
+            try {
+                yield accountService.update({
+                    accountType: req.params.accountType,
+                    accountNumber: req.params.accountNumber,
+                    name: req.body.name
+                });
+                req.flash('message', '更新しました');
+                res.redirect(req.originalUrl);
+                return;
+            }
+            catch (error) {
+                message = error.message;
+            }
+        }
         res.render('accounts/show', {
-            message: '',
+            message: message,
             account: account
         });
     }
