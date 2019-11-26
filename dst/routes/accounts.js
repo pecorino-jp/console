@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -20,7 +21,7 @@ const accountsRouter = express.Router();
 /**
  * 口座検索
  */
-accountsRouter.get('/', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+accountsRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const accountService = new pecorinoapi.service.Account({
             endpoint: process.env.API_ENDPOINT,
@@ -61,7 +62,7 @@ accountsRouter.get('/', (req, res, next) => __awaiter(this, void 0, void 0, func
 /**
  * 口座詳細
  */
-accountsRouter.all('/:accountType/:accountNumber', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+accountsRouter.all('/:accountType/:accountNumber', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let message;
         const accountService = new pecorinoapi.service.Account({
@@ -111,7 +112,7 @@ accountsRouter.all('/:accountType/:accountNumber', (req, res, next) => __awaiter
 /**
  * 取引検索
  */
-accountsRouter.get('/:accountType/:accountNumber/actions/moneyTransfer', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+accountsRouter.get('/:accountType/:accountNumber/actions/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const accountService = new pecorinoapi.service.Account({
             endpoint: process.env.API_ENDPOINT,

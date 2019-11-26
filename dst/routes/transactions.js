@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -20,7 +21,7 @@ const transactionsRouter = express.Router();
 /**
  * 取引検索
  */
-transactionsRouter.get('/', (req, _, next) => __awaiter(this, void 0, void 0, function* () {
+transactionsRouter.get('/', (req, _, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         debug('searching transactions...', req.query);
         throw new Error('Not implemented');
@@ -32,7 +33,7 @@ transactionsRouter.get('/', (req, _, next) => __awaiter(this, void 0, void 0, fu
 /**
  * 入金取引開始
  */
-transactionsRouter.all('/deposit/start', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+transactionsRouter.all('/deposit/start', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let values = {};
         let message;
@@ -92,7 +93,7 @@ transactionsRouter.all('/deposit/start', (req, res, next) => __awaiter(this, voi
 /**
  * 入金取引確認
  */
-transactionsRouter.all('/deposit/:transactionId/confirm', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+transactionsRouter.all('/deposit/:transactionId/confirm', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let message;
         let toAccount;
@@ -145,7 +146,7 @@ transactionsRouter.all('/deposit/:transactionId/confirm', (req, res, next) => __
 /**
  * 出金取引開始
  */
-transactionsRouter.all('/withdraw/start', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+transactionsRouter.all('/withdraw/start', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let values = {};
         let message;
@@ -204,7 +205,7 @@ transactionsRouter.all('/withdraw/start', (req, res, next) => __awaiter(this, vo
 /**
  * 出金取引確認
  */
-transactionsRouter.all('/withdraw/:transactionId/confirm', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+transactionsRouter.all('/withdraw/:transactionId/confirm', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let message;
         let fromAccount;
@@ -257,7 +258,7 @@ transactionsRouter.all('/withdraw/:transactionId/confirm', (req, res, next) => _
 /**
  * 転送取引開始
  */
-transactionsRouter.all('/transfer/start', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+transactionsRouter.all('/transfer/start', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let values = {};
         let message;
@@ -321,7 +322,7 @@ transactionsRouter.all('/transfer/start', (req, res, next) => __awaiter(this, vo
 /**
  * 転送取引確認
  */
-transactionsRouter.all('/transfer/:transactionId/confirm', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+transactionsRouter.all('/transfer/:transactionId/confirm', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let message;
         let fromAccount;

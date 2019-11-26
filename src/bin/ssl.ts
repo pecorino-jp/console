@@ -74,12 +74,10 @@ function onError(error: any) {
             // tslint:disable-next-line:no-console
             console.error(`${bind} requires elevated privileges`);
             process.exit(1);
-            break;
         case 'EADDRINUSE':
             // tslint:disable-next-line:no-console
             console.error(`${bind} is already in use`);
             process.exit(1);
-            break;
         default:
             throw error;
     }
@@ -93,6 +91,6 @@ function onListening() {
     const addr = server.address();
     const bind = typeof addr === 'string'
         ? `pipe ${addr}`
-        : `port ${addr.port.toString()}`;
+        : (addr !== null) ? `port ${addr.port.toString()}` : 'unknown';
     debug(`Listening on ${bind}`);
 }
