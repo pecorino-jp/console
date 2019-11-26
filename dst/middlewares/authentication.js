@@ -16,6 +16,13 @@ exports.default = (req, res, next) => __awaiter(this, void 0, void 0, function* 
             session: req.session,
             state: req.originalUrl
         });
+        if (process.env.PROJECT_ID === undefined) {
+            throw new Error('Set environment variable `PROJECT_ID`');
+        }
+        req.project = {
+            typeOf: 'Project',
+            id: process.env.PROJECT_ID
+        };
         if (!req.user.isAuthenticated()) {
             // ログインページへリダイレクト
             res.redirect(req.user.generateAuthUrl());

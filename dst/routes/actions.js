@@ -19,18 +19,17 @@ const actionsRouter = express.Router();
 /**
  * 転送アクション検索
  */
-actionsRouter.get('/moneyTransfer', 
-// tslint:disable-next-line:cyclomatic-complexity
-(req, res, next) => __awaiter(this, void 0, void 0, function* () {
+actionsRouter.get('/moneyTransfer', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const actionService = new pecorinoapi.service.Action({
-            endpoint: process.env.PECORINO_API_ENDPOINT,
+            endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchConditions = {
             limit: req.query.limit,
             page: req.query.page,
             sort: { startDate: pecorinoapi.factory.sortType.Descending },
+            project: { id: { $eq: req.project.id } },
             accountType: req.query.accountType,
             accountNumber: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0) ?
                 req.query.accountNumber :

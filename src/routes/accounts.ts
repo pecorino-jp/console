@@ -14,17 +14,17 @@ const accountsRouter = express.Router();
  */
 accountsRouter.get(
     '/',
-    // tslint:disable-next-line:cyclomatic-complexity
     async (req, res, next) => {
         try {
             const accountService = new pecorinoapi.service.Account({
-                endpoint: <string>process.env.PECORINO_API_ENDPOINT,
+                endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const searchConditions: pecorinoapi.factory.account.ISearchConditions<string> = {
                 limit: req.query.limit,
                 page: req.query.page,
                 sort: { openDate: pecorinoapi.factory.sortType.Descending },
+                project: { id: { $eq: req.project.id } },
                 accountType: req.query.accountType,
                 accountNumbers: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0) ?
                     [req.query.accountNumber] :
@@ -34,7 +34,7 @@ accountsRouter.get(
             };
             if (req.query.format === 'datatable') {
                 debug('searching accounts...', req.query);
-                const { totalCount, data } = await accountService.searchWithTotalCount(searchConditions);
+                const { totalCount, data } = await accountService.search(searchConditions);
                 res.json({
                     draw: req.query.draw,
                     recordsTotal: totalCount,
@@ -51,6 +51,7 @@ accountsRouter.get(
         }
     }
 );
+
 /**
  * 口座詳細
  */
@@ -61,11 +62,12 @@ accountsRouter.all(
             let message;
 
             const accountService = new pecorinoapi.service.Account({
-                endpoint: <string>process.env.PECORINO_API_ENDPOINT,
+                endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const { totalCount, data } = await accountService.searchWithTotalCount({
+            const { totalCount, data } = await accountService.search({
                 limit: 1,
+                project: { id: { $eq: req.project.id } },
                 statuses: [],
                 accountType: req.params.accountType,
                 accountNumbers: [req.params.accountNumber]
@@ -105,6 +107,7 @@ accountsRouter.all(
         }
     }
 );
+
 /**
  * 取引検索
  */
@@ -113,12 +116,13 @@ accountsRouter.get(
     async (req, res, next) => {
         try {
             const accountService = new pecorinoapi.service.Account({
-                endpoint: <string>process.env.PECORINO_API_ENDPOINT,
+                endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const searchActionsResult = await accountService.searchMoneyTransferActionsWithTotalCount({
+            const searchActionsResult = await accountService.searchMoneyTransferActions({
                 limit: req.query.limit,
                 page: req.query.page,
+                project: { id: { $eq: req.project.id } },
                 accountType: req.params.accountType,
                 accountNumber: req.params.accountNumber,
                 sort: { startDate: pecorinoapi.factory.sortType.Descending }
@@ -129,4 +133,5 @@ accountsRouter.get(
         }
     }
 );
+
 export default accountsRouter;

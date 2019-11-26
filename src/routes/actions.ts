@@ -13,11 +13,10 @@ const actionsRouter = express.Router();
  */
 actionsRouter.get(
     '/moneyTransfer',
-    // tslint:disable-next-line:cyclomatic-complexity
     async (req, res, next) => {
         try {
             const actionService = new pecorinoapi.service.Action({
-                endpoint: <string>process.env.PECORINO_API_ENDPOINT,
+                endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
 
@@ -25,6 +24,7 @@ actionsRouter.get(
                 limit: req.query.limit,
                 page: req.query.page,
                 sort: { startDate: pecorinoapi.factory.sortType.Descending },
+                project: { id: { $eq: req.project.id } },
                 accountType: <string>req.query.accountType,
                 accountNumber: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0) ?
                     <string>req.query.accountNumber :

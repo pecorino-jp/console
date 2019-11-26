@@ -6,7 +6,7 @@ import * as session from 'express-session';
 
 import redisClient from '../redis';
 
-const EXPIRES = parseInt(<string>process.env.USER_EXPIRES_IN_SECONDS, 10);
+const EXPIRES = Number(<string>process.env.USER_EXPIRES_IN_SECONDS);
 export default session({
     secret: 'pecorino-console-session-secret',
     resave: false,

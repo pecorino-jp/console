@@ -10,6 +10,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
 
+- @pecorino/api-nodejs-client@4.0.0で再構築
+- マルチプロジェクト対応
+
 ### Deprecated
 
 ### Removed

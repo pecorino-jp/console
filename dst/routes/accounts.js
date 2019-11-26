@@ -20,18 +20,17 @@ const accountsRouter = express.Router();
 /**
  * 口座検索
  */
-accountsRouter.get('/', 
-// tslint:disable-next-line:cyclomatic-complexity
-(req, res, next) => __awaiter(this, void 0, void 0, function* () {
+accountsRouter.get('/', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const accountService = new pecorinoapi.service.Account({
-            endpoint: process.env.PECORINO_API_ENDPOINT,
+            endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchConditions = {
             limit: req.query.limit,
             page: req.query.page,
             sort: { openDate: pecorinoapi.factory.sortType.Descending },
+            project: { id: { $eq: req.project.id } },
             accountType: req.query.accountType,
             accountNumbers: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0) ?
                 [req.query.accountNumber] :
@@ -41,7 +40,7 @@ accountsRouter.get('/',
         };
         if (req.query.format === 'datatable') {
             debug('searching accounts...', req.query);
-            const { totalCount, data } = yield accountService.searchWithTotalCount(searchConditions);
+            const { totalCount, data } = yield accountService.search(searchConditions);
             res.json({
                 draw: req.query.draw,
                 recordsTotal: totalCount,
@@ -66,11 +65,12 @@ accountsRouter.all('/:accountType/:accountNumber', (req, res, next) => __awaiter
     try {
         let message;
         const accountService = new pecorinoapi.service.Account({
-            endpoint: process.env.PECORINO_API_ENDPOINT,
+            endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const { totalCount, data } = yield accountService.searchWithTotalCount({
+        const { totalCount, data } = yield accountService.search({
             limit: 1,
+            project: { id: { $eq: req.project.id } },
             statuses: [],
             accountType: req.params.accountType,
             accountNumbers: [req.params.accountNumber]
@@ -114,12 +114,13 @@ accountsRouter.all('/:accountType/:accountNumber', (req, res, next) => __awaiter
 accountsRouter.get('/:accountType/:accountNumber/actions/moneyTransfer', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const accountService = new pecorinoapi.service.Account({
-            endpoint: process.env.PECORINO_API_ENDPOINT,
+            endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const searchActionsResult = yield accountService.searchMoneyTransferActionsWithTotalCount({
+        const searchActionsResult = yield accountService.searchMoneyTransferActions({
             limit: req.query.limit,
             page: req.query.page,
+            project: { id: { $eq: req.project.id } },
             accountType: req.params.accountType,
             accountNumber: req.params.accountNumber,
             sort: { startDate: pecorinoapi.factory.sortType.Descending }

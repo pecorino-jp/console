@@ -23,6 +23,7 @@ $(function () {
                     data: null,
                     render: function (data, type, row) {
                         return '<ul class="list-unstyled">'
+                            + '<li><span class="badge badge-light">' + data.project.id + '</span></li>'
                             + '<li>' + '<span class="badge badge-secondary ' + data.typeOf + '">' + data.typeOf + '</span></li>'
                             + '<li>' + '<a href="#">' + data.id + '</a>' + '</li>'
                             + '<li>' + data.startDate + '</li>'

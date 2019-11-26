@@ -24,11 +24,9 @@ $(function () {
                     data: null,
                     render: function (data, type, row) {
                         return '<ul class="list-unstyled">'
-                            + '<li>'
-                            + '<span class="badge ' + data.accountType + '">' + data.accountType + '</span>'
-                            + ' <a target="_blank" href="/accounts/' + data.accountType + '/' + data.accountNumber + '">' + data.accountNumber + '</a>'
-                            + '</li>'
-                            + '<span class="badge ' + data.status + '">' + data.status + '</span>'
+                            + '<li><span class="badge badge-light">' + data.project.id + '</span></li>'
+                            + '<li><span class="badge ' + data.accountType + '">' + data.accountType + '</span></li>'
+                            + '<li><span class="badge ' + data.status + '">' + data.status + '</span></li>'
                             + '</ul>';
                     }
                 },
@@ -36,6 +34,7 @@ $(function () {
                     data: null,
                     render: function (data, type, row) {
                         return '<ul class="list-unstyled">'
+                            + '<li><a target="_blank" href="/accounts/' + data.accountType + '/' + data.accountNumber + '">' + data.accountNumber + '</a></li>'
                             + '<li>' + data.name + '</li>'
                             + '</ul>';
 
@@ -46,13 +45,6 @@ $(function () {
                     render: function (data, type, row) {
                         return '<ul class="list-unstyled">'
                             + '<li>' + data.balance + '</li>'
-                            + '</ul>';
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        return '<ul class="list-unstyled">'
                             + '<li>' + data.availableBalance + '</li>'
                             + '</ul>';
                     }

@@ -21,9 +21,9 @@ class User {
         this.session = configurations.session;
         this.state = configurations.state;
         this.authClient = new pecorinoapi.auth.OAuth2({
-            domain: process.env.PECORINO_API_AUTHORIZE_SERVER_DOMAIN,
-            clientId: process.env.PECORINO_API_CLIENT_ID,
-            clientSecret: process.env.PECORINO_API_CLIENT_SECRET,
+            domain: process.env.API_AUTHORIZE_SERVER_DOMAIN,
+            clientId: process.env.API_CLIENT_ID,
+            clientSecret: process.env.API_CLIENT_SECRET,
             redirectUri: `https://${configurations.host}/signIn`,
             logoutUri: `https://${configurations.host}/logout`
         });
@@ -33,7 +33,7 @@ class User {
         return this.authClient.generateAuthUrl({
             scopes: [],
             state: this.state,
-            codeVerifier: process.env.PECORINO_API_CODE_VERIFIER
+            codeVerifier: process.env.API_CODE_VERIFIER
         });
     }
     generateLogoutUrl() {
@@ -48,7 +48,7 @@ class User {
     signIn(code) {
         return __awaiter(this, void 0, void 0, function* () {
             // 認証情報を取得できればログイン成功
-            const credentials = yield this.authClient.getToken(code, process.env.PECORINO_API_CODE_VERIFIER);
+            const credentials = yield this.authClient.getToken(code, process.env.API_CODE_VERIFIER);
             debug('credentials published', credentials);
             if (credentials.access_token === undefined) {
                 throw new Error('Access token is required for credentials.');
