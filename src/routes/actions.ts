@@ -33,11 +33,13 @@ actionsRouter.get(
 
             if (req.query.format === 'datatable') {
                 debug('searching accounts...', req.query);
-                const { totalCount, data } = await actionService.searchMoneyTransferActions(searchConditions);
+                const { data } = await actionService.searchMoneyTransferActions(searchConditions);
                 res.json({
                     draw: req.query.draw,
-                    recordsTotal: totalCount,
-                    recordsFiltered: totalCount,
+                    // recordsTotal: data.length,
+                    recordsFiltered: (data.length === Number(searchConditions.limit))
+                        ? (Number(searchConditions.page) * Number(searchConditions.limit)) + 1
+                        : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(data.length),
                     data: data
                 });
             } else {

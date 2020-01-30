@@ -6,6 +6,11 @@ $(function () {
         $("#actions-table").DataTable({
             processing: true,
             serverSide: true,
+            pagingType: 'simple',
+            language: {
+                info: 'Showing page _PAGE_',
+                infoFiltered: ''
+            },
             ajax: {
                 url: '/actions/moneyTransfer?' + $('form').serialize(),
                 data: function (d) {

@@ -47,7 +47,6 @@ function searchMoneyTransferActions(cb) {
         '/accounts/' + account.accountType + '/' + account.accountNumber + '/actions/moneyTransfer',
         { limit: limit, page: page }
     ).done(function (data) {
-        $('#numTransactions').html(data.totalCount.toString());
         searchedAllMoneyTransferActions = (data.data.length < limit);
         $.each(data.data, function (_, action) {
             moneyTransferActions.push(action);
@@ -122,6 +121,7 @@ function searchMoneyTransferActions(cb) {
         if (!searchedAllMoneyTransferActions) {
             searchMoneyTransferActions(cb);
         } else {
+            $('#numTransactions').html(moneyTransferActions.length.toString());
             cb();
         }
     }).fail(function () {

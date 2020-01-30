@@ -38,11 +38,13 @@ actionsRouter.get('/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0
         };
         if (req.query.format === 'datatable') {
             debug('searching accounts...', req.query);
-            const { totalCount, data } = yield actionService.searchMoneyTransferActions(searchConditions);
+            const { data } = yield actionService.searchMoneyTransferActions(searchConditions);
             res.json({
                 draw: req.query.draw,
-                recordsTotal: totalCount,
-                recordsFiltered: totalCount,
+                // recordsTotal: data.length,
+                recordsFiltered: (data.length === Number(searchConditions.limit))
+                    ? (Number(searchConditions.page) * Number(searchConditions.limit)) + 1
+                    : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(data.length),
                 data: data
             });
         }

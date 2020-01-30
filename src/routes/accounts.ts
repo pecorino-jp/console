@@ -34,11 +34,13 @@ accountsRouter.get(
             };
             if (req.query.format === 'datatable') {
                 debug('searching accounts...', req.query);
-                const { totalCount, data } = await accountService.search(searchConditions);
+                const { data } = await accountService.search(searchConditions);
                 res.json({
                     draw: req.query.draw,
-                    recordsTotal: totalCount,
-                    recordsFiltered: totalCount,
+                    // recordsTotal: data.length,
+                    recordsFiltered: (data.length === Number(searchConditions.limit))
+                        ? (Number(searchConditions.page) * Number(searchConditions.limit)) + 1
+                        : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(data.length),
                     data: data
                 });
             } else {
@@ -65,14 +67,14 @@ accountsRouter.all(
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const { totalCount, data } = await accountService.search({
+            const { data } = await accountService.search({
                 limit: 1,
                 project: { id: { $eq: req.project.id } },
                 statuses: [],
                 accountType: req.params.accountType,
                 accountNumbers: [req.params.accountNumber]
             });
-            if (totalCount < 1) {
+            if (data.length < 1) {
                 throw new pecorinoapi.factory.errors.NotFound('Account');
             }
             const account = data[0];
