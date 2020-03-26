@@ -27,32 +27,58 @@ $(function () {
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<ul class="list-unstyled">'
-                            + '<li><span class="badge badge-light">' + data.project.id + '</span></li>'
-                            + '<li>' + '<span class="badge badge-secondary ' + data.typeOf + '">' + data.typeOf + '</span></li>'
-                            + '<li>' + '<a href="#">' + data.id + '</a>' + '</li>'
-                            + '<li>' + data.startDate + '</li>'
-                            + '<li>' + data.endDate + '</li>'
-                            + '<li>' + '<span class="badge badge-secondary ' + data.actionStatus + '">' + data.actionStatus + '</span>' + '</li>'
-                            + '</ul>';
+                        return '<a href="#">' + data.id + '</a>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<span>' + data.startDate + '</span>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<span>' + data.endDate + '</span>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<span class="badge badge-secondary ' + data.actionStatus + '">' + data.actionStatus + '</span>';
                     }
                 },
                 {
                     data: null,
                     render: function (data, type, row) {
                         var fromLocation = data.fromLocation;
-                        var html = '<ul class="list-unstyled">'
-                            + '<li>' + '<span class="badge badge-secondary ' + fromLocation.typeOf + '">' + fromLocation.typeOf + '</span></li>';
+                        var html = '<span>' + '<span class="badge badge-secondary ' + fromLocation.typeOf + '">' + fromLocation.typeOf + '</span></span>';
+
+                        return html;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        var fromLocation = data.fromLocation;
+                        var html = '';
 
                         if (fromLocation.accountType !== undefined) {
-                            html += '<li>'
-                                + '<span class="badge badge-secondary ' + fromLocation.accountType + '">' + fromLocation.accountType + '</span>'
-                                + ' <span><a target="_blank" href="/accounts/' + fromLocation.accountType + '/' + fromLocation.accountNumber + '">' + fromLocation.accountNumber + '</a></span>'
-                                + '</li>';
+                            var href = '/projects/' + PROJECT_ID + '/accounts/' + fromLocation.accountType + '/' + fromLocation.accountNumber
+                            html += ' <span class="badge badge-secondary ' + fromLocation.accountType + '">' + fromLocation.accountType + '</span>'
+                                + '<br><span><a target="_blank" href="' + href + '">' + fromLocation.accountNumber + '</a></span>';
                         }
 
-                        html += '<li><span>' + fromLocation.name + '</span></li>'
-                            + '</ul>';
+                        return html;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        var fromLocation = data.fromLocation;
+                        var html = '';
+
+                        html += '<span>' + fromLocation.name + '</span>';
 
                         return html;
                     }
@@ -61,18 +87,7 @@ $(function () {
                     data: null,
                     render: function (data, type, row) {
                         var toLocation = data.toLocation;
-                        var html = '<ul class="list-unstyled">'
-                            + '<li>' + '<span class="badge badge-secondary ' + toLocation.typeOf + '">' + toLocation.typeOf + '</span></li>';
-
-                        if (toLocation.accountType !== undefined) {
-                            html += '<li>'
-                                + '<span class="badge badge-secondary ' + toLocation.accountType + '">' + toLocation.accountType + '</span>'
-                                + ' <span><a target="_blank" href="/accounts/' + toLocation.accountType + '/' + toLocation.accountNumber + '">' + toLocation.accountNumber + '</a></span>'
-                                + '</li>';
-                        }
-
-                        html += '<li><span>' + toLocation.name + '</span></li>'
-                            + '</ul>';
+                        var html = '<span class="badge badge-secondary ' + toLocation.typeOf + '">' + toLocation.typeOf + '</span>';
 
                         return html;
                     }
@@ -80,19 +95,52 @@ $(function () {
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<ul class="list-unstyled">'
-                            + '<li>' + data.amount + '</li>'
-                            + '<li>' + data.description + '</li>'
-                            + '</ul>';
+                        var toLocation = data.toLocation;
+                        var html = '';
+
+                        if (toLocation.accountType !== undefined) {
+                            var href = '/projects/' + PROJECT_ID + '/accounts/' + toLocation.accountType + '/' + toLocation.accountNumber
+                            html += ' <span class="badge badge-secondary ' + toLocation.accountType + '">' + toLocation.accountType + '</span>'
+                                + '<br><span><a target="_blank" href="' + href + '">' + toLocation.accountNumber + '</a></span>';
+                        }
+
+                        return html;
                     }
                 },
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<ul class="list-unstyled">'
-                            + '<li><span class="badge badge-secondary ' + data.purpose.typeOf + '">' + data.purpose.typeOf + '</span></li>'
-                            + '<li><a href="#">' + data.purpose.id + '</a></li>'
-                            + '</ul>';
+                        var toLocation = data.toLocation;
+                        var html = '';
+
+                        html += '<span>' + toLocation.name + '</span>';
+
+                        return html;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<span>' + data.amount + '</span>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        var description = String(data.description);
+                        if (description.length > 10) {
+                            description = String(data.description).slice(0, 10) + '...';
+                        }
+                        var html = '<span>' + description + '</span>';
+
+                        return html;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<span class="badge badge-secondary ' + data.purpose.typeOf + '">' + data.purpose.typeOf + '</span>'
+                            + '<br><a href="#">' + data.purpose.id + '</a>';
                     }
                 }
             ]

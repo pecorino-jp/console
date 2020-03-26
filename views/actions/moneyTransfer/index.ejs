@@ -38,10 +38,16 @@
                     <form role="form" method="get">
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="accountNumber">口座タイプ</label>
-                                <input type="text" class="form-control" id="accountType" name="accountType"
-                                    placeholder="口座タイプ" value="<%= query.accountType %>">
+                                <label for="accountType">口座タイプ</label>
+                                <select class="form-control" id="accountType" name="accountType">
+                                    <% accountTypes.forEach((accountType) => { %>
+                                    <option value="<%= accountType.codeValue %>"
+                                        <% if (query.accountType === accountType.codeValue) { %> selected<% } %>>
+                                        <%= accountType.name.ja %></option>
+                                    <% }) %>
+                                </select>
                             </div>
+
                             <div class="form-group">
                                 <label for="accountNumber">口座番号</label>
                                 <input type="text" class="form-control" id="accountNumber" name="accountNumber"
@@ -72,20 +78,36 @@
                         <table id="actions-table" class="table table-bordered table-hover dataTable">
                             <thead>
                                 <tr>
-                                    <th>Action Type<br>Start Date<br>End Date<br>Status</th>
-                                    <th>From</th>
-                                    <th>To</th>
-                                    <th>Amount<br>Description</th>
-                                    <th>Transaction</th>
+                                    <th>ID</th>
+                                    <th>開始</th>
+                                    <th>終了</th>
+                                    <th>ステータス</th>
+                                    <th>From タイプ</th>
+                                    <th>From 口座</th>
+                                    <th>From 名称</th>
+                                    <th>To タイプ</th>
+                                    <th>To 口座</th>
+                                    <th>To 名称</th>
+                                    <th>Amount</th>
+                                    <th>説明</th>
+                                    <th>取引</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th>Action Type<br>Start Date<br>End Date<br>Status</th>
+                                    <th>ID</th>
+                                    <th>開始</th>
+                                    <th>終了</th>
+                                    <th>ステータス</th>
                                     <th>From</th>
+                                    <th>From タイプ</th>
+                                    <th>From 名称</th>
                                     <th>To</th>
-                                    <th>Amount<br>Description</th>
-                                    <th>Transaction</th>
+                                    <th>To タイプ</th>
+                                    <th>To 名称</th>
+                                    <th>Amount</th>
+                                    <th>説明</th>
+                                    <th>取引</th>
                                 </tr>
                             </tfoot>
                         </table>

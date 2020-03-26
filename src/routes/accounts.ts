@@ -6,6 +6,8 @@ import * as createDebug from 'debug';
 import * as express from 'express';
 import { NO_CONTENT } from 'http-status';
 
+import * as chevreapi from '../chevreapi';
+
 const debug = createDebug('pecorino-console:router');
 const accountsRouter = express.Router();
 
@@ -44,8 +46,18 @@ accountsRouter.get(
                     data: data
                 });
             } else {
+                const categoryCodeService = new chevreapi.service.CategoryCode({
+                    endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
+                    auth: req.user.authClient
+                });
+                const searchAccountTypesResult = await categoryCodeService.search({
+                    project: { id: { $eq: req.project.id } },
+                    inCodeSet: { identifier: { $eq: chevreapi.factory.categoryCode.CategorySetIdentifier.AccountType } }
+                });
+
                 res.render('accounts/index', {
-                    query: req.query
+                    query: req.query,
+                    accountTypes: searchAccountTypesResult.data
                 });
             }
         } catch (error) {

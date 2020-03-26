@@ -21,7 +21,8 @@
 | `API_CODE_VERIFIER`           | true     |                    | API credentials                       |
 | `BASIC_AUTH_NAME`             | false    |                    | Basic auth settings                   |
 | `BASIC_AUTH_PASS`             | false    |                    | Basic auth settings                   |
-| `CINERINO_API_ENDPOINT`       | true     |                    | Cinerino API credentials              |
+| `CHEVRE_API_ENDPOINT`         | true     |                    | Chevre API Endpoint                   |
+| `CINERINO_API_ENDPOINT`       | true     |                    | Cinerino API Endpoint                 |
 | `REDIS_HOST`                  | true     |                    | Redis connection settings for session |
 | `REDIS_PORT`                  | true     |                    | Redis connection settings for session |
 | `REDIS_KEY`                   | true     |                    | Redis connection settings for session |

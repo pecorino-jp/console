@@ -57,10 +57,14 @@
                             <% } %>
 
                             <div class="form-group">
-                                <label for="toAccountNumber">口座タイプ</label>
-                                <input type="text" class="form-control" id="accountType" name="accountType"
-                                    placeholder="口座タイプ" value="<%= values.accountType %>">
+                                <label for="accountType">口座タイプ</label>
+                                <select class="form-control" id="accountType" name="accountType">
+                                    <% accountTypes.forEach((accountType) => { %>
+                                    <option value="<%= accountType.codeValue %>"><%= accountType.name.ja %></option>
+                                    <% }) %>
+                                </select>
                             </div>
+
                             <div class="form-group">
                                 <label for="fromName">入金者名</label>
                                 <input type="text" class="form-control" id="fromName" name="fromName" placeholder="入金者名"

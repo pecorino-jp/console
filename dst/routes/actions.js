@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const pecorinoapi = require("@pecorino/api-nodejs-client");
 const createDebug = require("debug");
 const express = require("express");
+const chevreapi = require("../chevreapi");
 const debug = createDebug('pecorino-console:router');
 const actionsRouter = express.Router();
 /**
@@ -49,8 +50,17 @@ actionsRouter.get('/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0
             });
         }
         else {
+            const categoryCodeService = new chevreapi.service.CategoryCode({
+                endpoint: process.env.CHEVRE_API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const searchAccountTypesResult = yield categoryCodeService.search({
+                project: { id: { $eq: req.project.id } },
+                inCodeSet: { identifier: { $eq: chevreapi.factory.categoryCode.CategorySetIdentifier.AccountType } }
+            });
             res.render('actions/moneyTransfer/index', {
-                query: req.query
+                query: req.query,
+                accountTypes: searchAccountTypesResult.data
             });
         }
     }

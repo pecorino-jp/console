@@ -28,42 +28,58 @@ $(function () {
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<ul class="list-unstyled">'
-                            + '<li><span class="badge badge-light">' + data.project.id + '</span></li>'
-                            + '<li><span class="badge ' + data.accountType + '">' + data.accountType + '</span></li>'
-                            + '<li><span class="badge ' + data.status + '">' + data.status + '</span></li>'
-                            + '</ul>';
+                        return '<span class="badge ' + data.accountType + '">' + data.accountType + '</span>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<span><span class="badge ' + data.status + '">' + data.status + '</span></span>';
                     }
                 },
                 {
                     data: null,
                     render: function (data, type, row) {
                         var href = '/projects/' + PROJECT_ID + '/accounts/' + data.accountType + '/' + data.accountNumber;
-                        return '<ul class="list-unstyled">'
-                            + '<li><a target="_blank" href="' + href + '">' + data.accountNumber + '</a></li>'
-                            + '<li>' + data.name + '</li>'
-                            + '</ul>';
+                        return '<span><a target="_blank" href="' + href + '">' + data.accountNumber + '</a></span>';
 
                     }
                 },
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<ul class="list-unstyled">'
-                            + '<li>' + data.balance + '</li>'
-                            + '<li>' + data.availableBalance + '</li>'
-                            + '</ul>';
+                        return '<span>' + data.name + '</span>';
+
                     }
                 },
                 {
                     data: null,
                     render: function (data, type, row) {
-                        var html = '<ul class="list-unstyled">'
-                            + '<li>' + data.openDate + '</li>';
+                        return '<span>' + data.balance + '</span>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<span>' + data.availableBalance + '</span>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        var html = '<span>' + data.openDate + '</span>'
+
+                        return html;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        var html = ''
                         if (data.closeDate !== undefined) {
-                            html += '<li>' + data.closeDate + '</li>'
+                            html += '<span>' + data.closeDate + '</span>'
                         }
-                        html += '</ul>';
+                        html += '';
 
                         return html;
                     }

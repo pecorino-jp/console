@@ -5,6 +5,8 @@ import * as pecorinoapi from '@pecorino/api-nodejs-client';
 import * as createDebug from 'debug';
 import * as express from 'express';
 
+import * as chevreapi from '../chevreapi';
+
 const debug = createDebug('pecorino-console:router');
 const actionsRouter = express.Router();
 
@@ -43,8 +45,18 @@ actionsRouter.get(
                     data: data
                 });
             } else {
+                const categoryCodeService = new chevreapi.service.CategoryCode({
+                    endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
+                    auth: req.user.authClient
+                });
+                const searchAccountTypesResult = await categoryCodeService.search({
+                    project: { id: { $eq: req.project.id } },
+                    inCodeSet: { identifier: { $eq: chevreapi.factory.categoryCode.CategorySetIdentifier.AccountType } }
+                });
+
                 res.render('actions/moneyTransfer/index', {
-                    query: req.query
+                    query: req.query,
+                    accountTypes: searchAccountTypesResult.data
                 });
             }
         } catch (error) {
