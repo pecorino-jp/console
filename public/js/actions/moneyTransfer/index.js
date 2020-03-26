@@ -12,7 +12,7 @@ $(function () {
                 infoFiltered: ''
             },
             ajax: {
-                url: '/actions/moneyTransfer?' + $('form').serialize(),
+                url: '/projects/' + PROJECT_ID + '/actions/moneyTransfer?' + $('form').serialize(),
                 data: function (d) {
                     d.limit = d.length;
                     d.page = (d.start / d.length) + 1;

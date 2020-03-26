@@ -13,7 +13,7 @@ $(function () {
                 infoFiltered: ''
             },
             ajax: {
-                url: '/accounts?' + $('form').serialize(),
+                url: '/projects/' + PROJECT_ID + '/accounts?' + $('form').serialize(),
                 data: function (d) {
                     d.limit = d.length;
                     d.page = (d.start / d.length) + 1;
@@ -38,8 +38,9 @@ $(function () {
                 {
                     data: null,
                     render: function (data, type, row) {
+                        var href = '/projects/' + PROJECT_ID + '/accounts/' + data.accountType + '/' + data.accountNumber;
                         return '<ul class="list-unstyled">'
-                            + '<li><a target="_blank" href="/accounts/' + data.accountType + '/' + data.accountNumber + '">' + data.accountNumber + '</a></li>'
+                            + '<li><a target="_blank" href="' + href + '">' + data.accountNumber + '</a></li>'
                             + '<li>' + data.name + '</li>'
                             + '</ul>';
 

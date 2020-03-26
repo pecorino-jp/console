@@ -71,7 +71,7 @@ transactionsRouter.all(
                     // セッションに取引追加
                     (<Express.Session>req.session)[`transaction:${transaction.id}`] = transaction;
 
-                    res.redirect(`/transactions/deposit/${transaction.id}/confirm`);
+                    res.redirect(`/projects/${req.project.id}/transactions/deposit/${transaction.id}/confirm`);
 
                     return;
                 } catch (error) {
@@ -115,7 +115,7 @@ transactionsRouter.all(
                 // セッション削除
                 delete (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
                 req.flash('message', '入金取引を実行しました。');
-                res.redirect('/transactions/deposit/start');
+                res.redirect(`/projects/${req.project.id}/transactions/deposit/start`);
 
                 return;
             } else {
@@ -193,7 +193,7 @@ transactionsRouter.all(
                     // セッションに取引追加
                     (<Express.Session>req.session)[`transaction:${transaction.id}`] = transaction;
 
-                    res.redirect(`/transactions/withdraw/${transaction.id}/confirm`);
+                    res.redirect(`/projects/${req.project.id}/transactions/withdraw/${transaction.id}/confirm`);
 
                     return;
                 } catch (error) {
@@ -237,7 +237,7 @@ transactionsRouter.all(
                 // セッション削除
                 delete (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
                 req.flash('message', '出金取引を実行しました。');
-                res.redirect('/transactions/withdraw/start');
+                res.redirect(`/projects/${req.project.id}/transactions/withdraw/start`);
 
                 return;
             } else {
@@ -320,7 +320,7 @@ transactionsRouter.all(
                     // セッションに取引追加
                     (<Express.Session>req.session)[`transaction:${transaction.id}`] = transaction;
 
-                    res.redirect(`/transactions/transfer/${transaction.id}/confirm`);
+                    res.redirect(`/projects/${req.project.id}/transactions/transfer/${transaction.id}/confirm`);
 
                     return;
                 } catch (error) {
@@ -365,7 +365,7 @@ transactionsRouter.all(
                 // セッション削除
                 delete (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
                 req.flash('message', '転送取引を実行しました。');
-                res.redirect('/transactions/transfer/start');
+                res.redirect(`/projects/${req.project.id}/transactions/transfer/start`);
 
                 return;
             } else {

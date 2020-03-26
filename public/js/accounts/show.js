@@ -44,7 +44,7 @@ $(function () {
 function searchMoneyTransferActions(cb) {
     page += 1;
     $.getJSON(
-        '/accounts/' + account.accountType + '/' + account.accountNumber + '/actions/moneyTransfer',
+        '/projects/' + PROJECT_ID + '/accounts/' + account.accountType + '/' + account.accountNumber + '/actions/moneyTransfer',
         { limit: limit, page: page }
     ).done(function (data) {
         searchedAllMoneyTransferActions = (data.data.length < limit);
@@ -130,25 +130,92 @@ function searchMoneyTransferActions(cb) {
 }
 function createBalanceChart(datas) {
     console.log('creating chart...datas:', datas.length);
-    balanceChart = new Morris.Line({
-        element: 'balanceChart',
-        resize: true,
-        data: datas.map(function (data) {
-            return { y: data.x, balance: data.y }
-        }),
-        xkey: 'y',
-        ykeys: ['balance'],
-        labels: ['残高遷移'],
-        lineColors: ['#efefef'],
-        lineWidth: 2,
-        hideHover: 'auto',
-        gridTextColor: '#fff',
-        gridStrokeWidth: 0.4,
-        pointSize: 2,
-        pointStrokeColors: ['#efefef'],
-        gridLineColor: '#efefef',
-        gridTextFamily: 'Open Sans',
-        gridTextSize: 10,
-        smooth: false
+
+    balanceChart = new Chart($('#balanceChart').get(0).getContext('2d'), {
+        type: 'line',
+        data: {
+            // labels: ['2011 Q1', '2011 Q2', '2011 Q3', '2011 Q4', '2012 Q1', '2012 Q2', '2012 Q3', '2012 Q4', '2013 Q1', '2013 Q2'],
+            datasets: [
+                {
+                    label: status,
+                    fill: false,
+                    borderWidth: 2,
+                    lineTension: 0,
+                    spanGaps: true,
+                    borderColor: '#efefef',
+                    pointRadius: 2,
+                    pointHoverRadius: 7,
+                    pointColor: '#efefef',
+                    pointBackgroundColor: '#efefef',
+                    data: datas.map(function (data) {
+                        return { x: moment(data.x).toDate(), y: data.y }
+                    }),
+                }
+            ]
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            legend: {
+                display: false,
+            },
+            scales: {
+                xAxes: [{
+                    type: 'time',
+                    time: {
+                        unit: 'day'
+                        // displayFormats: {
+                        //     quarter: 'MMM YYYY'
+                        // }
+                    },
+                    ticks: {
+                        fontColor: '#fff',
+                        fontFamily: 'Open Sans',
+                        fontSize: 10
+                    },
+                    gridLines: {
+                        display: false
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        // stepSize: 5000,
+                        fontColor: '#fff',
+                        fontFamily: 'Open Sans',
+                        fontSize: 10
+                    },
+                    gridLines: {
+                        display: true,
+                        // color: '#555c62',
+                        // color: '#efefef',
+                        lineWidth: 1,
+                        drawBorder: false,
+                    }
+                }]
+            }
+        }
     });
+
+    // balanceChart = new Morris.Line({
+    //     element: 'balanceChart',
+    //     resize: true,
+    //     data: datas.map(function (data) {
+    //         return { y: data.x, balance: data.y }
+    //     }),
+    //     xkey: 'y',
+    //     ykeys: ['balance'],
+    //     labels: ['残高遷移'],
+    //     lineColors: ['#efefef'],
+    //     lineWidth: 2,
+    //     hideHover: 'auto',
+    //     gridTextColor: '#fff',
+    //     gridStrokeWidth: 0.4,
+    //     pointSize: 2,
+    //     pointStrokeColors: ['#efefef'],
+    //     gridLineColor: '#efefef',
+    //     gridTextFamily: 'Open Sans',
+    //     gridTextSize: 10,
+    //     smooth: false
+    // });
 }

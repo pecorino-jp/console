@@ -5,11 +5,9 @@ import * as express from 'express';
 
 import authentication from '../middlewares/authentication';
 
-import accountsRouter from './accounts';
-import actionsRouter from './actions';
 import authRouter from './auth';
-import homeRouter from './home';
-import transactionsRouter from './transactions';
+import dashboardRouter from './dashboard';
+import projectsRouter from './projects';
 
 const router = express.Router();
 
@@ -22,9 +20,7 @@ const router = express.Router();
 router.use(authRouter);
 
 router.use(authentication);
-router.use(homeRouter);
-router.use('/accounts', accountsRouter);
-router.use('/actions', actionsRouter);
-router.use('/transactions', transactionsRouter);
+router.use(dashboardRouter);
+router.use('/projects', projectsRouter);
 
 export default router;

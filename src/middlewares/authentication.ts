@@ -13,15 +13,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
             state: req.originalUrl
         });
 
-        if (process.env.PROJECT_ID === undefined) {
-            throw new Error('Set environment variable `PROJECT_ID`');
-        }
-
-        req.project = {
-            typeOf: 'Project',
-            id: process.env.PROJECT_ID
-        };
-
         if (!req.user.isAuthenticated()) {
             // ログインページへリダイレクト
             res.redirect(req.user.generateAuthUrl());
@@ -30,6 +21,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         }
 
         await req.user.retrieveProfile();
+        res.locals.req = req;
         res.locals.user = req.user;
         next();
     } catch (error) {
