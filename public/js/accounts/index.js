@@ -21,6 +21,7 @@ $(function () {
                     d.format = 'datatable';
                 }
             },
+            lengthChange: false,
             searching: false,
             order: [[1, 'asc']], // デフォルトは枝番号昇順
             ordering: false,
@@ -87,6 +88,10 @@ $(function () {
             ]
         });
     }
+
+    $(document).on('click', '.btn.search', function () {
+        $('form').submit();
+    });
 
     //Date range picker
     $('#orderDateRange').daterangepicker({

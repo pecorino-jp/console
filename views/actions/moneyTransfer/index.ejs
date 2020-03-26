@@ -29,37 +29,85 @@
             <!-- left column -->
             <div class="col-md-12">
                 <!-- general form elements -->
-                <div class="card card-primary">
-                    <!-- <div class="card-header">
-                        <h3 class="card-title">Quick Example</h3>
-                    </div> -->
+                <div class="card card-default">
+                    <div class="card-header">
+                        <!-- <h1 class="card-title">Quick Example</h1> -->
+                        <div class="toolbar">
+                            <!--        Here you can write extra buttons/actions for the toolbar              -->
+                            <a class="btn btn-default btn-sm search" href="#">
+                                <i class="fa fa-redo"></i>&nbsp;&nbsp;更新</a>
+                        </div>
+                    </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form role="form" method="get">
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="accountType">口座タイプ</label>
-                                <select class="form-control" id="accountType" name="accountType">
-                                    <% accountTypes.forEach((accountType) => { %>
-                                    <option value="<%= accountType.codeValue %>"
-                                        <% if (query.accountType === accountType.codeValue) { %> selected<% } %>>
-                                        <%= accountType.name.ja %></option>
-                                    <% }) %>
-                                </select>
+                    <div class="card-body">
+                        <form role="form" method="get">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="accountType">口座タイプ</label>
+                                        <select class="form-control form-control-sm" id="accountType"
+                                            name="accountType">
+                                            <% accountTypes.forEach((accountType) => { %>
+                                            <option value="<%= accountType.codeValue %>"
+                                                <% if (query.accountType === accountType.codeValue) { %>
+                                                selected<% } %>>
+                                                <%= accountType.name.ja %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="accountNumber">口座番号</label>
+                                        <input type="text" class="form-control form-control-sm" id="accountNumber"
+                                            name="accountNumber" placeholder="口座番号" value="<%= query.accountNumber %>">
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="accountNumber">口座番号</label>
-                                <input type="text" class="form-control" id="accountNumber" name="accountNumber"
-                                    placeholder="口座番号" value="<%= query.accountNumber %>">
-                            </div>
-                        </div>
-                        <!-- /.card-body -->
+                        </form>
 
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">検索</button>
+                        <div class=" table-responsive">
+                            <table id="actions-table" class="table table-bordered table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>開始</th>
+                                        <th>終了</th>
+                                        <th>ステータス</th>
+                                        <th>From タイプ</th>
+                                        <th>From 口座</th>
+                                        <th>From 名称</th>
+                                        <th>To タイプ</th>
+                                        <th>To 口座</th>
+                                        <th>To 名称</th>
+                                        <th>Amount</th>
+                                        <th>説明</th>
+                                        <th>取引</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>開始</th>
+                                        <th>終了</th>
+                                        <th>ステータス</th>
+                                        <th>From</th>
+                                        <th>From タイプ</th>
+                                        <th>From 名称</th>
+                                        <th>To</th>
+                                        <th>To タイプ</th>
+                                        <th>To 名称</th>
+                                        <th>Amount</th>
+                                        <th>説明</th>
+                                        <th>取引</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
-                    </form>
+                    </div>
+                    <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
 
@@ -74,44 +122,6 @@
                         <h3 class="card-title">検索結果</h3>
                     </div>
                     <!-- /.card-header -->
-                    <div class="card-body table-responsive">
-                        <table id="actions-table" class="table table-bordered table-hover dataTable">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>開始</th>
-                                    <th>終了</th>
-                                    <th>ステータス</th>
-                                    <th>From タイプ</th>
-                                    <th>From 口座</th>
-                                    <th>From 名称</th>
-                                    <th>To タイプ</th>
-                                    <th>To 口座</th>
-                                    <th>To 名称</th>
-                                    <th>Amount</th>
-                                    <th>説明</th>
-                                    <th>取引</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>開始</th>
-                                    <th>終了</th>
-                                    <th>ステータス</th>
-                                    <th>From</th>
-                                    <th>From タイプ</th>
-                                    <th>From 名称</th>
-                                    <th>To</th>
-                                    <th>To タイプ</th>
-                                    <th>To 名称</th>
-                                    <th>Amount</th>
-                                    <th>説明</th>
-                                    <th>取引</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->

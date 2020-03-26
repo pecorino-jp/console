@@ -29,42 +29,85 @@
             <!-- left column -->
             <div class="col-md-12">
                 <!-- general form elements -->
-                <div class="card card-primary">
-                    <!-- <div class="card-header">
-                        <h3 class="card-title">Quick Example</h3>
-                    </div> -->
+                <div class="card card-default">
+                    <div class="card-header">
+                        <!-- <h3 class="card-title">Quick Example</h3> -->
+                        <div class="toolbar">
+                            <!--        Here you can write extra buttons/actions for the toolbar              -->
+                            <a class="btn btn-default btn-sm search" href="#">
+                                <i class="fa fa-redo"></i>&nbsp;&nbsp;更新</a>
+                        </div>
+                    </div>
                     <!-- /.card-header -->
-                    <!-- form start -->
-                    <form role="form" method="get">
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="accountType">口座タイプ</label>
-                                <select class="form-control" id="accountType" name="accountType">
-                                    <% accountTypes.forEach((accountType) => { %>
-                                    <option value="<%= accountType.codeValue %>"
-                                        <% if (query.accountType === accountType.codeValue) { %> selected<% } %>>
-                                        <%= accountType.name.ja %></option>
-                                    <% }) %>
-                                </select>
-                            </div>
 
-                            <div class="form-group">
-                                <label for="accountNumber">口座番号</label>
-                                <input type="text" class="form-control" id="accountNumber" name="accountNumber"
-                                    placeholder="口座番号" value="<%= query.accountNumber %>">
-                            </div>
-                            <div class="form-group">
-                                <label for="name">名義</label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="名義"
-                                    value="<%= query.name %>">
-                            </div>
-                        </div>
-                        <!-- /.card-body -->
+                    <div class="card-body">
+                        <!-- form start -->
+                        <form role="form" method="get">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="accountType">口座タイプ</label>
+                                        <select class="form-control form-control-sm" id="accountType"
+                                            name="accountType">
+                                            <% accountTypes.forEach((accountType) => { %>
+                                            <option value="<%= accountType.codeValue %>"
+                                                <% if (query.accountType === accountType.codeValue) { %>
+                                                selected<% } %>>
+                                                <%= accountType.name.ja %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
 
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">検索</button>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="accountNumber">口座番号</label>
+                                        <input type="text" class="form-control form-control-sm" id="accountNumber"
+                                            name="accountNumber" placeholder="口座番号" value="<%= query.accountNumber %>">
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="name">名義</label>
+                                        <input type="text" class="form-control form-control-sm" id="name" name="name"
+                                            placeholder="名義" value="<%= query.name %>">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="table-responsive">
+                            <table id="accounts-table" class="table table-bordered table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>口座タイプ</th>
+                                        <th>ステータス</th>
+                                        <th>口座番号</th>
+                                        <th>名義</th>
+                                        <th>残高</th>
+                                        <th>利用可能残高</th>
+                                        <th>開設</th>
+                                        <th>解約</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>口座タイプ</th>
+                                        <th>ステータス</th>
+                                        <th>口座番号</th>
+                                        <th>名義</th>
+                                        <th>残高</th>
+                                        <th>利用可能残高</th>
+                                        <th>開設</th>
+                                        <th>解約</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
-                    </form>
+                    </div>
+                    <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
 
@@ -79,34 +122,6 @@
                         <h3 class="card-title">検索結果</h3>
                     </div>
                     <!-- /.card-header -->
-                    <div class="card-body table-responsive">
-                        <table id="accounts-table" class="table table-bordered table-hover dataTable">
-                            <thead>
-                                <tr>
-                                    <th>口座タイプ</th>
-                                    <th>ステータス</th>
-                                    <th>口座番号</th>
-                                    <th>名義</th>
-                                    <th>残高</th>
-                                    <th>利用可能残高</th>
-                                    <th>開設</th>
-                                    <th>解約</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>口座タイプ</th>
-                                    <th>ステータス</th>
-                                    <th>口座番号</th>
-                                    <th>名義</th>
-                                    <th>残高</th>
-                                    <th>利用可能残高</th>
-                                    <th>開設</th>
-                                    <th>解約</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->

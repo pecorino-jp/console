@@ -49,3 +49,9 @@
 .badge.MoneyTransfer {
     @extend .badge-info;
 }
+
+.content-header {  
+    h1 {
+      font-size: 1.4rem;
+    }
+}
