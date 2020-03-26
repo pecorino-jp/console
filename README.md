@@ -22,7 +22,6 @@
 | `BASIC_AUTH_NAME`             | false    |                    | Basic auth settings                   |
 | `BASIC_AUTH_PASS`             | false    |                    | Basic auth settings                   |
 | `CINERINO_API_ENDPOINT`       | true     |                    | Cinerino API credentials              |
-| `NODE_ENV`                    | true     |                    | environment name                      |
 | `REDIS_HOST`                  | true     |                    | Redis connection settings for session |
 | `REDIS_PORT`                  | true     |                    | Redis connection settings for session |
 | `REDIS_KEY`                   | true     |                    | Redis connection settings for session |
