@@ -69,41 +69,24 @@
                         </form>
 
                         <div class=" table-responsive">
-                            <table id="actions-table" class="table table-bordered table-hover dataTable">
+                            <table id="actions-table" class="table table-sm table-hover dataTable">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>開始</th>
                                         <th>終了</th>
                                         <th>ステータス</th>
-                                        <th>From タイプ</th>
-                                        <th>From 口座</th>
-                                        <th>From 名称</th>
-                                        <th>To タイプ</th>
-                                        <th>To 口座</th>
-                                        <th>To 名称</th>
+                                        <th>From<br>タイプ</th>
+                                        <th>From<br>口座</th>
+                                        <th>From<br>名称</th>
+                                        <th>To<br>タイプ</th>
+                                        <th>To<br>口座</th>
+                                        <th>To<br>名称</th>
                                         <th>Amount</th>
                                         <th>説明</th>
                                         <th>取引</th>
                                     </tr>
                                 </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>開始</th>
-                                        <th>終了</th>
-                                        <th>ステータス</th>
-                                        <th>From</th>
-                                        <th>From タイプ</th>
-                                        <th>From 名称</th>
-                                        <th>To</th>
-                                        <th>To タイプ</th>
-                                        <th>To 名称</th>
-                                        <th>Amount</th>
-                                        <th>説明</th>
-                                        <th>取引</th>
-                                    </tr>
-                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -115,24 +98,27 @@
             <!--/.col (left) -->
         </div>
         <!-- /.row -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">検索結果</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
     </div>
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
+
+<div class="modal" id="modal-action" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- DataTables -->
 <link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.css">

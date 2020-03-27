@@ -68,7 +68,7 @@ $(function () {
                 {
                     data: null,
                     render: function (data, type, row) {
-                        var html = '<span>' + data.openDate + '</span>'
+                        var html = '<span>' + moment(data.openDate).utc().format() + '</span>'
 
                         return html;
                     }
@@ -78,7 +78,7 @@ $(function () {
                     render: function (data, type, row) {
                         var html = ''
                         if (data.closeDate !== undefined) {
-                            html += '<span>' + data.closeDate + '</span>'
+                            html += '<span>' + moment(data.closeDate).utc().format() + '</span>'
                         }
                         html += '';
 

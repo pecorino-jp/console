@@ -1,9 +1,11 @@
+var table;
+
 $(function () {
     var accountType = $('form input[name="accountType"]').val();
     if (accountType === '') {
         alert('口座タイプを指定してください');
     } else {
-        $("#actions-table").DataTable({
+        table = $("#actions-table").DataTable({
             processing: true,
             serverSide: true,
             pagingType: 'simple',
@@ -34,13 +36,13 @@ $(function () {
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<span>' + data.startDate + '</span>';
+                        return '<span>' + moment(data.startDate).utc().format() + '</span>';
                     }
                 },
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<span>' + data.endDate + '</span>';
+                        return '<span>' + moment(data.endDate).utc().format() + '</span>';
                     }
                 },
                 {
@@ -67,7 +69,7 @@ $(function () {
                         if (fromLocation.accountType !== undefined) {
                             var href = '/projects/' + PROJECT_ID + '/accounts/' + fromLocation.accountType + '/' + fromLocation.accountNumber
                             html += ' <span class="badge badge-secondary ' + fromLocation.accountType + '">' + fromLocation.accountType + '</span>'
-                                + '<br><span><a target="_blank" href="' + href + '">' + fromLocation.accountNumber + '</a></span>';
+                                + ' <span><a target="_blank" href="' + href + '">' + fromLocation.accountNumber + '</a></span>';
                         }
 
                         return html;
@@ -79,7 +81,14 @@ $(function () {
                         var fromLocation = data.fromLocation;
                         var html = '';
 
-                        html += '<span>' + fromLocation.name + '</span>';
+                        if (fromLocation !== undefined && fromLocation !== null) {
+                            var name = fromLocation.name;
+                            if (typeof name === 'string' && name.length > 10) {
+                                name = name.slice(0, 10) + '...';
+                            }
+
+                            html += '<a href="#" data-toggle="tooltip" title="' + fromLocation.name + '"><span>' + name + '</span></a>';
+                        }
 
                         return html;
                     }
@@ -102,7 +111,7 @@ $(function () {
                         if (toLocation.accountType !== undefined) {
                             var href = '/projects/' + PROJECT_ID + '/accounts/' + toLocation.accountType + '/' + toLocation.accountNumber
                             html += ' <span class="badge badge-secondary ' + toLocation.accountType + '">' + toLocation.accountType + '</span>'
-                                + '<br><span><a target="_blank" href="' + href + '">' + toLocation.accountNumber + '</a></span>';
+                                + ' <span><a target="_blank" href="' + href + '">' + toLocation.accountNumber + '</a></span>';
                         }
 
                         return html;
@@ -114,7 +123,14 @@ $(function () {
                         var toLocation = data.toLocation;
                         var html = '';
 
-                        html += '<span>' + toLocation.name + '</span>';
+                        if (toLocation !== undefined && toLocation !== null) {
+                            var name = toLocation.name;
+                            if (typeof name === 'string' && name.length > 10) {
+                                name = name.slice(0, 10) + '...';
+                            }
+
+                            html += '<a href="#" data-toggle="tooltip" title="' + toLocation.name + '"><span>' + name + '</span></a>';
+                        }
 
                         return html;
                     }
@@ -128,11 +144,14 @@ $(function () {
                 {
                     data: null,
                     render: function (data, type, row) {
-                        var description = String(data.description);
-                        if (description.length > 10) {
-                            description = String(data.description).slice(0, 10) + '...';
+                        var html = '';
+                        var description = data.description;
+
+                        if (typeof description === 'string' && description.length > 10) {
+                            description = description.slice(0, 10) + '...';
                         }
-                        var html = '<span>' + description + '</span>';
+
+                        html += '<a href="#" data-toggle="tooltip" title="' + data.description + '"><span>' + description + '</span></a>';
 
                         return html;
                     }
@@ -140,8 +159,7 @@ $(function () {
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<span class="badge badge-secondary ' + data.purpose.typeOf + '">' + data.purpose.typeOf + '</span>'
-                            + '<br><a href="#">' + data.purpose.id + '</a>';
+                        return '<a href="#' + data.purpose.id + '"><span class="badge badge-secondary ' + data.purpose.typeOf + '">' + data.purpose.typeOf + '</span></a>';
                     }
                 }
             ]
@@ -157,5 +175,6 @@ $(function () {
         timePicker: false,
         // timePickerIncrement: 30,
         format: 'YYYY-MM-DDT00:00:00Z'
-    })
+    });
+
 });
