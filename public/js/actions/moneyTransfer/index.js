@@ -57,29 +57,11 @@ $(function () {
                         var fromLocation = data.fromLocation;
                         var html = '<span>' + '<span class="badge badge-secondary ' + fromLocation.typeOf + '">' + fromLocation.typeOf + '</span></span>';
 
-                        return html;
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        var fromLocation = data.fromLocation;
-                        var html = '';
-
                         if (fromLocation.accountType !== undefined) {
                             var href = '/projects/' + PROJECT_ID + '/accounts/' + fromLocation.accountType + '/' + fromLocation.accountNumber
-                            html += ' <span class="badge badge-secondary ' + fromLocation.accountType + '">' + fromLocation.accountType + '</span>'
+                            html += ' <span class="badge badge-light ' + fromLocation.accountType + '">' + fromLocation.accountType + '</span>'
                                 + ' <span><a target="_blank" href="' + href + '">' + fromLocation.accountNumber + '</a></span>';
                         }
-
-                        return html;
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        var fromLocation = data.fromLocation;
-                        var html = '';
 
                         if (fromLocation !== undefined && fromLocation !== null) {
                             var name = fromLocation.name;
@@ -87,7 +69,7 @@ $(function () {
                                 name = name.slice(0, 10) + '...';
                             }
 
-                            html += '<a href="#" data-toggle="tooltip" title="' + fromLocation.name + '"><span>' + name + '</span></a>';
+                            html += '<br><a href="#" data-toggle="tooltip" title="' + fromLocation.name + '"><span>' + name + '</span></a>';
                         }
 
                         return html;
@@ -97,31 +79,13 @@ $(function () {
                     data: null,
                     render: function (data, type, row) {
                         var toLocation = data.toLocation;
-                        var html = '<span class="badge badge-secondary ' + toLocation.typeOf + '">' + toLocation.typeOf + '</span>';
-
-                        return html;
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        var toLocation = data.toLocation;
-                        var html = '';
+                        var html = '<span class="badge badge-light ' + toLocation.typeOf + '">' + toLocation.typeOf + '</span>';
 
                         if (toLocation.accountType !== undefined) {
                             var href = '/projects/' + PROJECT_ID + '/accounts/' + toLocation.accountType + '/' + toLocation.accountNumber
-                            html += ' <span class="badge badge-secondary ' + toLocation.accountType + '">' + toLocation.accountType + '</span>'
+                            html += ' <span class="badge badge-light ' + toLocation.accountType + '">' + toLocation.accountType + '</span>'
                                 + ' <span><a target="_blank" href="' + href + '">' + toLocation.accountNumber + '</a></span>';
                         }
-
-                        return html;
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        var toLocation = data.toLocation;
-                        var html = '';
 
                         if (toLocation !== undefined && toLocation !== null) {
                             var name = toLocation.name;
@@ -129,7 +93,7 @@ $(function () {
                                 name = name.slice(0, 10) + '...';
                             }
 
-                            html += '<a href="#" data-toggle="tooltip" title="' + toLocation.name + '"><span>' + name + '</span></a>';
+                            html += '<br><a href="#" data-toggle="tooltip" title="' + toLocation.name + '"><span>' + name + '</span></a>';
                         }
 
                         return html;

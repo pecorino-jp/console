@@ -3585,13 +3585,13 @@ input[type="button"].btn-block {
   padding-left: 0.6em;
   border-radius: 10rem; }
 
-.badge-primary, .badge.ActiveActionStatus, .badge.Coin, .badge.Point {
+.badge-primary, .badge.ActiveActionStatus {
   color: #fff;
   background-color: #007bff; }
-  a.badge-primary:hover, a.badge.ActiveActionStatus:hover, a.badge.Coin:hover, a.badge.Point:hover, a.badge-primary:focus, a.badge.ActiveActionStatus:focus, a.badge.Coin:focus, a.badge.Point:focus {
+  a.badge-primary:hover, a.badge.ActiveActionStatus:hover, a.badge-primary:focus, a.badge.ActiveActionStatus:focus {
     color: #fff;
     background-color: #0062cc; }
-  a.badge-primary:focus, a.badge.ActiveActionStatus:focus, a.badge.Coin:focus, a.badge.Point:focus, a.badge-primary.focus, a.focus.badge.ActiveActionStatus, a.focus.badge.Coin, a.focus.badge.Point {
+  a.badge-primary:focus, a.badge.ActiveActionStatus:focus, a.badge-primary.focus, a.focus.badge.ActiveActionStatus {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5); }
 

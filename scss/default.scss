@@ -29,13 +29,6 @@
     @extend .badge-danger;
 }
 
-.badge.Coin {
-    @extend .badge-primary;
-}
-.badge.Point {
-    @extend .badge-primary;
-}
-
 .badge.Account {
     @extend .badge-info;
 }
