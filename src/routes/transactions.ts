@@ -119,8 +119,7 @@ transactionsRouter.all(
             let message;
             let fromAccount: pecorinoapi.factory.account.IAccount<pecorinoapi.factory.account.AccountType> | undefined;
             let toAccount: pecorinoapi.factory.account.IAccount<pecorinoapi.factory.account.AccountType> | undefined;
-            const transaction = <pecorinoapi.factory.transaction.ITransaction<any, pecorinoapi.factory.account.AccountType>>
-                (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
+            const transaction = (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
             if (transaction === undefined) {
                 throw new pecorinoapi.factory.errors.NotFound('Transaction in session');
             }
