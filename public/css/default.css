@@ -3605,13 +3605,13 @@ input[type="button"].btn-block {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5); }
 
-.badge-success, .badge.CompletedActionStatus, .badge.Deposit, .badge.Opened {
+.badge-success, .badge.CompletedActionStatus, .badge.Opened {
   color: #fff;
   background-color: #28a745; }
-  a.badge-success:hover, a.badge.CompletedActionStatus:hover, a.badge.Deposit:hover, a.badge.Opened:hover, a.badge-success:focus, a.badge.CompletedActionStatus:focus, a.badge.Deposit:focus, a.badge.Opened:focus {
+  a.badge-success:hover, a.badge.CompletedActionStatus:hover, a.badge.Opened:hover, a.badge-success:focus, a.badge.CompletedActionStatus:focus, a.badge.Opened:focus {
     color: #fff;
     background-color: #1e7e34; }
-  a.badge-success:focus, a.badge.CompletedActionStatus:focus, a.badge.Deposit:focus, a.badge.Opened:focus, a.badge-success.focus, a.focus.badge.CompletedActionStatus, a.focus.badge.Deposit, a.focus.badge.Opened {
+  a.badge-success:focus, a.badge.CompletedActionStatus:focus, a.badge.Opened:focus, a.badge-success.focus, a.focus.badge.CompletedActionStatus, a.focus.badge.Opened {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5); }
 
@@ -3625,23 +3625,23 @@ input[type="button"].btn-block {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.5); }
 
-.badge-warning, .badge.CanceledActionStatus, .badge.Transfer {
+.badge-warning, .badge.CanceledActionStatus {
   color: #212529;
   background-color: #ffc107; }
-  a.badge-warning:hover, a.badge.CanceledActionStatus:hover, a.badge.Transfer:hover, a.badge-warning:focus, a.badge.CanceledActionStatus:focus, a.badge.Transfer:focus {
+  a.badge-warning:hover, a.badge.CanceledActionStatus:hover, a.badge-warning:focus, a.badge.CanceledActionStatus:focus {
     color: #212529;
     background-color: #d39e00; }
-  a.badge-warning:focus, a.badge.CanceledActionStatus:focus, a.badge.Transfer:focus, a.badge-warning.focus, a.focus.badge.CanceledActionStatus, a.focus.badge.Transfer {
+  a.badge-warning:focus, a.badge.CanceledActionStatus:focus, a.badge-warning.focus, a.focus.badge.CanceledActionStatus {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.5); }
 
-.badge-danger, .badge.FailedActionStatus, .badge.Withdraw, .badge.Closed {
+.badge-danger, .badge.FailedActionStatus, .badge.Closed {
   color: #fff;
   background-color: #dc3545; }
-  a.badge-danger:hover, a.badge.FailedActionStatus:hover, a.badge.Withdraw:hover, a.badge.Closed:hover, a.badge-danger:focus, a.badge.FailedActionStatus:focus, a.badge.Withdraw:focus, a.badge.Closed:focus {
+  a.badge-danger:hover, a.badge.FailedActionStatus:hover, a.badge.Closed:hover, a.badge-danger:focus, a.badge.FailedActionStatus:focus, a.badge.Closed:focus {
     color: #fff;
     background-color: #bd2130; }
-  a.badge-danger:focus, a.badge.FailedActionStatus:focus, a.badge.Withdraw:focus, a.badge.Closed:focus, a.badge-danger.focus, a.focus.badge.FailedActionStatus, a.focus.badge.Withdraw, a.focus.badge.Closed {
+  a.badge-danger:focus, a.badge.FailedActionStatus:focus, a.badge.Closed:focus, a.badge-danger.focus, a.focus.badge.FailedActionStatus, a.focus.badge.Closed {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5); }
 

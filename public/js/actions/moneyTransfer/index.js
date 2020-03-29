@@ -122,7 +122,7 @@ $(function () {
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<a href="#" class="showPurpose" data-id="' + data.id + '"><span class="badge badge-secondary ' + data.purpose.typeOf + '">' + data.purpose.typeOf + '</span></a>';
+                        return '<a href="#" class="showPurpose" data-id="' + data.id + '"><span class="badge badge-light ' + data.purpose.typeOf + '">' + data.purpose.typeOf + '</span></a>';
                     }
                 }
             ]
