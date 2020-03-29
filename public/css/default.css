@@ -3595,13 +3595,13 @@ input[type="button"].btn-block {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5); }
 
-.badge-secondary, .badge.Person, .badge.Organization {
+.badge-secondary {
   color: #fff;
   background-color: #6c757d; }
-  a.badge-secondary:hover, a.badge.Person:hover, a.badge.Organization:hover, a.badge-secondary:focus, a.badge.Person:focus, a.badge.Organization:focus {
+  a.badge-secondary:hover, a.badge-secondary:focus {
     color: #fff;
     background-color: #545b62; }
-  a.badge-secondary:focus, a.badge.Person:focus, a.badge.Organization:focus, a.badge-secondary.focus, a.focus.badge.Person, a.focus.badge.Organization {
+  a.badge-secondary:focus, a.badge-secondary.focus {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5); }
 
@@ -3615,13 +3615,13 @@ input[type="button"].btn-block {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5); }
 
-.badge-info, .badge.Account, .badge.MoneyTransfer {
+.badge-info, .badge.MoneyTransfer {
   color: #fff;
   background-color: #17a2b8; }
-  a.badge-info:hover, a.badge.Account:hover, a.badge.MoneyTransfer:hover, a.badge-info:focus, a.badge.Account:focus, a.badge.MoneyTransfer:focus {
+  a.badge-info:hover, a.badge.MoneyTransfer:hover, a.badge-info:focus, a.badge.MoneyTransfer:focus {
     color: #fff;
     background-color: #117a8b; }
-  a.badge-info:focus, a.badge.Account:focus, a.badge.MoneyTransfer:focus, a.badge-info.focus, a.focus.badge.Account, a.focus.badge.MoneyTransfer {
+  a.badge-info:focus, a.badge.MoneyTransfer:focus, a.badge-info.focus, a.focus.badge.MoneyTransfer {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.5); }
 

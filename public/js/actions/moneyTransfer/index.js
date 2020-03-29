@@ -30,19 +30,18 @@ $(function () {
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<a href="#">' + data.id + '</a>';
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
                         return '<span>' + moment(data.startDate).utc().format() + '</span>';
                     }
                 },
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<span>' + moment(data.endDate).utc().format() + '</span>';
+                        var html = '';
+                        if (typeof data.endDate === 'string') {
+                            html += '<span>' + moment(data.endDate).utc().format() + '</span>';
+                        }
+
+                        return html;
                     }
                 },
                 {
@@ -55,7 +54,7 @@ $(function () {
                     data: null,
                     render: function (data, type, row) {
                         var fromLocation = data.fromLocation;
-                        var html = '<span>' + '<span class="badge badge-secondary ' + fromLocation.typeOf + '">' + fromLocation.typeOf + '</span></span>';
+                        var html = '<span>' + '<span class="badge badge-light ' + fromLocation.typeOf + '">' + fromLocation.typeOf + '</span></span>';
 
                         if (fromLocation.accountType !== undefined) {
                             var href = '/projects/' + PROJECT_ID + '/accounts/' + fromLocation.accountType + '/' + fromLocation.accountNumber
@@ -123,7 +122,7 @@ $(function () {
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<a href="#' + data.purpose.id + '"><span class="badge badge-secondary ' + data.purpose.typeOf + '">' + data.purpose.typeOf + '</span></a>';
+                        return '<a href="#" class="showPurpose" data-id="' + data.id + '"><span class="badge badge-secondary ' + data.purpose.typeOf + '">' + data.purpose.typeOf + '</span></a>';
                     }
                 }
             ]
@@ -141,4 +140,40 @@ $(function () {
         format: 'YYYY-MM-DDT00:00:00Z'
     });
 
+    $(document).on('click', '.showPurpose', function (event) {
+        var id = $(this).attr('data-id');
+
+        showPurpose(id);
+    });
 });
+
+function showPurpose(id) {
+    var actions = table
+        .rows()
+        .data()
+        .toArray();
+    var action = actions.find(function (a) {
+        return a.id === id
+    })
+    if (action === undefined) {
+        alert('アクション' + id + 'が見つかりません');
+
+        return;
+    }
+
+    var modal = $('#modal-action');
+    var title = '取引';
+
+    var purpose = action.purpose;
+    var body = $('<dl>').addClass('row');
+    if (purpose !== undefined && purpose !== null) {
+        body.append($('<dt>').addClass('col-md-3').append($('<span>').text('タイプ')))
+            .append($('<dd>').addClass('col-md-9').append(purpose.typeOf))
+            .append($('<dt>').addClass('col-md-3').append($('<span>').text('ID')))
+            .append($('<dd>').addClass('col-md-9').append(purpose.id));
+    }
+
+    modal.find('.modal-title').html(title);
+    modal.find('.modal-body').html(body);
+    modal.modal();
+}

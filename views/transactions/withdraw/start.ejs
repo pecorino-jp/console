@@ -56,30 +56,45 @@
                             </div>
                             <% } %>
 
-                            <div class="form-group">
-                                <label for="accountType">口座タイプ</label>
-                                <select class="form-control" id="accountType" name="accountType">
-                                    <% accountTypes.forEach((accountType) => { %>
-                                    <option value="<%= accountType.codeValue %>"><%= accountType.name.ja %></option>
-                                    <% }) %>
-                                </select>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="accountType">口座タイプ</label>
+                                    <select class="form-control" id="accountType" name="accountType">
+                                        <% accountTypes.forEach((accountType) => { %>
+                                        <option value="<%= accountType.codeValue %>"><%= accountType.name.ja %></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="amount">金額</label>
+                                    <input type="text" class="form-control" id="amount" name="amount" placeholder="金額"
+                                        value="<%= values.amount %>">
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="fromName">出金者名</label>
-                                <input type="text" class="form-control" id="fromName" name="fromName" placeholder="出金者名"
-                                    value="<%= values.fromName %>">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="fromName">From 名称</label>
+                                        <input type="text" class="form-control" id="fromName" name="fromName"
+                                            placeholder="From 名称" value="<%= values.fromName %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fromAccountNumber">From 口座番号</label>
+                                        <input type="text" class="form-control" id="fromAccountNumber"
+                                            name="fromAccountNumber" placeholder="From 口座番号"
+                                            value="<%= values.fromAccountNumber %>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="recipientName">To 名称</label>
+                                        <input type="text" class="form-control" id="recipientName" name="recipientName"
+                                            placeholder="To 名称" value="<%= values.recipientName %>">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="fromAccountNumber">出金元口座番号</label>
-                                <input type="text" class="form-control" id="fromAccountNumber" name="fromAccountNumber"
-                                    placeholder="出金元口座番号" value="<%= values.fromAccountNumber %>">
-                            </div>
-                            <div class="form-group">
-                                <label for="amount">出金金額</label>
-                                <input type="text" class="form-control" id="amount" name="amount" placeholder="出金金額"
-                                    value="<%= values.amount %>">
-                            </div>
+
                             <div class="form-group">
                                 <label for="description">説明</label>
                                 <input type="text" class="form-control" id="description" name="description"

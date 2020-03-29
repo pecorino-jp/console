@@ -51,16 +51,14 @@ transactionsRouter.all('/deposit/start', (req, res, next) => __awaiter(void 0, v
                     typeOf: pecorinoapi.factory.transactionType.Deposit,
                     expires: moment().add(1, 'minutes').toDate(),
                     agent: {
-                        typeOf: 'Organization',
-                        id: 'agent-id',
-                        name: values.fromName,
-                        url: ''
+                        typeOf: 'Person',
+                        id: req.user.profile.sub,
+                        name: values.fromName
                     },
                     recipient: {
                         typeOf: 'Person',
-                        id: 'recipient-id',
-                        name: 'recipient name',
-                        url: ''
+                        id: '',
+                        name: values.recipientName
                     },
                     object: {
                         amount: Number(values.amount),
@@ -179,9 +177,8 @@ transactionsRouter.all('/withdraw/start', (req, res, next) => __awaiter(void 0, 
                     },
                     recipient: {
                         typeOf: 'Person',
-                        id: 'recipient-id',
-                        name: 'recipient name',
-                        url: ''
+                        id: '',
+                        name: values.recipientName
                     },
                     object: {
                         amount: Number(values.amount),
@@ -300,9 +297,8 @@ transactionsRouter.all('/transfer/start', (req, res, next) => __awaiter(void 0, 
                     },
                     recipient: {
                         typeOf: 'Person',
-                        id: 'recipient-id',
-                        name: 'recipient name',
-                        url: ''
+                        id: '',
+                        name: values.recipientName
                     },
                     object: {
                         amount: Number(values.amount),

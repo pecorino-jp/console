@@ -29,16 +29,6 @@
     @extend .badge-danger;
 }
 
-.badge.Account {
-    @extend .badge-info;
-}
-.badge.Person {
-    @extend .badge-secondary;
-}
-.badge.Organization {
-    @extend .badge-secondary;
-}
-
 .badge.MoneyTransfer {
     @extend .badge-info;
 }
