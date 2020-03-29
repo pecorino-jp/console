@@ -45,32 +45,8 @@ transactionsRouter.all('/deposit/start', (req, res, next) => __awaiter(void 0, v
                     endpoint: process.env.API_ENDPOINT,
                     auth: req.user.authClient
                 });
-                debug('取引を開始します...', values);
-                const transaction = yield depositTransactionService.start({
-                    project: req.project,
-                    typeOf: pecorinoapi.factory.transactionType.Deposit,
-                    expires: moment().add(1, 'minutes').toDate(),
-                    agent: {
-                        typeOf: 'Person',
-                        id: req.user.profile.sub,
-                        name: values.fromName
-                    },
-                    recipient: {
-                        typeOf: 'Person',
-                        id: '',
-                        name: values.recipientName
-                    },
-                    object: {
-                        amount: Number(values.amount),
-                        description: values.description,
-                        toLocation: {
-                            typeOf: pecorinoapi.factory.account.TypeOf.Account,
-                            accountType: values.accountType,
-                            accountNumber: values.toAccountNumber
-                        }
-                    }
-                });
-                debug('取引が開始されました。', transaction.id);
+                const startParams = createStartParams(req);
+                const transaction = yield depositTransactionService.start(startParams);
                 // セッションに取引追加
                 req.session[`transaction:${transaction.id}`] = transaction;
                 res.redirect(`/projects/${req.project.id}/transactions/deposit/${transaction.id}/confirm`);
@@ -165,32 +141,8 @@ transactionsRouter.all('/withdraw/start', (req, res, next) => __awaiter(void 0, 
                     endpoint: process.env.API_ENDPOINT,
                     auth: req.user.authClient
                 });
-                debug('取引を開始します...', values);
-                const transaction = yield withdrawService.start({
-                    project: req.project,
-                    typeOf: pecorinoapi.factory.transactionType.Withdraw,
-                    expires: moment().add(1, 'minutes').toDate(),
-                    agent: {
-                        typeOf: 'Person',
-                        id: req.user.profile.sub,
-                        name: values.fromName
-                    },
-                    recipient: {
-                        typeOf: 'Person',
-                        id: '',
-                        name: values.recipientName
-                    },
-                    object: {
-                        amount: Number(values.amount),
-                        description: values.description,
-                        fromLocation: {
-                            typeOf: pecorinoapi.factory.account.TypeOf.Account,
-                            accountType: values.accountType,
-                            accountNumber: values.fromAccountNumber
-                        }
-                    }
-                });
-                debug('取引が開始されました。', transaction.id);
+                const startParams = createStartParams(req);
+                const transaction = yield withdrawService.start(startParams);
                 // セッションに取引追加
                 req.session[`transaction:${transaction.id}`] = transaction;
                 res.redirect(`/projects/${req.project.id}/transactions/withdraw/${transaction.id}/confirm`);
@@ -285,37 +237,8 @@ transactionsRouter.all('/transfer/start', (req, res, next) => __awaiter(void 0, 
                     endpoint: process.env.API_ENDPOINT,
                     auth: req.user.authClient
                 });
-                debug('取引を開始します...', values);
-                const transaction = yield transferService.start({
-                    project: req.project,
-                    typeOf: pecorinoapi.factory.transactionType.Transfer,
-                    expires: moment().add(1, 'minutes').toDate(),
-                    agent: {
-                        typeOf: 'Person',
-                        id: req.user.profile.sub,
-                        name: values.fromName
-                    },
-                    recipient: {
-                        typeOf: 'Person',
-                        id: '',
-                        name: values.recipientName
-                    },
-                    object: {
-                        amount: Number(values.amount),
-                        fromLocation: {
-                            typeOf: pecorinoapi.factory.account.TypeOf.Account,
-                            accountType: values.accountType,
-                            accountNumber: values.fromAccountNumber
-                        },
-                        toLocation: {
-                            typeOf: pecorinoapi.factory.account.TypeOf.Account,
-                            accountType: values.accountType,
-                            accountNumber: values.toAccountNumber
-                        },
-                        description: values.description
-                    }
-                });
-                debug('取引が開始されました。', transaction.id);
+                const startParams = createStartParams(req);
+                const transaction = yield transferService.start(startParams);
                 // セッションに取引追加
                 req.session[`transaction:${transaction.id}`] = transaction;
                 res.redirect(`/projects/${req.project.id}/transactions/transfer/${transaction.id}/confirm`);
@@ -405,4 +328,85 @@ transactionsRouter.all('/transfer/:transactionId/confirm', (req, res, next) => _
         next(error);
     }
 }));
+// tslint:disable-next-line:max-func-body-length
+function createStartParams(req) {
+    const expires = moment().add(1, 'minutes').toDate();
+    const agent = {
+        typeOf: 'Person',
+        id: req.user.profile.sub,
+        name: req.body.fromName
+    };
+    const recipient = {
+        typeOf: 'Person',
+        id: '',
+        name: req.body.recipientName
+    };
+    const amount = Number(req.body.amount);
+    const description = req.body.description;
+    let startParams;
+    switch (req.body.transactionType) {
+        case pecorinoapi.factory.transactionType.Deposit:
+            startParams = {
+                project: req.project,
+                typeOf: pecorinoapi.factory.transactionType.Deposit,
+                expires,
+                agent,
+                recipient,
+                object: {
+                    amount,
+                    toLocation: {
+                        typeOf: pecorinoapi.factory.account.TypeOf.Account,
+                        accountType: req.body.accountType,
+                        accountNumber: req.body.toAccountNumber
+                    },
+                    description
+                }
+            };
+            break;
+        case pecorinoapi.factory.transactionType.Transfer:
+            startParams = {
+                project: req.project,
+                typeOf: pecorinoapi.factory.transactionType.Transfer,
+                expires,
+                agent,
+                recipient,
+                object: {
+                    amount,
+                    fromLocation: {
+                        typeOf: pecorinoapi.factory.account.TypeOf.Account,
+                        accountType: req.body.accountType,
+                        accountNumber: req.body.fromAccountNumber
+                    },
+                    toLocation: {
+                        typeOf: pecorinoapi.factory.account.TypeOf.Account,
+                        accountType: req.body.accountType,
+                        accountNumber: req.body.toAccountNumber
+                    },
+                    description
+                }
+            };
+            break;
+        case pecorinoapi.factory.transactionType.Withdraw:
+            startParams = {
+                project: req.project,
+                typeOf: pecorinoapi.factory.transactionType.Withdraw,
+                expires,
+                agent,
+                recipient,
+                object: {
+                    amount,
+                    fromLocation: {
+                        typeOf: pecorinoapi.factory.account.TypeOf.Account,
+                        accountType: req.body.accountType,
+                        accountNumber: req.body.fromAccountNumber
+                    },
+                    description
+                }
+            };
+            break;
+        default:
+            throw new Error(`Transaction type ${req.body.transactionType} not implemented`);
+    }
+    return startParams;
+}
 exports.default = transactionsRouter;

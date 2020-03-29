@@ -42,32 +42,8 @@ transactionsRouter.all(
                         endpoint: <string>process.env.API_ENDPOINT,
                         auth: req.user.authClient
                     });
-                    debug('取引を開始します...', values);
-                    const transaction = await depositTransactionService.start({
-                        project: req.project,
-                        typeOf: pecorinoapi.factory.transactionType.Deposit,
-                        expires: moment().add(1, 'minutes').toDate(),
-                        agent: {
-                            typeOf: 'Person',
-                            id: req.user.profile.sub,
-                            name: values.fromName
-                        },
-                        recipient: {
-                            typeOf: 'Person',
-                            id: '',
-                            name: values.recipientName
-                        },
-                        object: {
-                            amount: Number(values.amount),
-                            description: values.description,
-                            toLocation: {
-                                typeOf: pecorinoapi.factory.account.TypeOf.Account,
-                                accountType: values.accountType,
-                                accountNumber: values.toAccountNumber
-                            }
-                        }
-                    });
-                    debug('取引が開始されました。', transaction.id);
+                    const startParams = createStartParams<pecorinoapi.factory.transactionType.Deposit>(req);
+                    const transaction = await depositTransactionService.start(startParams);
                     // セッションに取引追加
                     (<Express.Session>req.session)[`transaction:${transaction.id}`] = transaction;
 
@@ -173,32 +149,8 @@ transactionsRouter.all(
                         endpoint: <string>process.env.API_ENDPOINT,
                         auth: req.user.authClient
                     });
-                    debug('取引を開始します...', values);
-                    const transaction = await withdrawService.start({
-                        project: req.project,
-                        typeOf: pecorinoapi.factory.transactionType.Withdraw,
-                        expires: moment().add(1, 'minutes').toDate(),
-                        agent: {
-                            typeOf: 'Person',
-                            id: req.user.profile.sub,
-                            name: values.fromName
-                        },
-                        recipient: {
-                            typeOf: 'Person',
-                            id: '',
-                            name: values.recipientName
-                        },
-                        object: {
-                            amount: Number(values.amount),
-                            description: values.description,
-                            fromLocation: {
-                                typeOf: pecorinoapi.factory.account.TypeOf.Account,
-                                accountType: values.accountType,
-                                accountNumber: values.fromAccountNumber
-                            }
-                        }
-                    });
-                    debug('取引が開始されました。', transaction.id);
+                    const startParams = createStartParams<pecorinoapi.factory.transactionType.Withdraw>(req);
+                    const transaction = await withdrawService.start(startParams);
                     // セッションに取引追加
                     (<Express.Session>req.session)[`transaction:${transaction.id}`] = transaction;
 
@@ -304,37 +256,8 @@ transactionsRouter.all(
                         endpoint: <string>process.env.API_ENDPOINT,
                         auth: req.user.authClient
                     });
-                    debug('取引を開始します...', values);
-                    const transaction = await transferService.start({
-                        project: req.project,
-                        typeOf: pecorinoapi.factory.transactionType.Transfer,
-                        expires: moment().add(1, 'minutes').toDate(),
-                        agent: {
-                            typeOf: 'Person',
-                            id: req.user.profile.sub,
-                            name: values.fromName
-                        },
-                        recipient: {
-                            typeOf: 'Person',
-                            id: '',
-                            name: values.recipientName
-                        },
-                        object: {
-                            amount: Number(values.amount),
-                            fromLocation: {
-                                typeOf: pecorinoapi.factory.account.TypeOf.Account,
-                                accountType: values.accountType,
-                                accountNumber: values.fromAccountNumber
-                            },
-                            toLocation: {
-                                typeOf: pecorinoapi.factory.account.TypeOf.Account,
-                                accountType: values.accountType,
-                                accountNumber: values.toAccountNumber
-                            },
-                            description: values.description
-                        }
-                    });
-                    debug('取引が開始されました。', transaction.id);
+                    const startParams = createStartParams<pecorinoapi.factory.transactionType.Transfer>(req);
+                    const transaction = await transferService.start(startParams);
                     // セッションに取引追加
                     (<Express.Session>req.session)[`transaction:${transaction.id}`] = transaction;
 
@@ -432,5 +355,101 @@ transactionsRouter.all(
             next(error);
         }
     });
+
+// tslint:disable-next-line:max-func-body-length
+function createStartParams<T extends pecorinoapi.factory.transactionType>(
+    req: express.Request
+): pecorinoapi.factory.transaction.IStartParams<T, any> {
+
+    const expires = moment().add(1, 'minutes').toDate();
+    const agent = {
+        typeOf: 'Person',
+        id: req.user.profile.sub,
+        name: req.body.fromName
+    };
+    const recipient = {
+        typeOf: 'Person',
+        id: '',
+        name: req.body.recipientName
+    };
+    const amount = Number(req.body.amount);
+    const description = req.body.description;
+
+    let startParams: pecorinoapi.factory.transaction.IStartParams<pecorinoapi.factory.transactionType.Deposit, any>
+        | pecorinoapi.factory.transaction.IStartParams<pecorinoapi.factory.transactionType.Transfer, any>
+        | pecorinoapi.factory.transaction.IStartParams<pecorinoapi.factory.transactionType.Withdraw, any>;
+
+    switch (req.body.transactionType) {
+        case pecorinoapi.factory.transactionType.Deposit:
+            startParams = {
+                project: req.project,
+                typeOf: pecorinoapi.factory.transactionType.Deposit,
+                expires,
+                agent,
+                recipient,
+                object: {
+                    amount,
+                    toLocation: {
+                        typeOf: pecorinoapi.factory.account.TypeOf.Account,
+                        accountType: req.body.accountType,
+                        accountNumber: req.body.toAccountNumber
+                    },
+                    description
+                }
+            };
+
+            break;
+
+        case pecorinoapi.factory.transactionType.Transfer:
+            startParams = {
+                project: req.project,
+                typeOf: pecorinoapi.factory.transactionType.Transfer,
+                expires,
+                agent,
+                recipient,
+                object: {
+                    amount,
+                    fromLocation: {
+                        typeOf: pecorinoapi.factory.account.TypeOf.Account,
+                        accountType: req.body.accountType,
+                        accountNumber: req.body.fromAccountNumber
+                    },
+                    toLocation: {
+                        typeOf: pecorinoapi.factory.account.TypeOf.Account,
+                        accountType: req.body.accountType,
+                        accountNumber: req.body.toAccountNumber
+                    },
+                    description
+                }
+            };
+
+            break;
+
+        case pecorinoapi.factory.transactionType.Withdraw:
+            startParams = {
+                project: req.project,
+                typeOf: pecorinoapi.factory.transactionType.Withdraw,
+                expires,
+                agent,
+                recipient,
+                object: {
+                    amount,
+                    fromLocation: {
+                        typeOf: pecorinoapi.factory.account.TypeOf.Account,
+                        accountType: req.body.accountType,
+                        accountNumber: req.body.fromAccountNumber
+                    },
+                    description
+                }
+            };
+
+            break;
+
+        default:
+            throw new Error(`Transaction type ${req.body.transactionType} not implemented`);
+    }
+
+    return <any>startParams;
+}
 
 export default transactionsRouter;
