@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">転送取引内容確認</h1>
+                <h1 class="m-0 text-dark">取引内容確認</h1>
             </div>
             <!-- /.col -->
             <div class="col-sm-6">
@@ -11,7 +11,7 @@
                     <li class="breadcrumb-item">
                         <a href="/projects/<%= req.project.id %>/home">Home</a>
                     </li>
-                    <li class="breadcrumb-item active">転送取引内容確認</li>
+                    <li class="breadcrumb-item active">取引内容確認</li>
                 </ol>
             </div>
             <!-- /.col -->
@@ -36,38 +36,48 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="fa fa-text-width"></i>
-                            下記内容で転送取引を実行しようとしています...
+                            下記内容で取引を実行しようとしています...
                         </h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
                         <dl class="dl-horizontal">
+                            <dt>取引タイプ</dt>
+                            <dd>
+                                <%= transaction.typeOf %>
+                            </dd>
                             <dt>取引ID</dt>
                             <dd>
                                 <%= transaction.id %>
                             </dd>
-                            <dt>転送者名</dt>
+                            <dt>From 名称</dt>
                             <dd>
                                 <%= transaction.agent.name %>
                             </dd>
-                            <dt>転送元</dt>
+                            <% if (transaction.object.fromLocation !== undefined) { %>
+                            <dt>From 口座</dt>
                             <dd>
                                 <span class="badge badge-secondary <%= transaction.object.accountType %>">
                                     <%= transaction.object.fromLocation.accountType %>
                                 </span>
                                 <%= transaction.object.fromLocation.accountNumber %>
-                                <br>
-                                <%= fromAccount.name %>
+                                <br><%= fromAccount.name %>
                             </dd>
-                            <dt>転送先</dt>
+                            <% } %>
+                            <dt>To 名称</dt>
+                            <dd>
+                                <%= transaction.recipient.name %>
+                            </dd>
+                            <% if (transaction.object.toLocation !== undefined) { %>
+                            <dt>To 口座</dt>
                             <dd>
                                 <span class="badge badge-secondary <%= transaction.object.accountType %>">
                                     <%= transaction.object.toLocation.accountType %>
                                 </span>
                                 <%= transaction.object.toLocation.accountNumber %>
-                                <br>
-                                <%= toAccount.name %>
+                                <br><%= toAccount.name %>
                             </dd>
+                            <% } %>
                             <dt>金額</dt>
                             <dd>
                                 <%= transaction.object.amount %>
@@ -83,7 +93,7 @@
                     <!-- form start -->
                     <form role="form" method="post">
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">確認して転送取引確定</button>
+                            <button type="submit" class="btn btn-primary">確認して取引確定</button>
                         </div>
                     </form>
                 </div>

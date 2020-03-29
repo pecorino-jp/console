@@ -1,0 +1,13 @@
+<% if (messages.message) { %>
+<script>
+    $(document).Toasts('create', {
+        // title: 'Toast Title',
+        body: '<%= messages.message %>',
+        autohide: true,
+        close: true,
+        delay: 5000,
+        fade: true,
+        class: 'bg-success'
+    })
+</script>
+<% } %>

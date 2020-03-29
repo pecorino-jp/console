@@ -1,9 +1,11 @@
+<%- include('../parts/messages') %>
+
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">転送取引</h1>
+                <h1 class="m-0 text-dark">取引作成</h1>
             </div>
             <!-- /.col -->
             <div class="col-sm-6">
@@ -11,7 +13,7 @@
                     <li class="breadcrumb-item">
                         <a href="/projects/<%= req.project.id %>/home">Home</a>
                     </li>
-                    <li class="breadcrumb-item active">転送取引</li>
+                    <li class="breadcrumb-item active">取引作成</li>
                 </ol>
             </div>
             <!-- /.col -->
@@ -37,18 +39,7 @@
 
                     <!-- form start -->
                     <form role="form" method="post">
-                        <input type="hidden" name="transactionType" value="Transfer">
                         <div class="card-body">
-                            <% if (messages.message) { %>
-                            <div class="alert alert-success alert-dismissible">
-                                <button type="button" class="close" data-dismiss="alert"
-                                    aria-hidden="true">&times;</button>
-                                <h5>
-                                    <i class="icon fa fa-check"></i> Congraturations!</h5>
-                                <%= messages.message %>
-                            </div>
-                            <% } %>
-
                             <% if (message) { %>
                             <div class="alert alert-warning alert-dismissible">
                                 <button type="button" class="close" data-dismiss="alert"
@@ -59,10 +50,24 @@
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
+                                    <label for="transactionType">取引タイプ</label>
+                                    <select class="form-control" id="transactionType" name="transactionType">
+                                        <option value="Deposit" <% if (values.transactionType === 'Deposit') { %>
+                                            selected<% } %>>入金</option>
+                                        <option value="Withdraw" <% if (values.transactionType === 'Withdraw') { %>
+                                            selected<% } %>>出金</option>
+                                        <option value="Transfer" <% if (values.transactionType === 'Transfer') { %>
+                                            selected<% } %>>転送</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-6">
                                     <label for="accountType">口座タイプ</label>
                                     <select class="form-control" id="accountType" name="accountType">
                                         <% accountTypes.forEach((accountType) => { %>
-                                        <option value="<%= accountType.codeValue %>"><%= accountType.name.ja %></option>
+                                        <option value="<%= accountType.codeValue %>"
+                                            <% if (values.accountType === accountType.codeValue) { %> selected<% } %>>
+                                            <%= accountType.name.ja %></option>
                                         <% }) %>
                                     </select>
                                 </div>
