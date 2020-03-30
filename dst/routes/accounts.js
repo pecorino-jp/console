@@ -28,18 +28,18 @@ accountsRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const searchConditions = {
-            limit: req.query.limit,
-            page: req.query.page,
-            sort: { openDate: pecorinoapi.factory.sortType.Descending },
-            project: { id: { $eq: req.project.id } },
-            accountType: req.query.accountType,
-            accountNumbers: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0) ?
-                [req.query.accountNumber] :
-                [],
-            statuses: [],
-            name: req.query.name
-        };
+        const searchConditions = Object.assign({ limit: req.query.limit, page: req.query.page, sort: { openDate: pecorinoapi.factory.sortType.Descending }, project: { id: { $eq: req.project.id } }, accountType: req.query.accountType, statuses: (typeof req.query.status === 'string' && req.query.status.length > 0)
+                ? [req.query.status]
+                : undefined }, {
+            accountNumber: {
+                $regex: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0)
+                    ? req.query.accountNumber
+                    : undefined
+            },
+            name: {
+                $regex: (typeof req.query.name === 'string' && req.query.name.length > 0) ? req.query.name : undefined
+            }
+        });
         if (req.query.format === 'datatable') {
             debug('searching accounts...', req.query);
             const { data } = yield accountService.search(searchConditions);

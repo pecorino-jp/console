@@ -28,11 +28,19 @@ accountsRouter.get(
                 sort: { openDate: pecorinoapi.factory.sortType.Descending },
                 project: { id: { $eq: req.project.id } },
                 accountType: req.query.accountType,
-                accountNumbers: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0) ?
-                    [req.query.accountNumber] :
-                    [],
-                statuses: [],
-                name: req.query.name
+                statuses: (typeof req.query.status === 'string' && req.query.status.length > 0)
+                    ? [req.query.status]
+                    : undefined,
+                ...{
+                    accountNumber: {
+                        $regex: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0)
+                            ? req.query.accountNumber
+                            : undefined
+                    },
+                    name: <any>{
+                        $regex: (typeof req.query.name === 'string' && req.query.name.length > 0) ? req.query.name : undefined
+                    }
+                }
             };
             if (req.query.format === 'datatable') {
                 debug('searching accounts...', req.query);
