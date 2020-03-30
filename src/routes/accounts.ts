@@ -144,10 +144,17 @@ accountsRouter.get(
             const searchActionsResult = await accountService.searchMoneyTransferActions({
                 limit: req.query.limit,
                 page: req.query.page,
+                sort: { startDate: pecorinoapi.factory.sortType.Descending },
                 project: { id: { $eq: req.project.id } },
                 accountType: req.params.accountType,
                 accountNumber: req.params.accountNumber,
-                sort: { startDate: pecorinoapi.factory.sortType.Descending }
+                ...{
+                    // startDate: {
+                    //     $gte: moment()
+                    //         .add(-1, 'month')
+                    //         .toDate()
+                    // }
+                }
             });
             res.json(searchActionsResult);
         } catch (error) {

@@ -58,7 +58,7 @@
                         </h3>
 
                         <p class="text-muted text-center">
-                            <span class="badge <%= account.accountType %>">
+                            <span class="badge badge-light <%= account.accountType %>">
                                 <%= account.accountType %>
                             </span>
                             <%= account.accountNumber %>
@@ -146,14 +146,17 @@
 
                             <div class="tab-pane" id="moneyTransferActions">
                                 <div class="table-responsive">
-                                    <table class="table m-0">
+                                    <table class="table table-sm">
                                         <thead>
                                             <tr>
-                                                <th>Action Type<br>Start Date<br>End Date<br>Status</th>
+                                                <th>開始</th>
+                                                <th>終了</th>
+                                                <th>ステータス</th>
                                                 <th>From</th>
                                                 <th>To</th>
-                                                <th>Amount<br>Description</th>
-                                                <th>Transaction</th>
+                                                <th>Amount</th>
+                                                <th>説明</th>
+                                                <th>取引</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -216,6 +219,21 @@
     </div><!-- /.container-fluid -->
 </section>
 <!-- /.content -->
+
+<div class="modal" id="modal-action" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">閉じる</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- DataTables -->
 <link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.css">

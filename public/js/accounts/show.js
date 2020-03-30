@@ -47,73 +47,70 @@ function searchMoneyTransferActions(cb) {
         '/projects/' + PROJECT_ID + '/accounts/' + account.accountType + '/' + account.accountNumber + '/actions/moneyTransfer',
         { limit: limit, page: page }
     ).done(function (data) {
-        searchedAllMoneyTransferActions = (data.data.length < limit);
+        searchedAllMoneyTransferActions = true;
+        // searchedAllMoneyTransferActions = (data.data.length < limit);
         $.each(data.data, function (_, action) {
             moneyTransferActions.push(action);
-            var html =
-                '<td>'
-                + '<span class="badge badge-secondary ' + action.typeOf + '">'
-                + action.typeOf
-                + '</span>'
-                + '<br>'
-                + '<a href="#">' + action.id + '</a>' + '<br>'
-                + action.startDate + '<br>'
-                + action.endDate + '<br>'
-                + '<span class="badge badge-secondary ' + action.actionStatus + '">'
+            var html = '';
+
+            html += '<td>'
+                + moment(action.startDate).utc().format()
+                + '</td>';
+            if (typeof action.endDate === 'string') {
+                html += '<td>'
+                    + moment(action.endDate).utc().format()
+                    + '</td>';
+            } else {
+                html += '<td></td>';
+            }
+            html += '<td>'
+                + '<span class="badge badge-light ' + action.actionStatus + '">'
                 + action.actionStatus
                 + '</span>'
                 + '</td>'
                 + '<td>'
-                + '<span class="badge badge-secondary ' + action.fromLocation.typeOf + '">'
+                + '<span class="badge badge-light ' + action.fromLocation.typeOf + '">'
                 + action.fromLocation.typeOf
                 + '</span>';
             if (action.fromLocation.accountType !== undefined) {
-                html += '<br>'
-                    + '<span class="badge badge-secondary ' + action.fromLocation.accountType + '">'
+                html += ' <span class="badge badge-light ' + action.fromLocation.accountType + '">'
                     + action.fromLocation.accountType
                     + '</span>'
                     + '<span>'
-                    + ' <a target="_blank" href="/accounts/' + action.fromLocation.accountType + '/' + action.fromLocation.accountNumber + '">'
+                    + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/accounts/' + action.fromLocation.accountType + '/' + action.fromLocation.accountNumber + '">'
                     + action.fromLocation.accountNumber
                     + '</a>'
                     + '</span>';
             }
-            html += '<br>'
-                + '<span>'
-                + action.fromLocation.name
-                + '</span>'
-                + '</td>'
+            html += '</td>'
                 + '<td>'
-                + '<span class="badge badge-secondary ' + action.toLocation.typeOf + '">'
+                + '<span class="badge badge-light ' + action.toLocation.typeOf + '">'
                 + action.toLocation.typeOf
                 + '</span>';
 
             if (action.toLocation.accountType !== undefined) {
-                html += '<br>'
-                    + '<span class="badge badge-secondary ' + action.toLocation.accountType + '">'
+                html += ' <span class="badge badge-light ' + action.toLocation.accountType + '">'
                     + action.toLocation.accountType
                     + '</span>'
                     + '<span>'
-                    + ' <a target="_blank" href="/accounts/' + action.toLocation.accountType + '/' + action.toLocation.accountNumber + '">'
+                    + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/accounts/' + action.toLocation.accountType + '/' + action.toLocation.accountNumber + '">'
                     + action.toLocation.accountNumber
                     + '</a>'
                     + '</span>';
             }
-            html += '<br>'
-                + '<span>'
-                + action.toLocation.name
-                + '</span>'
-                + '</td>'
+            html += '</td>'
                 + '<td>'
-                + action.amount + '<br>'
-                + action.description
-                + '</td>'
-                + '<td>'
-                + '<span class="badge badge-secondary ' + action.purpose.typeOf + '">'
-                + action.purpose.typeOf
-                + '</span>'
-                + '<br>'
-                + '<a href="#">' + action.purpose.id + '</a>'
+                + action.amount
+                + '</td>';
+
+            var description = action.description;
+            if (typeof description === 'string' && description.length > 10) {
+                description = description.slice(0, 10) + '...';
+            }
+            html += '<td><a href="#" data-toggle="tooltip" title="' + action.description + '">' + description + '</a></td>';
+
+            html += '<td>'
+                + '<a href="#" class="showPurpose" data-id="' + action.id + '"><span class="badge badge-light ' + action.purpose.typeOf + '">' + action.purpose.typeOf + '</span></a>'
                 + '</td>';
 
             $('<tr>').html(html).appendTo("#moneyTransferActions tbody");
@@ -127,7 +124,41 @@ function searchMoneyTransferActions(cb) {
     }).fail(function () {
         console.error('取引履歴を取得できませんでした')
     });
+
+    $(document).on('click', '.showPurpose', function (event) {
+        var id = $(this).attr('data-id');
+
+        showPurpose(id);
+    });
 }
+
+function showPurpose(id) {
+    var action = moneyTransferActions.find(function (a) {
+        return a.id === id
+    })
+    if (action === undefined) {
+        alert('アクション' + id + 'が見つかりません');
+
+        return;
+    }
+
+    var modal = $('#modal-action');
+    var title = '取引';
+
+    var purpose = action.purpose;
+    var body = $('<dl>').addClass('row');
+    if (purpose !== undefined && purpose !== null) {
+        body.append($('<dt>').addClass('col-md-3').append($('<span>').text('タイプ')))
+            .append($('<dd>').addClass('col-md-9').append(purpose.typeOf))
+            .append($('<dt>').addClass('col-md-3').append($('<span>').text('ID')))
+            .append($('<dd>').addClass('col-md-9').append(purpose.id));
+    }
+
+    modal.find('.modal-title').html(title);
+    modal.find('.modal-body').html(body);
+    modal.modal();
+}
+
 function createBalanceChart(datas) {
     console.log('creating chart...datas:', datas.length);
 

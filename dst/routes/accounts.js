@@ -130,14 +130,13 @@ accountsRouter.get('/:accountType/:accountNumber/actions/moneyTransfer', (req, r
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const searchActionsResult = yield accountService.searchMoneyTransferActions({
-            limit: req.query.limit,
-            page: req.query.page,
-            project: { id: { $eq: req.project.id } },
-            accountType: req.params.accountType,
-            accountNumber: req.params.accountNumber,
-            sort: { startDate: pecorinoapi.factory.sortType.Descending }
-        });
+        const searchActionsResult = yield accountService.searchMoneyTransferActions(Object.assign({ limit: req.query.limit, page: req.query.page, sort: { startDate: pecorinoapi.factory.sortType.Descending }, project: { id: { $eq: req.project.id } }, accountType: req.params.accountType, accountNumber: req.params.accountNumber }, {
+        // startDate: {
+        //     $gte: moment()
+        //         .add(-1, 'month')
+        //         .toDate()
+        // }
+        }));
         res.json(searchActionsResult);
     }
     catch (error) {
