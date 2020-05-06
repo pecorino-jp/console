@@ -5,6 +5,7 @@ import * as pecorinoapi from '@pecorino/api-nodejs-client';
 import * as createDebug from 'debug';
 import * as express from 'express';
 import { NO_CONTENT } from 'http-status';
+import * as moment from 'moment';
 
 import * as chevreapi from '../chevreapi';
 
@@ -63,9 +64,19 @@ accountsRouter.get(
                     inCodeSet: { identifier: { $eq: chevreapi.factory.categoryCode.CategorySetIdentifier.AccountType } }
                 });
 
+                const productService = new chevreapi.service.Product({
+                    endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
+                    auth: req.user.authClient
+                });
+                const searchPaymentCardsResult = await productService.search({
+                    project: { id: { $eq: req.project.id } },
+                    typeOf: { $eq: 'PaymentCard' }
+                });
+
                 res.render('accounts/index', {
                     query: req.query,
-                    accountTypes: searchAccountTypesResult.data
+                    accountTypes: searchAccountTypesResult.data,
+                    paymentCards: searchPaymentCardsResult.data
                 });
             }
         } catch (error) {
@@ -149,11 +160,11 @@ accountsRouter.get(
                 accountType: req.params.accountType,
                 accountNumber: req.params.accountNumber,
                 ...{
-                    // startDate: {
-                    //     $gte: moment()
-                    //         .add(-1, 'month')
-                    //         .toDate()
-                    // }
+                    startDate: {
+                        $gte: moment()
+                            .add(-1, 'month')
+                            .toDate()
+                    }
                 }
             });
             res.json(searchActionsResult);

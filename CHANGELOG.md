@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - @pecorino/api-nodejs-client@4.0.0で再構築
 - マルチプロジェクト対応
 - update packages
+- 口座タイプをPaymentCard対応
 
 ### Deprecated
 

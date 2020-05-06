@@ -55,6 +55,13 @@
                                                 selected<% } %>>
                                                 <%= accountType.name.ja %></option>
                                             <% }) %>
+
+                                            <% paymentCards.forEach((paymentCard) => { %>
+                                            <option value="<%= paymentCard.serviceOutput.typeOf %>"
+                                                <% if (query.accountType === paymentCard.serviceOutput.typeOf) { %>
+                                                selected<% } %>>
+                                                <%= paymentCard.name.ja %></option>
+                                            <% }) %>
                                         </select>
                                     </div>
                                 </div>

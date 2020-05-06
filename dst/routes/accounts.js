@@ -16,6 +16,7 @@ const pecorinoapi = require("@pecorino/api-nodejs-client");
 const createDebug = require("debug");
 const express = require("express");
 const http_status_1 = require("http-status");
+const moment = require("moment");
 const chevreapi = require("../chevreapi");
 const debug = createDebug('pecorino-console:router');
 const accountsRouter = express.Router();
@@ -61,9 +62,18 @@ accountsRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
                 project: { id: { $eq: req.project.id } },
                 inCodeSet: { identifier: { $eq: chevreapi.factory.categoryCode.CategorySetIdentifier.AccountType } }
             });
+            const productService = new chevreapi.service.Product({
+                endpoint: process.env.CHEVRE_API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const searchPaymentCardsResult = yield productService.search({
+                project: { id: { $eq: req.project.id } },
+                typeOf: { $eq: 'PaymentCard' }
+            });
             res.render('accounts/index', {
                 query: req.query,
-                accountTypes: searchAccountTypesResult.data
+                accountTypes: searchAccountTypesResult.data,
+                paymentCards: searchPaymentCardsResult.data
             });
         }
     }
@@ -131,11 +141,11 @@ accountsRouter.get('/:accountType/:accountNumber/actions/moneyTransfer', (req, r
             auth: req.user.authClient
         });
         const searchActionsResult = yield accountService.searchMoneyTransferActions(Object.assign({ limit: req.query.limit, page: req.query.page, sort: { startDate: pecorinoapi.factory.sortType.Descending }, project: { id: { $eq: req.project.id } }, accountType: req.params.accountType, accountNumber: req.params.accountNumber }, {
-        // startDate: {
-        //     $gte: moment()
-        //         .add(-1, 'month')
-        //         .toDate()
-        // }
+            startDate: {
+                $gte: moment()
+                    .add(-1, 'month')
+                    .toDate()
+            }
         }));
         res.json(searchActionsResult);
     }

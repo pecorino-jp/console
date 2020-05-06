@@ -69,6 +69,13 @@
                                             <% if (values.accountType === accountType.codeValue) { %> selected<% } %>>
                                             <%= accountType.name.ja %></option>
                                         <% }) %>
+
+                                        <% paymentCards.forEach((paymentCard) => { %>
+                                        <option value="<%= paymentCard.serviceOutput.typeOf %>"
+                                            <% if (values.accountType === paymentCard.serviceOutput.typeOf) { %>
+                                            selected<% } %>>
+                                            <%= paymentCard.name.ja %></option>
+                                        <% }) %>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-6">

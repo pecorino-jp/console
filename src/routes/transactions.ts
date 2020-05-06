@@ -98,10 +98,20 @@ transactionsRouter.all(
                 inCodeSet: { identifier: { $eq: chevreapi.factory.categoryCode.CategorySetIdentifier.AccountType } }
             });
 
+            const productService = new chevreapi.service.Product({
+                endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const searchPaymentCardsResult = await productService.search({
+                project: { id: { $eq: req.project.id } },
+                typeOf: { $eq: 'PaymentCard' }
+            });
+
             res.render('transactions/start', {
                 values: values,
                 message: message,
-                accountTypes: searchAccountTypesResult.data
+                accountTypes: searchAccountTypesResult.data,
+                paymentCards: searchPaymentCardsResult.data
             });
         } catch (error) {
             next(error);
