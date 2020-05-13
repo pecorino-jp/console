@@ -21,6 +21,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         }
 
         await req.user.retrieveProfile();
+        res.locals.req = req;
         res.locals.user = req.user;
         next();
     } catch (error) {

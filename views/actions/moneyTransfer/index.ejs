@@ -9,7 +9,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item">
-                        <a href="/">Home</a>
+                        <a href="/projects/<%= req.project.id %>/home">Home</a>
                     </li>
                     <li class="breadcrumb-item active">転送アクション検索</li>
                 </ol>
@@ -29,31 +29,114 @@
             <!-- left column -->
             <div class="col-md-12">
                 <!-- general form elements -->
-                <div class="card card-primary">
-                    <!-- <div class="card-header">
-                        <h3 class="card-title">Quick Example</h3>
-                    </div> -->
+                <div class="card card-default">
+                    <div class="card-header">
+                        <!-- <h1 class="card-title">Quick Example</h1> -->
+                        <div class="toolbar">
+                            <!--        Here you can write extra buttons/actions for the toolbar              -->
+                            <a class="btn btn-default btn-sm search" href="#">
+                                <i class="fa fa-redo"></i>&nbsp;&nbsp;更新</a>
+                        </div>
+                    </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form role="form" method="get">
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="accountNumber">口座タイプ</label>
-                                <input type="text" class="form-control" id="accountType" name="accountType"
-                                    placeholder="口座タイプ" value="<%= query.accountType %>">
-                            </div>
-                            <div class="form-group">
-                                <label for="accountNumber">口座番号</label>
-                                <input type="text" class="form-control" id="accountNumber" name="accountNumber"
-                                    placeholder="口座番号" value="<%= query.accountNumber %>">
-                            </div>
-                        </div>
-                        <!-- /.card-body -->
+                    <div class="card-body">
+                        <form role="form" method="get">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="accountType">口座タイプ</label>
+                                        <select class="form-control form-control-sm" id="accountType"
+                                            name="accountType">
+                                            <% accountTypes.forEach((accountType) => { %>
+                                            <option value="<%= accountType.codeValue %>"
+                                                <% if (query.accountType === accountType.codeValue) { %>
+                                                selected<% } %>>
+                                                <%= accountType.name.ja %></option>
+                                            <% }) %>
 
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">検索</button>
+                                            <% paymentCards.forEach((paymentCard) => { %>
+                                            <option value="<%= paymentCard.serviceOutput.typeOf %>"
+                                                <% if (query.accountType === paymentCard.serviceOutput.typeOf) { %>
+                                                selected<% } %>>
+                                                <%= paymentCard.name.ja %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="accountNumber">口座番号</label>
+                                        <input type="text" class="form-control form-control-sm" id="accountNumber"
+                                            name="accountNumber" placeholder="口座番号" value="<%= query.accountNumber %>">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="purpose[typeOf]">取引タイプ</label>
+                                        <select class="form-control form-control-sm" id="purpose[typeOf]"
+                                            name="purpose[typeOf]">
+                                            <option value="">---</option>
+                                            <option value="Deposit"
+                                                <% if (query.purpose !== undefined && query.purpose.typeOf === 'Deposit') { %>
+                                                selected<% } %>>入金</option>
+                                            <option value="Withdraw"
+                                                <% if (query.purpose !== undefined && query.purpose.typeOf === 'Withdraw') { %>
+                                                selected<% } %>>出金</option>
+                                            <option value="Transfer"
+                                                <% if (query.purpose !== undefined && query.purpose.typeOf === 'Transfer') { %>
+                                                selected<% } %>>転送</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="purpose[id]">取引ID</label>
+                                        <input type="text" class="form-control form-control-sm" id="purpose[id]"
+                                            name="purpose[id]" placeholder="取引ID"
+                                            value="<%= (query.purpose !== undefined) ? query.purpose.id : '' %>">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="actionStatus">ステータス</label>
+                                        <select class="form-control form-control-sm" id="actionStatus"
+                                            name="actionStatus">
+                                            <option value="">---</option>
+                                            <option value="ActiveActionStatus"
+                                                <% if ( query.actionStatus === 'ActiveActionStatus') { %>
+                                                selected<% } %>>進行中</option>
+                                            <option value="CanceledActionStatus"
+                                                <% if ( query.actionStatus === 'CanceledActionStatus') { %>
+                                                selected<% } %>>中止</option>
+                                            <option value="CompletedActionStatus"
+                                                <% if (query.actionStatus === 'CompletedActionStatus') { %>
+                                                selected<% } %>>完了</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+
+                        <div class=" table-responsive">
+                            <table id="actions-table" class="table table-sm table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>開始</th>
+                                        <th>終了</th>
+                                        <th>ステータス</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Amount</th>
+                                        <th>説明</th>
+                                        <th>取引</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
-                    </form>
+                    </div>
+                    <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
 
@@ -61,47 +144,26 @@
             <!--/.col (left) -->
         </div>
         <!-- /.row -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">検索結果</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body table-responsive">
-                        <table id="actions-table" class="table table-bordered table-hover dataTable">
-                            <thead>
-                                <tr>
-                                    <th>Action Type<br>Start Date<br>End Date<br>Status</th>
-                                    <th>From</th>
-                                    <th>To</th>
-                                    <th>Amount<br>Description</th>
-                                    <th>Transaction</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Action Type<br>Start Date<br>End Date<br>Status</th>
-                                    <th>From</th>
-                                    <th>To</th>
-                                    <th>Amount<br>Description</th>
-                                    <th>Transaction</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
     </div>
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
 
+<div class="modal" id="modal-action" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">閉じる</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- DataTables -->
-<link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables/dataTables.bootstrap4.css">
+<link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
 <script src="/js/actions/moneyTransfer/index.js"></script>

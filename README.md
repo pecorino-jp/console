@@ -11,21 +11,22 @@
 
 ### Environment variables
 
-| Name                                   | Required | Purpose            | Value            |
-|----------------------------------------|----------|--------------------|------------------|
-| `DEBUG`                                | false    | pecorino-console:* | Debug            |
-| `NODE_ENV`                             | true     |                    | environment name |
-| `PECORINO_API_ENDPOINT`                | true     |                    | APIエンドポイント       |
-| `PECORINO_API_AUTHORIZE_SERVER_DOMAIN` | true     |                    | API認可サーバードメイン    |
-| `PECORINO_API_CLIENT_ID`               | true     |                    | APIクライアントID      |
-| `PECORINO_API_CLIENT_SECRET`           | true     |                    | APIクライアントシークレット  |
-| `PECORINO_API_CODE_VERIFIER`           | true     |                    | APIコード検証鍵        |
-| `REDIS_HOST`                           | true     |                    | ログイン状態保持ストレージ    |
-| `REDIS_PORT`                           | true     |                    | ログイン状態保持ストレージ    |
-| `REDIS_KEY`                            | true     |                    | ログイン状態保持ストレージ    |
-| `USER_EXPIRES_IN_SECONDS`              | true     |                    | ユーザーセッション保持期間    |
-| `BASIC_AUTH_NAME`                      | false    |                    | ベーシック認証          |
-| `BASIC_AUTH_PASS`                      | false    |                    | ベーシック認証          |
+| Name                          | Required | Purpose            | Value                                 |
+| ----------------------------- | -------- | ------------------ | ------------------------------------- |
+| `DEBUG`                       | false    | pecorino-console:* | Debug                                 |
+| `API_ENDPOINT`                | true     |                    | API credentials                       |
+| `API_AUTHORIZE_SERVER_DOMAIN` | true     |                    | API credentials                       |
+| `API_CLIENT_ID`               | true     |                    | API credentials                       |
+| `API_CLIENT_SECRET`           | true     |                    | API credentials                       |
+| `API_CODE_VERIFIER`           | true     |                    | API credentials                       |
+| `BASIC_AUTH_NAME`             | false    |                    | Basic auth settings                   |
+| `BASIC_AUTH_PASS`             | false    |                    | Basic auth settings                   |
+| `CHEVRE_API_ENDPOINT`         | true     |                    | Chevre API Endpoint                   |
+| `CINERINO_API_ENDPOINT`       | true     |                    | Cinerino API Endpoint                 |
+| `REDIS_HOST`                  | true     |                    | Redis connection settings for session |
+| `REDIS_PORT`                  | true     |                    | Redis connection settings for session |
+| `REDIS_KEY`                   | true     |                    | Redis connection settings for session |
+| `USER_EXPIRES_IN_SECONDS`     | true     |                    | Login user session expiration         |
 
 ## License
 

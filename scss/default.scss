@@ -12,16 +12,6 @@
     @extend .badge-danger;
 }
 
-.badge.Withdraw  {
-    @extend .badge-danger;
-}
-.badge.Deposit {
-    @extend .badge-success;
-}
-.badge.Transfer {
-    @extend .badge-warning;
-}
-
 .badge.Opened {
     @extend .badge-success;
 }
@@ -29,23 +19,12 @@
     @extend .badge-danger;
 }
 
-.badge.Coin {
-    @extend .badge-primary;
-}
-.badge.Point {
-    @extend .badge-primary;
-}
-
-.badge.Account {
-    @extend .badge-info;
-}
-.badge.Person {
-    @extend .badge-secondary;
-}
-.badge.Organization {
-    @extend .badge-secondary;
-}
-
 .badge.MoneyTransfer {
     @extend .badge-info;
+}
+
+.content-header {  
+    h1 {
+      font-size: 1.4rem;
+    }
 }

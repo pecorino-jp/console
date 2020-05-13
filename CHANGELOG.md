@@ -18,6 +18,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Security
 
+## v1.5.0 - 2020-05-13
+
+### Added
+
+- 取引に取引番号を追加
+
+### Changed
+
+- @pecorino/api-nodejs-client@4.0.0で再構築
+- マルチプロジェクト対応
+- update packages
+- 口座タイプをPaymentCard対応
+
 ## v1.4.0 - 2019-06-22
 
 ### Added

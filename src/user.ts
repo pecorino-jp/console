@@ -37,9 +37,9 @@ export default class User {
         this.state = configurations.state;
 
         this.authClient = new pecorinoapi.auth.OAuth2({
-            domain: <string>process.env.PECORINO_API_AUTHORIZE_SERVER_DOMAIN,
-            clientId: <string>process.env.PECORINO_API_CLIENT_ID,
-            clientSecret: <string>process.env.PECORINO_API_CLIENT_SECRET,
+            domain: <string>process.env.API_AUTHORIZE_SERVER_DOMAIN,
+            clientId: <string>process.env.API_CLIENT_ID,
+            clientSecret: <string>process.env.API_CLIENT_SECRET,
             redirectUri: `https://${configurations.host}/signIn`,
             logoutUri: `https://${configurations.host}/logout`
         });
@@ -50,7 +50,7 @@ export default class User {
         return this.authClient.generateAuthUrl({
             scopes: [],
             state: this.state,
-            codeVerifier: <string>process.env.PECORINO_API_CODE_VERIFIER
+            codeVerifier: <string>process.env.API_CODE_VERIFIER
         });
     }
 
@@ -68,7 +68,7 @@ export default class User {
 
     public async signIn(code: string) {
         // 認証情報を取得できればログイン成功
-        const credentials = await this.authClient.getToken(code, <string>process.env.PECORINO_API_CODE_VERIFIER);
+        const credentials = await this.authClient.getToken(code, <string>process.env.API_CODE_VERIFIER);
         debug('credentials published', credentials);
 
         if (credentials.access_token === undefined) {

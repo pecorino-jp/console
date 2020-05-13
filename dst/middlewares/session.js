@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const connectRedis = require("connect-redis");
 const session = require("express-session");
 const redis_1 = require("../redis");
-const EXPIRES = parseInt(process.env.USER_EXPIRES_IN_SECONDS, 10);
+const EXPIRES = Number(process.env.USER_EXPIRES_IN_SECONDS);
 exports.default = session({
     secret: 'pecorino-console-session-secret',
     resave: false,

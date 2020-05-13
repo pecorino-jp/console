@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -15,43 +16,64 @@ const pecorinoapi = require("@pecorino/api-nodejs-client");
 const createDebug = require("debug");
 const express = require("express");
 const http_status_1 = require("http-status");
+const moment = require("moment");
+const chevreapi = require("../chevreapi");
 const debug = createDebug('pecorino-console:router');
 const accountsRouter = express.Router();
 /**
  * 口座検索
  */
-accountsRouter.get('/', 
-// tslint:disable-next-line:cyclomatic-complexity
-(req, res, next) => __awaiter(this, void 0, void 0, function* () {
+accountsRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const accountService = new pecorinoapi.service.Account({
-            endpoint: process.env.PECORINO_API_ENDPOINT,
+            endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const searchConditions = {
-            limit: req.query.limit,
-            page: req.query.page,
-            sort: { openDate: pecorinoapi.factory.sortType.Descending },
-            accountType: req.query.accountType,
-            accountNumbers: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0) ?
-                [req.query.accountNumber] :
-                [],
-            statuses: [],
-            name: req.query.name
-        };
+        const searchConditions = Object.assign({ limit: req.query.limit, page: req.query.page, sort: { openDate: pecorinoapi.factory.sortType.Descending }, project: { id: { $eq: req.project.id } }, accountType: req.query.accountType, statuses: (typeof req.query.status === 'string' && req.query.status.length > 0)
+                ? [req.query.status]
+                : undefined }, {
+            accountNumber: {
+                $regex: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0)
+                    ? req.query.accountNumber
+                    : undefined
+            },
+            name: {
+                $regex: (typeof req.query.name === 'string' && req.query.name.length > 0) ? req.query.name : undefined
+            }
+        });
         if (req.query.format === 'datatable') {
             debug('searching accounts...', req.query);
-            const { totalCount, data } = yield accountService.searchWithTotalCount(searchConditions);
+            const { data } = yield accountService.search(searchConditions);
             res.json({
                 draw: req.query.draw,
-                recordsTotal: totalCount,
-                recordsFiltered: totalCount,
+                // recordsTotal: data.length,
+                recordsFiltered: (data.length === Number(searchConditions.limit))
+                    ? (Number(searchConditions.page) * Number(searchConditions.limit)) + 1
+                    : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(data.length),
                 data: data
             });
         }
         else {
+            const categoryCodeService = new chevreapi.service.CategoryCode({
+                endpoint: process.env.CHEVRE_API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const searchAccountTypesResult = yield categoryCodeService.search({
+                project: { id: { $eq: req.project.id } },
+                inCodeSet: { identifier: { $eq: chevreapi.factory.categoryCode.CategorySetIdentifier.AccountType } }
+            });
+            const productService = new chevreapi.service.Product({
+                endpoint: process.env.CHEVRE_API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const searchPaymentCardsResult = yield productService.search({
+                project: { id: { $eq: req.project.id } },
+                typeOf: { $eq: 'PaymentCard' }
+            });
             res.render('accounts/index', {
-                query: req.query
+                query: req.query,
+                accountTypes: searchAccountTypesResult.data,
+                paymentCards: searchPaymentCardsResult.data
             });
         }
     }
@@ -62,20 +84,21 @@ accountsRouter.get('/',
 /**
  * 口座詳細
  */
-accountsRouter.all('/:accountType/:accountNumber', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+accountsRouter.all('/:accountType/:accountNumber', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let message;
         const accountService = new pecorinoapi.service.Account({
-            endpoint: process.env.PECORINO_API_ENDPOINT,
+            endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const { totalCount, data } = yield accountService.searchWithTotalCount({
+        const { data } = yield accountService.search({
             limit: 1,
+            project: { id: { $eq: req.project.id } },
             statuses: [],
             accountType: req.params.accountType,
             accountNumbers: [req.params.accountNumber]
         });
-        if (totalCount < 1) {
+        if (data.length < 1) {
             throw new pecorinoapi.factory.errors.NotFound('Account');
         }
         const account = data[0];
@@ -111,19 +134,19 @@ accountsRouter.all('/:accountType/:accountNumber', (req, res, next) => __awaiter
 /**
  * 取引検索
  */
-accountsRouter.get('/:accountType/:accountNumber/actions/moneyTransfer', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+accountsRouter.get('/:accountType/:accountNumber/actions/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const accountService = new pecorinoapi.service.Account({
-            endpoint: process.env.PECORINO_API_ENDPOINT,
+            endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const searchActionsResult = yield accountService.searchMoneyTransferActionsWithTotalCount({
-            limit: req.query.limit,
-            page: req.query.page,
-            accountType: req.params.accountType,
-            accountNumber: req.params.accountNumber,
-            sort: { startDate: pecorinoapi.factory.sortType.Descending }
-        });
+        const searchActionsResult = yield accountService.searchMoneyTransferActions(Object.assign({ limit: req.query.limit, page: req.query.page, sort: { startDate: pecorinoapi.factory.sortType.Descending }, project: { id: { $eq: req.project.id } }, accountType: req.params.accountType, accountNumber: req.params.accountNumber }, {
+            startDate: {
+                $gte: moment()
+                    .add(-1, 'month')
+                    .toDate()
+            }
+        }));
         res.json(searchActionsResult);
     }
     catch (error) {

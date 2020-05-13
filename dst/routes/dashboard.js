@@ -10,16 +10,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
- * ホームルーター
+ * ダッシュボードルーター
  */
+// import * as createDebug from 'debug';
 const express = require("express");
-const homeRouter = express.Router();
-homeRouter.get('/', (_, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+// import * as moment from 'moment';
+const cinerinoapi = require("../cinerinoapi");
+// const debug = createDebug('cinerino-console:routes');
+const dashboardRouter = express.Router();
+dashboardRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        res.render('index', { message: 'Welcome to Pecorino Console!' });
+        const projectService = new cinerinoapi.service.Project({
+            endpoint: process.env.CINERINO_API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const searchProjectsResult = yield projectService.search({});
+        const projects = searchProjectsResult.data;
+        res.render('dashboard', {
+            layout: 'layouts/dashboard',
+            message: 'Welcome to Pecorino Console!',
+            projects: projects
+        });
     }
     catch (error) {
         next(error);
     }
 }));
-exports.default = homeRouter;
+exports.default = dashboardRouter;

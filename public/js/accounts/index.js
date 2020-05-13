@@ -7,8 +7,13 @@ $(function () {
         $("#accounts-table").DataTable({
             processing: true,
             serverSide: true,
+            pagingType: 'simple',
+            language: {
+                info: 'Showing page _PAGE_',
+                infoFiltered: ''
+            },
             ajax: {
-                url: '/accounts?' + $('form').serialize(),
+                url: '/projects/' + PROJECT_ID + '/accounts?' + $('form').serialize(),
                 data: function (d) {
                     d.limit = d.length;
                     d.page = (d.start / d.length) + 1;
@@ -16,6 +21,7 @@ $(function () {
                     d.format = 'datatable';
                 }
             },
+            lengthChange: false,
             searching: false,
             order: [[1, 'asc']], // デフォルトは枝番号昇順
             ordering: false,
@@ -23,49 +29,58 @@ $(function () {
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<ul class="list-unstyled">'
-                            + '<li>'
-                            + '<span class="badge ' + data.accountType + '">' + data.accountType + '</span>'
-                            + ' <a target="_blank" href="/accounts/' + data.accountType + '/' + data.accountNumber + '">' + data.accountNumber + '</a>'
-                            + '</li>'
-                            + '<span class="badge ' + data.status + '">' + data.status + '</span>'
-                            + '</ul>';
+                        return '<span class="badge ' + data.accountType + '">' + data.accountType + '</span>';
                     }
                 },
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<ul class="list-unstyled">'
-                            + '<li>' + data.name + '</li>'
-                            + '</ul>';
+                        return '<span><span class="badge ' + data.status + '">' + data.status + '</span></span>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        var href = '/projects/' + PROJECT_ID + '/accounts/' + data.accountType + '/' + data.accountNumber;
+                        return '<span><a target="_blank" href="' + href + '">' + data.accountNumber + '</a></span>';
 
                     }
                 },
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<ul class="list-unstyled">'
-                            + '<li>' + data.balance + '</li>'
-                            + '</ul>';
+                        return '<span>' + data.name + '</span>';
+
                     }
                 },
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<ul class="list-unstyled">'
-                            + '<li>' + data.availableBalance + '</li>'
-                            + '</ul>';
+                        return '<span>' + data.balance + '</span>';
                     }
                 },
                 {
                     data: null,
                     render: function (data, type, row) {
-                        var html = '<ul class="list-unstyled">'
-                            + '<li>' + data.openDate + '</li>';
+                        return '<span>' + data.availableBalance + '</span>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        var html = '<span>' + moment(data.openDate).utc().format() + '</span>'
+
+                        return html;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        var html = ''
                         if (data.closeDate !== undefined) {
-                            html += '<li>' + data.closeDate + '</li>'
+                            html += '<span>' + moment(data.closeDate).utc().format() + '</span>'
                         }
-                        html += '</ul>';
+                        html += '';
 
                         return html;
                     }
@@ -73,6 +88,10 @@ $(function () {
             ]
         });
     }
+
+    $(document).on('click', '.btn.search', function () {
+        $('form').submit();
+    });
 
     //Date range picker
     $('#orderDateRange').daterangepicker({
