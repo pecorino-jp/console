@@ -38,7 +38,7 @@ transactionsRouter.all(
                 values = req.body;
 
                 try {
-                    let transaction: pecorinoapi.factory.transaction.ITransaction<any, any>;
+                    let transaction: pecorinoapi.factory.transaction.ITransaction<any>;
 
                     switch (req.body.transactionType) {
                         case pecorinoapi.factory.transactionType.Deposit:
@@ -127,8 +127,8 @@ transactionsRouter.all(
     async (req, res, next) => {
         try {
             let message;
-            let fromAccount: pecorinoapi.factory.account.IAccount<pecorinoapi.factory.account.AccountType> | undefined;
-            let toAccount: pecorinoapi.factory.account.IAccount<pecorinoapi.factory.account.AccountType> | undefined;
+            let fromAccount: pecorinoapi.factory.account.IAccount | undefined;
+            let toAccount: pecorinoapi.factory.account.IAccount | undefined;
             const transaction = (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
             if (transaction === undefined) {
                 throw new pecorinoapi.factory.errors.NotFound('Transaction in session');
@@ -221,7 +221,7 @@ transactionsRouter.all(
 // tslint:disable-next-line:max-func-body-length
 function createStartParams<T extends pecorinoapi.factory.transactionType>(
     req: express.Request
-): pecorinoapi.factory.transaction.IStartParams<T, any> {
+): pecorinoapi.factory.transaction.IStartParams<T> {
 
     const expires = moment().add(1, 'minutes').toDate();
     const agent = {
@@ -237,9 +237,9 @@ function createStartParams<T extends pecorinoapi.factory.transactionType>(
     const amount = Number(req.body.amount);
     const description = req.body.description;
 
-    let startParams: pecorinoapi.factory.transaction.IStartParams<pecorinoapi.factory.transactionType.Deposit, any>
-        | pecorinoapi.factory.transaction.IStartParams<pecorinoapi.factory.transactionType.Transfer, any>
-        | pecorinoapi.factory.transaction.IStartParams<pecorinoapi.factory.transactionType.Withdraw, any>;
+    let startParams: pecorinoapi.factory.transaction.IStartParams<pecorinoapi.factory.transactionType.Deposit>
+        | pecorinoapi.factory.transaction.IStartParams<pecorinoapi.factory.transactionType.Transfer>
+        | pecorinoapi.factory.transaction.IStartParams<pecorinoapi.factory.transactionType.Withdraw>;
 
     switch (req.body.transactionType) {
         case pecorinoapi.factory.transactionType.Deposit:

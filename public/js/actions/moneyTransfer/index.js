@@ -170,7 +170,9 @@ function showPurpose(id) {
         body.append($('<dt>').addClass('col-md-3').append($('<span>').text('タイプ')))
             .append($('<dd>').addClass('col-md-9').append(purpose.typeOf))
             .append($('<dt>').addClass('col-md-3').append($('<span>').text('ID')))
-            .append($('<dd>').addClass('col-md-9').append(purpose.id));
+            .append($('<dd>').addClass('col-md-9').append(purpose.id))
+            .append($('<dt>').addClass('col-md-3').append($('<span>').text('取引番号')))
+            .append($('<dd>').addClass('col-md-9').append(purpose.transactionNumber));
     }
 
     modal.find('.modal-title').html(title);

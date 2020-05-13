@@ -10,23 +10,27 @@ $(function () {
     searchMoneyTransferActions(function () {
         console.log('creating line chart...');
         var balance = account.balance;
-        var datas = moneyTransferActions.reduce(
-            (a, b) => {
-                a.push({
-                    x: moment(b.endDate).toISOString(),
-                    y: balance,
-                });
-                if (b.fromLocation.accountNumber === account.accountNumber) {
-                    balance += b.amount;
-                } else {
-                    balance -= b.amount;
-                }
+        var datas = moneyTransferActions
+            .filter(function (action) {
+                return action.actionStatus === 'CompletedActionStatus';
+            })
+            .reduce(
+                (a, b) => {
+                    a.push({
+                        x: moment(b.endDate).toISOString(),
+                        y: balance,
+                    });
+                    if (b.fromLocation.accountNumber === account.accountNumber) {
+                        balance += b.amount;
+                    } else {
+                        balance -= b.amount;
+                    }
 
-                return a;
-            },
-            [
-            ],
-        );
+                    return a;
+                },
+                [
+                ],
+            );
         createBalanceChart(datas);
     });
 
@@ -151,7 +155,9 @@ function showPurpose(id) {
         body.append($('<dt>').addClass('col-md-3').append($('<span>').text('タイプ')))
             .append($('<dd>').addClass('col-md-9').append(purpose.typeOf))
             .append($('<dt>').addClass('col-md-3').append($('<span>').text('ID')))
-            .append($('<dd>').addClass('col-md-9').append(purpose.id));
+            .append($('<dd>').addClass('col-md-9').append(purpose.id))
+            .append($('<dt>').addClass('col-md-3').append($('<span>').text('取引番号')))
+            .append($('<dd>').addClass('col-md-9').append(purpose.transactionNumber));
     }
 
     modal.find('.modal-title').html(title);
@@ -178,9 +184,10 @@ function createBalanceChart(datas) {
                     pointHoverRadius: 7,
                     pointColor: '#efefef',
                     pointBackgroundColor: '#efefef',
-                    data: datas.map(function (data) {
-                        return { x: moment(data.x).toDate(), y: data.y }
-                    }),
+                    data: datas
+                        .map(function (data) {
+                            return { x: moment(data.x).toDate(), y: data.y }
+                        }),
                 }
             ]
         },

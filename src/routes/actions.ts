@@ -25,17 +25,21 @@ actionsRouter.get(
             const actionStatusEq = req.query.actionStatus;
             const purposeTypeOfEq = req.query.purpose?.typeOf;
             const purposeIdEq = req.query.purpose?.id;
-            const searchConditions: pecorinoapi.factory.action.transfer.moneyTransfer.ISearchConditions<string> = {
+            const searchConditions: pecorinoapi.factory.action.transfer.moneyTransfer.ISearchConditions = {
                 limit: req.query.limit,
                 page: req.query.page,
                 sort: { startDate: pecorinoapi.factory.sortType.Descending },
                 project: { id: { $eq: req.project.id } },
-                accountType: <string>req.query.accountTypes,
+                accountType: <string>req.query.accountType,
                 accountNumber: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0) ?
                     <string>req.query.accountNumber :
                     undefined,
                 ...{
-                    actionStatus: { $in: (typeof actionStatusEq === 'string' && actionStatusEq.length > 0) ? [actionStatusEq] : undefined },
+                    actionStatus: {
+                        $in: (typeof actionStatusEq === 'string' && actionStatusEq.length > 0)
+                            ? [<pecorinoapi.factory.actionStatusType>actionStatusEq]
+                            : undefined
+                    },
                     purpose: {
                         typeOf: { $eq: (typeof purposeTypeOfEq === 'string' && purposeTypeOfEq.length > 0) ? purposeTypeOfEq : undefined },
                         id: { $eq: (typeof purposeIdEq === 'string' && purposeIdEq.length > 0) ? purposeIdEq : undefined }

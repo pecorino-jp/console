@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Added
 
+- 取引に取引番号を追加
+
 ### Changed
 
 - @pecorino/api-nodejs-client@4.0.0で再構築

@@ -23,7 +23,7 @@ accountsRouter.get(
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const searchConditions: pecorinoapi.factory.account.ISearchConditions<string> = {
+            const searchConditions: pecorinoapi.factory.account.ISearchConditions = {
                 limit: req.query.limit,
                 page: req.query.page,
                 sort: { openDate: pecorinoapi.factory.sortType.Descending },
