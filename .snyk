@@ -1,0 +1,15 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - admin-lte > summernote > npm-check-updates > node-alias > lodash:
+        patched: '2020-05-13T11:07:23.351Z'
+    - admin-lte > summernote > npm-check-updates > lodash:
+        patched: '2020-05-13T11:07:23.351Z'
+    - '@cinerino/api-nodejs-client > @cinerino/api-abstract-client > @cinerino/factory > @motionpicture/gmo-service > request-promise-native > request-promise-core > lodash':
+        patched: '2020-05-13T11:07:23.351Z'
+  'npm:lodash:20180130':
+    - '@cinerino/api-nodejs-client > @cinerino/api-abstract-client > @cinerino/factory > @movieticket/reserve-api-nodejs-client > @movieticket/reserve-api-abstract-client > @motionpicture/mvtk-reserve-service > soap > lodash':
+        patched: '2020-05-13T11:07:23.351Z'
