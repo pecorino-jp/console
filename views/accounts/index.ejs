@@ -53,14 +53,15 @@
                                             <option value="<%= accountType.codeValue %>"
                                                 <% if (query.accountType === accountType.codeValue) { %>
                                                 selected<% } %>>
-                                                <%= accountType.name.ja %></option>
+                                                <%= accountType.codeValue %> <%= accountType.name.ja %></option>
                                             <% }) %>
 
                                             <% paymentCards.forEach((paymentCard) => { %>
                                             <option value="<%= paymentCard.serviceOutput.typeOf %>"
                                                 <% if (query.accountType === paymentCard.serviceOutput.typeOf) { %>
                                                 selected<% } %>>
-                                                <%= paymentCard.name.ja %></option>
+                                                <%= paymentCard.serviceOutput.typeOf %> <%= paymentCard.name.ja %>
+                                            </option>
                                             <% }) %>
                                         </select>
                                     </div>
@@ -100,6 +101,7 @@
                             <table id="accounts-table" class="table table-sm table-hover dataTable">
                                 <thead>
                                     <tr>
+                                        <th>口座種別</th>
                                         <th>口座タイプ</th>
                                         <th>ステータス</th>
                                         <th>口座番号</th>

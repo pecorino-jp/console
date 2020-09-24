@@ -158,7 +158,6 @@ transactionsRouter.all('/:transactionId/confirm', (req, res, next) => __awaiter(
             });
             if (transaction.object.fromLocation !== undefined) {
                 const searchAccountsResult = yield accountService.search({
-                    accountType: transaction.object.fromLocation.accountType,
                     accountNumbers: [transaction.object.fromLocation.accountNumber],
                     statuses: [],
                     limit: 1
@@ -167,7 +166,6 @@ transactionsRouter.all('/:transactionId/confirm', (req, res, next) => __awaiter(
             }
             if (transaction.object.toLocation !== undefined) {
                 const searchAccountsResult = yield accountService.search({
-                    accountType: transaction.object.toLocation.accountType,
                     accountNumbers: [transaction.object.toLocation.accountNumber],
                     statuses: [],
                     limit: 1
@@ -216,8 +214,6 @@ function createStartParams(req) {
                 object: {
                     amount,
                     toLocation: {
-                        typeOf: pecorinoapi.factory.account.TypeOf.Account,
-                        accountType: req.body.accountType,
                         accountNumber: req.body.toAccountNumber
                     },
                     description
@@ -234,13 +230,9 @@ function createStartParams(req) {
                 object: {
                     amount,
                     fromLocation: {
-                        typeOf: pecorinoapi.factory.account.TypeOf.Account,
-                        accountType: req.body.accountType,
                         accountNumber: req.body.fromAccountNumber
                     },
                     toLocation: {
-                        typeOf: pecorinoapi.factory.account.TypeOf.Account,
-                        accountType: req.body.accountType,
                         accountNumber: req.body.toAccountNumber
                     },
                     description
@@ -257,8 +249,6 @@ function createStartParams(req) {
                 object: {
                     amount,
                     fromLocation: {
-                        typeOf: pecorinoapi.factory.account.TypeOf.Account,
-                        accountType: req.body.accountType,
                         accountNumber: req.body.fromAccountNumber
                     },
                     description
