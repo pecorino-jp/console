@@ -29,6 +29,12 @@ $(function () {
                 {
                     data: null,
                     render: function (data, type, row) {
+                        return '<span class="badge ' + data.typeOf + '">' + data.typeOf + '</span>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
                         return '<span class="badge ' + data.accountType + '">' + data.accountType + '</span>';
                     }
                 },

@@ -47,7 +47,7 @@ transactionsRouter.all(
                                 auth: req.user.authClient
                             });
                             transaction = await depositService.start(
-                                createStartParams<pecorinoapi.factory.transactionType.Deposit>(req)
+                                <pecorinoapi.factory.transaction.deposit.IStartParamsWithoutDetail>createStartParams(req)
                             );
 
                             break;
@@ -58,7 +58,7 @@ transactionsRouter.all(
                                 auth: req.user.authClient
                             });
                             transaction = await transferService.start(
-                                createStartParams<pecorinoapi.factory.transactionType.Transfer>(req)
+                                <pecorinoapi.factory.transaction.transfer.IStartParamsWithoutDetail>createStartParams(req)
                             );
 
                             break;
@@ -69,7 +69,7 @@ transactionsRouter.all(
                                 auth: req.user.authClient
                             });
                             transaction = await withdrawService.start(
-                                createStartParams<pecorinoapi.factory.transactionType.Withdraw>(req)
+                                <pecorinoapi.factory.transaction.withdraw.IStartParamsWithoutDetail>createStartParams(req)
                             );
 
                             break;
@@ -184,7 +184,6 @@ transactionsRouter.all(
                 });
                 if (transaction.object.fromLocation !== undefined) {
                     const searchAccountsResult = await accountService.search({
-                        accountType: transaction.object.fromLocation.accountType,
                         accountNumbers: [transaction.object.fromLocation.accountNumber],
                         statuses: [],
                         limit: 1
@@ -194,7 +193,6 @@ transactionsRouter.all(
 
                 if (transaction.object.toLocation !== undefined) {
                     const searchAccountsResult = await accountService.search({
-                        accountType: transaction.object.toLocation.accountType,
                         accountNumbers: [transaction.object.toLocation.accountNumber],
                         statuses: [],
                         limit: 1
@@ -219,9 +217,11 @@ transactionsRouter.all(
 );
 
 // tslint:disable-next-line:max-func-body-length
-function createStartParams<T extends pecorinoapi.factory.transactionType>(
+function createStartParams(
     req: express.Request
-): pecorinoapi.factory.transaction.IStartParams<T> {
+): pecorinoapi.factory.transaction.deposit.IStartParamsWithoutDetail
+    | pecorinoapi.factory.transaction.transfer.IStartParamsWithoutDetail
+    | pecorinoapi.factory.transaction.withdraw.IStartParamsWithoutDetail {
 
     const expires = moment().add(1, 'minutes').toDate();
     const agent = {
@@ -237,9 +237,9 @@ function createStartParams<T extends pecorinoapi.factory.transactionType>(
     const amount = Number(req.body.amount);
     const description = req.body.description;
 
-    let startParams: pecorinoapi.factory.transaction.IStartParams<pecorinoapi.factory.transactionType.Deposit>
-        | pecorinoapi.factory.transaction.IStartParams<pecorinoapi.factory.transactionType.Transfer>
-        | pecorinoapi.factory.transaction.IStartParams<pecorinoapi.factory.transactionType.Withdraw>;
+    let startParams: pecorinoapi.factory.transaction.deposit.IStartParamsWithoutDetail
+        | pecorinoapi.factory.transaction.transfer.IStartParamsWithoutDetail
+        | pecorinoapi.factory.transaction.withdraw.IStartParamsWithoutDetail;
 
     switch (req.body.transactionType) {
         case pecorinoapi.factory.transactionType.Deposit:
@@ -252,8 +252,6 @@ function createStartParams<T extends pecorinoapi.factory.transactionType>(
                 object: {
                     amount,
                     toLocation: {
-                        typeOf: pecorinoapi.factory.account.TypeOf.Account,
-                        accountType: req.body.accountType,
                         accountNumber: req.body.toAccountNumber
                     },
                     description
@@ -272,13 +270,9 @@ function createStartParams<T extends pecorinoapi.factory.transactionType>(
                 object: {
                     amount,
                     fromLocation: {
-                        typeOf: pecorinoapi.factory.account.TypeOf.Account,
-                        accountType: req.body.accountType,
                         accountNumber: req.body.fromAccountNumber
                     },
                     toLocation: {
-                        typeOf: pecorinoapi.factory.account.TypeOf.Account,
-                        accountType: req.body.accountType,
                         accountNumber: req.body.toAccountNumber
                     },
                     description
@@ -297,8 +291,6 @@ function createStartParams<T extends pecorinoapi.factory.transactionType>(
                 object: {
                     amount,
                     fromLocation: {
-                        typeOf: pecorinoapi.factory.account.TypeOf.Account,
-                        accountType: req.body.accountType,
                         accountNumber: req.body.fromAccountNumber
                     },
                     description

@@ -101,8 +101,6 @@ accountsRouter.all(
             const { data } = await accountService.search({
                 limit: 1,
                 project: { id: { $eq: req.project.id } },
-                statuses: [],
-                accountType: req.params.accountType,
                 accountNumbers: [req.params.accountNumber]
             });
             if (data.length < 1) {
@@ -118,7 +116,6 @@ accountsRouter.all(
             } else if (req.method === 'POST') {
                 try {
                     await accountService.update({
-                        accountType: req.params.accountType,
                         accountNumber: req.params.accountNumber,
                         name: req.body.name
                     });
@@ -157,7 +154,6 @@ accountsRouter.get(
                 page: req.query.page,
                 sort: { startDate: pecorinoapi.factory.sortType.Descending },
                 project: { id: { $eq: req.project.id } },
-                accountType: req.params.accountType,
                 accountNumber: req.params.accountNumber,
                 ...{
                     startDate: {
