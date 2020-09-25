@@ -6,4 +6,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Cinerino API Client
  */
-__export(require("@cinerino/api-nodejs-client"));
+__export(require("@cinerino/sdk"));

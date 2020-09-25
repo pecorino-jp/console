@@ -89,7 +89,7 @@ accountsRouter.get(
  * 口座詳細
  */
 accountsRouter.all(
-    '/:accountType/:accountNumber',
+    '/:accountNumber',
     async (req, res, next) => {
         try {
             let message;
@@ -142,7 +142,7 @@ accountsRouter.all(
  * 取引検索
  */
 accountsRouter.get(
-    '/:accountType/:accountNumber/actions/moneyTransfer',
+    '/:accountNumber/actions/moneyTransfer',
     async (req, res, next) => {
         try {
             const accountService = new pecorinoapi.service.Account({
@@ -164,6 +164,21 @@ accountsRouter.get(
                 }
             });
             res.json(searchActionsResult);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+/**
+ * 口座詳細
+ * @deprecated Use /:accountNumber
+ */
+accountsRouter.get(
+    '/:accountType/:accountNumber',
+    async (req, res, next) => {
+        try {
+            res.redirect(`/projects/${req.project.id}/accounts/${req.params.accountNumber}`);
         } catch (error) {
             next(error);
         }

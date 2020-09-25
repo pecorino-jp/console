@@ -47,7 +47,7 @@ $(function () {
                 {
                     data: null,
                     render: function (data, type, row) {
-                        var href = '/projects/' + PROJECT_ID + '/accounts/' + data.accountType + '/' + data.accountNumber;
+                        var href = '/projects/' + PROJECT_ID + '/accounts/' + data.accountNumber;
                         return '<span><a target="_blank" href="' + href + '">' + data.accountNumber + '</a></span>';
 
                     }

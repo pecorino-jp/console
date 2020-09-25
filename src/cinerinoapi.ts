@@ -1,4 +1,4 @@
 /**
  * Cinerino API Client
  */
-export * from '@cinerino/api-nodejs-client';
+export * from '@cinerino/sdk';

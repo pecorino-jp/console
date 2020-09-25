@@ -57,7 +57,7 @@ $(function () {
                         var html = '<span>' + '<span class="badge badge-light ' + fromLocation.typeOf + '">' + fromLocation.typeOf + '</span></span>';
 
                         if (fromLocation.accountType !== undefined) {
-                            var href = '/projects/' + PROJECT_ID + '/accounts/' + fromLocation.accountType + '/' + fromLocation.accountNumber
+                            var href = '/projects/' + PROJECT_ID + '/accounts/' + fromLocation.accountNumber
                             html += ' <span class="badge badge-light ' + fromLocation.accountType + '">' + fromLocation.accountType + '</span>'
                                 + ' <span><a target="_blank" href="' + href + '">' + fromLocation.accountNumber + '</a></span>';
                         }
@@ -81,7 +81,7 @@ $(function () {
                         var html = '<span class="badge badge-light ' + toLocation.typeOf + '">' + toLocation.typeOf + '</span>';
 
                         if (toLocation.accountType !== undefined) {
-                            var href = '/projects/' + PROJECT_ID + '/accounts/' + toLocation.accountType + '/' + toLocation.accountNumber
+                            var href = '/projects/' + PROJECT_ID + '/accounts/' + toLocation.accountNumber
                             html += ' <span class="badge badge-light ' + toLocation.accountType + '">' + toLocation.accountType + '</span>'
                                 + ' <span><a target="_blank" href="' + href + '">' + toLocation.accountNumber + '</a></span>';
                         }

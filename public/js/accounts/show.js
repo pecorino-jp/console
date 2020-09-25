@@ -48,7 +48,7 @@ $(function () {
 function searchMoneyTransferActions(cb) {
     page += 1;
     $.getJSON(
-        '/projects/' + PROJECT_ID + '/accounts/' + account.accountType + '/' + account.accountNumber + '/actions/moneyTransfer',
+        '/projects/' + PROJECT_ID + '/accounts/' + account.accountNumber + '/actions/moneyTransfer',
         { limit: limit, page: page }
     ).done(function (data) {
         searchedAllMoneyTransferActions = true;
@@ -81,7 +81,7 @@ function searchMoneyTransferActions(cb) {
                     + action.fromLocation.accountType
                     + '</span>'
                     + '<span>'
-                    + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/accounts/' + action.fromLocation.accountType + '/' + action.fromLocation.accountNumber + '">'
+                    + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/accounts/' + action.fromLocation.accountNumber + '">'
                     + action.fromLocation.accountNumber
                     + '</a>'
                     + '</span>';
@@ -97,7 +97,7 @@ function searchMoneyTransferActions(cb) {
                     + action.toLocation.accountType
                     + '</span>'
                     + '<span>'
-                    + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/accounts/' + action.toLocation.accountType + '/' + action.toLocation.accountNumber + '">'
+                    + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/accounts/' + action.toLocation.accountNumber + '">'
                     + action.toLocation.accountNumber
                     + '</a>'
                     + '</span>';

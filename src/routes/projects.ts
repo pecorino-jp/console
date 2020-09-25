@@ -15,34 +15,10 @@ const API_ENDPOINT = <string>process.env.API_ENDPOINT;
 const projectsRouter = express.Router();
 
 projectsRouter.all(
-    '/:id',
-    async (req, res, next) => {
-        try {
-            const message: string = '';
-
-            const projectService = new cinerinoapi.service.Project({
-                endpoint: API_ENDPOINT,
-                auth: req.user.authClient
-            });
-            const project = await projectService.findById({ id: req.params.id });
-
-            req.project = { ...project, settings: { ...project.settings, id: project.id, API_ENDPOINT: API_ENDPOINT } };
-
-            res.render('projects/edit', {
-                message: message,
-                project: req.project
-            });
-        } catch (error) {
-            next(error);
-        }
-    }
-);
-
-projectsRouter.all(
     '/:id/*',
     async (req, _, next) => {
         req.project = {
-            typeOf: cinerinoapi.factory.organizationType.Project,
+            typeOf: cinerinoapi.factory.chevre.organizationType.Project,
             id: req.params.id,
             settings: { id: req.params.id, API_ENDPOINT: API_ENDPOINT }
         };
