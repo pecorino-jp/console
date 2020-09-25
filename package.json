@@ -30,7 +30,8 @@
     "otplib": "^9.0.0",
     "redis": "^2.8.0",
     "request": "^2.88.2",
-    "request-promise-native": "^1.0.8"
+    "request-promise-native": "^1.0.8",
+    "snyk": "^1.400.0"
   },
   "description": "pecorino-console",
   "devDependencies": {
@@ -86,7 +87,10 @@
     "tslint": "tslint --project tsconfig.json -c tslint.json src/**/*.ts --exclude **/*.spec.ts",
     "preversion": "npm run clean && npm run build && npm test && npm run doc",
     "version": "git add -A",
-    "postversion": "git push origin --tags"
+    "postversion": "git push origin --tags",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
-  "version": "1.7.0"
+  "version": "1.7.0",
+  "snyk": true
 }
