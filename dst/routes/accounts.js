@@ -84,7 +84,7 @@ accountsRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 /**
  * 口座詳細
  */
-accountsRouter.all('/:accountType/:accountNumber', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+accountsRouter.all('/:accountNumber', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let message;
         const accountService = new pecorinoapi.service.Account({
@@ -131,7 +131,7 @@ accountsRouter.all('/:accountType/:accountNumber', (req, res, next) => __awaiter
 /**
  * 取引検索
  */
-accountsRouter.get('/:accountType/:accountNumber/actions/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+accountsRouter.get('/:accountNumber/actions/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const accountService = new pecorinoapi.service.Account({
             endpoint: process.env.API_ENDPOINT,
@@ -145,6 +145,18 @@ accountsRouter.get('/:accountType/:accountNumber/actions/moneyTransfer', (req, r
             }
         }));
         res.json(searchActionsResult);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * 口座詳細
+ * @deprecated Use /:accountNumber
+ */
+accountsRouter.get('/:accountType/:accountNumber', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        res.redirect(`/projects/${req.project.id}/accounts/${req.params.accountNumber}`);
     }
     catch (error) {
         next(error);

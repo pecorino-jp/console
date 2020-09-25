@@ -3,7 +3,6 @@
  * ユーザーの型をここで定義しています。
  */
 import * as pecorino from '@pecorino/api-nodejs-client';
-import * as express from 'express';
 
 import User from '../user';
 declare global {

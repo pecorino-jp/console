@@ -20,27 +20,9 @@ const home_1 = require("./home");
 const transactions_1 = require("./transactions");
 const API_ENDPOINT = process.env.API_ENDPOINT;
 const projectsRouter = express.Router();
-projectsRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const message = '';
-        const projectService = new cinerinoapi.service.Project({
-            endpoint: API_ENDPOINT,
-            auth: req.user.authClient
-        });
-        const project = yield projectService.findById({ id: req.params.id });
-        req.project = Object.assign(Object.assign({}, project), { settings: Object.assign(Object.assign({}, project.settings), { id: project.id, API_ENDPOINT: API_ENDPOINT }) });
-        res.render('projects/edit', {
-            message: message,
-            project: req.project
-        });
-    }
-    catch (error) {
-        next(error);
-    }
-}));
 projectsRouter.all('/:id/*', (req, _, next) => __awaiter(void 0, void 0, void 0, function* () {
     req.project = {
-        typeOf: cinerinoapi.factory.organizationType.Project,
+        typeOf: cinerinoapi.factory.chevre.organizationType.Project,
         id: req.params.id,
         settings: { id: req.params.id, API_ENDPOINT: API_ENDPOINT }
     };
