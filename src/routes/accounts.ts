@@ -28,19 +28,24 @@ accountsRouter.get(
                 page: req.query.page,
                 sort: { openDate: pecorinoapi.factory.sortType.Descending },
                 project: { id: { $eq: req.project.id } },
-                accountType: req.query.accountType,
+                accountType: (typeof req.query.accountType === 'string' && req.query.accountType.length > 0)
+                    ? req.query.accountType
+                    : undefined,
                 statuses: (typeof req.query.status === 'string' && req.query.status.length > 0)
                     ? [req.query.status]
                     : undefined,
-                ...{
-                    accountNumber: {
-                        $regex: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0)
-                            ? req.query.accountNumber
-                            : undefined
-                    },
-                    name: <any>{
-                        $regex: (typeof req.query.name === 'string' && req.query.name.length > 0) ? req.query.name : undefined
-                    }
+                accountNumber: {
+                    $regex: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0)
+                        ? req.query.accountNumber
+                        : undefined
+                },
+                name: <any>{
+                    $regex: (typeof req.query.name === 'string' && req.query.name.length > 0) ? req.query.name : undefined
+                },
+                typeOf: {
+                    $eq: (typeof req.query.typeOf === 'string' && req.query.typeOf.length > 0)
+                        ? req.query.typeOf
+                        : undefined
                 }
             };
             if (req.query.format === 'datatable') {
@@ -70,7 +75,7 @@ accountsRouter.get(
                 });
                 const searchPaymentCardsResult = await productService.search({
                     project: { id: { $eq: req.project.id } },
-                    typeOf: { $eq: 'PaymentCard' }
+                    typeOf: { $in: [chevreapi.factory.product.ProductType.Account, chevreapi.factory.product.ProductType.PaymentCard] }
                 });
 
                 res.render('accounts/index', {
@@ -155,12 +160,10 @@ accountsRouter.get(
                 sort: { startDate: pecorinoapi.factory.sortType.Descending },
                 project: { id: { $eq: req.project.id } },
                 accountNumber: req.params.accountNumber,
-                ...{
-                    startDate: {
-                        $gte: moment()
-                            .add(-1, 'month')
-                            .toDate()
-                    }
+                startDate: {
+                    $gte: moment()
+                        .add(-1, 'month')
+                        .toDate()
                 }
             });
             res.json(searchActionsResult);

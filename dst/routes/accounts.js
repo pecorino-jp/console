@@ -29,9 +29,17 @@ accountsRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const searchConditions = Object.assign({ limit: req.query.limit, page: req.query.page, sort: { openDate: pecorinoapi.factory.sortType.Descending }, project: { id: { $eq: req.project.id } }, accountType: req.query.accountType, statuses: (typeof req.query.status === 'string' && req.query.status.length > 0)
+        const searchConditions = {
+            limit: req.query.limit,
+            page: req.query.page,
+            sort: { openDate: pecorinoapi.factory.sortType.Descending },
+            project: { id: { $eq: req.project.id } },
+            accountType: (typeof req.query.accountType === 'string' && req.query.accountType.length > 0)
+                ? req.query.accountType
+                : undefined,
+            statuses: (typeof req.query.status === 'string' && req.query.status.length > 0)
                 ? [req.query.status]
-                : undefined }, {
+                : undefined,
             accountNumber: {
                 $regex: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0)
                     ? req.query.accountNumber
@@ -39,8 +47,13 @@ accountsRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             },
             name: {
                 $regex: (typeof req.query.name === 'string' && req.query.name.length > 0) ? req.query.name : undefined
+            },
+            typeOf: {
+                $eq: (typeof req.query.typeOf === 'string' && req.query.typeOf.length > 0)
+                    ? req.query.typeOf
+                    : undefined
             }
-        });
+        };
         if (req.query.format === 'datatable') {
             debug('searching accounts...', req.query);
             const { data } = yield accountService.search(searchConditions);
@@ -68,7 +81,7 @@ accountsRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             });
             const searchPaymentCardsResult = yield productService.search({
                 project: { id: { $eq: req.project.id } },
-                typeOf: { $eq: 'PaymentCard' }
+                typeOf: { $in: [chevreapi.factory.product.ProductType.Account, chevreapi.factory.product.ProductType.PaymentCard] }
             });
             res.render('accounts/index', {
                 query: req.query,
@@ -137,13 +150,18 @@ accountsRouter.get('/:accountNumber/actions/moneyTransfer', (req, res, next) => 
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const searchActionsResult = yield accountService.searchMoneyTransferActions(Object.assign({ limit: req.query.limit, page: req.query.page, sort: { startDate: pecorinoapi.factory.sortType.Descending }, project: { id: { $eq: req.project.id } }, accountNumber: req.params.accountNumber }, {
+        const searchActionsResult = yield accountService.searchMoneyTransferActions({
+            limit: req.query.limit,
+            page: req.query.page,
+            sort: { startDate: pecorinoapi.factory.sortType.Descending },
+            project: { id: { $eq: req.project.id } },
+            accountNumber: req.params.accountNumber,
             startDate: {
                 $gte: moment()
                     .add(-1, 'month')
                     .toDate()
             }
-        }));
+        });
         res.json(searchActionsResult);
     }
     catch (error) {

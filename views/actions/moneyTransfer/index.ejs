@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">転送アクション検索</h1>
+                <h1 class="m-0 text-dark">出入金検索</h1>
             </div>
             <!-- /.col -->
             <div class="col-sm-6">
@@ -11,7 +11,7 @@
                     <li class="breadcrumb-item">
                         <a href="/projects/<%= req.project.id %>/home">Home</a>
                     </li>
-                    <li class="breadcrumb-item active">転送アクション検索</li>
+                    <li class="breadcrumb-item active">出入金検索</li>
                 </ol>
             </div>
             <!-- /.col -->
@@ -48,18 +48,12 @@
                                         <label for="accountType">口座タイプ</label>
                                         <select class="form-control form-control-sm" id="accountType"
                                             name="accountType">
+                                            <option value="">---</option>
                                             <% accountTypes.forEach((accountType) => { %>
                                             <option value="<%= accountType.codeValue %>"
                                                 <% if (query.accountType === accountType.codeValue) { %>
                                                 selected<% } %>>
                                                 <%= accountType.name.ja %></option>
-                                            <% }) %>
-
-                                            <% paymentCards.forEach((paymentCard) => { %>
-                                            <option value="<%= paymentCard.serviceOutput.typeOf %>"
-                                                <% if (query.accountType === paymentCard.serviceOutput.typeOf) { %>
-                                                selected<% } %>>
-                                                <%= paymentCard.name.ja %></option>
                                             <% }) %>
                                         </select>
                                     </div>
