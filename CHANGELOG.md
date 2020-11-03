@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
 
+- update @chevre/api-nodejs-client
+- update @cinerino/sdk
+- update @pecorino/api-nodejs-client
+
 ### Deprecated
 
 ### Removed
