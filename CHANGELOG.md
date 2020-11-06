@@ -18,6 +18,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Security
 
+## v1.8.1 - 2020-11-06
+
+### Changed
+
+- MoneyTransferアクションのamountがMoneytaryAmount型の場合に対応
+
 ## v1.8.0 - 2020-11-06
 
 ### Changed
