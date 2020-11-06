@@ -49,7 +49,7 @@
                             <% } %>
 
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-3">
                                     <label for="transactionType">取引タイプ</label>
                                     <select class="form-control form-control-sm" id="transactionType"
                                         name="transactionType">
@@ -62,17 +62,7 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group col-md-6">
-                                    <label for="accountType">口座タイプ</label>
-                                    <select class="form-control form-control-sm" id="accountType" name="accountType">
-                                        <% accountTypes.forEach((accountType) => { %>
-                                        <option value="<%= accountType.codeValue %>"
-                                            <% if (values.accountType === accountType.codeValue) { %> selected<% } %>>
-                                            <%= accountType.name.ja %></option>
-                                        <% }) %>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-3">
                                     <label for="amount">金額</label>
                                     <input type="text" class="form-control form-control-sm" id="amount" name="amount"
                                         placeholder="金額" value="<%= values.amount %>">

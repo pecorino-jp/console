@@ -102,9 +102,15 @@ function searchMoneyTransferActions(cb) {
                     + '</a>'
                     + '</span>';
             }
+
+            var amount = (typeof action.amount === 'number')
+                // 互換性維持対応
+                ? { currency: 'Point', value: action.amount }
+                : action.amount;
+
             html += '</td>'
                 + '<td>'
-                + action.amount
+                + amount.value + ' ' + amount.currency
                 + '</td>';
 
             var description = action.description;

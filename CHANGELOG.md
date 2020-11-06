@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - update @cinerino/sdk
 - update @pecorino/api-nodejs-client
 - 口座検索条件拡張
+- MoneyTransferアクションのamountがMoneytaryAmount型の場合に対応
 
 ### Deprecated
 
