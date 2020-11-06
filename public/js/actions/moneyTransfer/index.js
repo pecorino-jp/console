@@ -106,7 +106,7 @@ $(function () {
                             ? { currency: 'Point', value: data.amount }
                             : data.amount;
 
-                        return '<span>' + data.amount.value + ' ' + data.amount.currency + '</span>';
+                        return '<span>' + amount.value + ' ' + amount.currency + '</span>';
                     }
                 },
                 {
