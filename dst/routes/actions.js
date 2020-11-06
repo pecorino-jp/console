@@ -19,7 +19,7 @@ const chevreapi = require("../chevreapi");
 const debug = createDebug('pecorino-console:router');
 const actionsRouter = express.Router();
 /**
- * 転送アクション検索
+ * 出入金検索
  */
 actionsRouter.get('/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
@@ -31,9 +31,17 @@ actionsRouter.get('/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0
         const actionStatusEq = req.query.actionStatus;
         const purposeTypeOfEq = (_a = req.query.purpose) === null || _a === void 0 ? void 0 : _a.typeOf;
         const purposeIdEq = (_b = req.query.purpose) === null || _b === void 0 ? void 0 : _b.id;
-        const searchConditions = Object.assign({ limit: req.query.limit, page: req.query.page, sort: { startDate: pecorinoapi.factory.sortType.Descending }, project: { id: { $eq: req.project.id } }, accountType: req.query.accountType, accountNumber: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0) ?
+        const searchConditions = {
+            limit: req.query.limit,
+            page: req.query.page,
+            sort: { startDate: pecorinoapi.factory.sortType.Descending },
+            project: { id: { $eq: req.project.id } },
+            accountType: (typeof req.query.accountType === 'string' && req.query.accountType.length > 0) ?
+                req.query.accountType :
+                undefined,
+            accountNumber: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0) ?
                 req.query.accountNumber :
-                undefined }, {
+                undefined,
             actionStatus: {
                 $in: (typeof actionStatusEq === 'string' && actionStatusEq.length > 0)
                     ? [actionStatusEq]
@@ -43,7 +51,7 @@ actionsRouter.get('/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0
                 typeOf: { $eq: (typeof purposeTypeOfEq === 'string' && purposeTypeOfEq.length > 0) ? purposeTypeOfEq : undefined },
                 id: { $eq: (typeof purposeIdEq === 'string' && purposeIdEq.length > 0) ? purposeIdEq : undefined }
             }
-        });
+        };
         if (req.query.format === 'datatable') {
             debug('searching accounts...', req.query);
             const { data } = yield actionService.searchMoneyTransferActions(searchConditions);

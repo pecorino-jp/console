@@ -49,9 +49,10 @@
                             <% } %>
 
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-3">
                                     <label for="transactionType">取引タイプ</label>
-                                    <select class="form-control" id="transactionType" name="transactionType">
+                                    <select class="form-control form-control-sm" id="transactionType"
+                                        name="transactionType">
                                         <option value="Deposit" <% if (values.transactionType === 'Deposit') { %>
                                             selected<% } %>>入金</option>
                                         <option value="Withdraw" <% if (values.transactionType === 'Withdraw') { %>
@@ -61,27 +62,10 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group col-md-6">
-                                    <label for="accountType">口座タイプ</label>
-                                    <select class="form-control" id="accountType" name="accountType">
-                                        <% accountTypes.forEach((accountType) => { %>
-                                        <option value="<%= accountType.codeValue %>"
-                                            <% if (values.accountType === accountType.codeValue) { %> selected<% } %>>
-                                            <%= accountType.name.ja %></option>
-                                        <% }) %>
-
-                                        <% paymentCards.forEach((paymentCard) => { %>
-                                        <option value="<%= paymentCard.serviceOutput.typeOf %>"
-                                            <% if (values.accountType === paymentCard.serviceOutput.typeOf) { %>
-                                            selected<% } %>>
-                                            <%= paymentCard.name.ja %></option>
-                                        <% }) %>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-3">
                                     <label for="amount">金額</label>
-                                    <input type="text" class="form-control" id="amount" name="amount" placeholder="金額"
-                                        value="<%= values.amount %>">
+                                    <input type="text" class="form-control form-control-sm" id="amount" name="amount"
+                                        placeholder="金額" value="<%= values.amount %>">
                                 </div>
                             </div>
 
@@ -89,12 +73,12 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="fromName">From 名称</label>
-                                        <input type="text" class="form-control" id="fromName" name="fromName"
-                                            placeholder="From 名称" value="<%= values.fromName %>">
+                                        <input type="text" class="form-control form-control-sm" id="fromName"
+                                            name="fromName" placeholder="From 名称" value="<%= values.fromName %>">
                                     </div>
                                     <div class="form-group">
                                         <label for="fromAccountNumber">From 口座番号</label>
-                                        <input type="text" class="form-control" id="fromAccountNumber"
+                                        <input type="text" class="form-control form-control-sm" id="fromAccountNumber"
                                             name="fromAccountNumber" placeholder="From 口座番号"
                                             value="<%= values.fromAccountNumber %>">
                                     </div>
@@ -102,12 +86,13 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="recipientName">To 名称</label>
-                                        <input type="text" class="form-control" id="recipientName" name="recipientName"
-                                            placeholder="To 名称" value="<%= values.recipientName %>">
+                                        <input type="text" class="form-control form-control-sm" id="recipientName"
+                                            name="recipientName" placeholder="To 名称"
+                                            value="<%= values.recipientName %>">
                                     </div>
                                     <div class="form-group">
                                         <label for="toAccountNumber">To 口座番号</label>
-                                        <input type="text" class="form-control" id="toAccountNumber"
+                                        <input type="text" class="form-control form-control-sm" id="toAccountNumber"
                                             name="toAccountNumber" placeholder="To 口座番号"
                                             value="<%= values.toAccountNumber %>">
                                     </div>
@@ -116,14 +101,14 @@
 
                             <div class="form-group">
                                 <label for="description">説明</label>
-                                <input type="text" class="form-control" id="description" name="description"
-                                    placeholder="説明" value="<%= values.description %>">
+                                <input type="text" class="form-control form-control-sm" id="description"
+                                    name="description" placeholder="説明" value="<%= values.description %>">
                             </div>
                         </div>
                         <!-- /.card-body -->
 
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">確認</button>
+                            <button type="submit" class="btn btn-primary btn-sm">確認</button>
                         </div>
                     </form>
                 </div>

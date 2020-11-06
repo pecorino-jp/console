@@ -18,6 +18,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Security
 
+## v1.8.0 - 2020-11-06
+
+### Changed
+
+- update @chevre/api-nodejs-client
+- update @cinerino/sdk
+- update @pecorino/api-nodejs-client
+- 口座検索条件拡張
+- MoneyTransferアクションのamountがMoneytaryAmount型の場合に対応
+
 ## v1.7.0 - 2020-09-25
 
 ### Changed

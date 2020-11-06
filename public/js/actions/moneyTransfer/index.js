@@ -101,7 +101,12 @@ $(function () {
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<span>' + data.amount + '</span>';
+                        var amount = (typeof data.amount === 'number')
+                            // 互換性維持対応
+                            ? { currency: 'Point', value: data.amount }
+                            : data.amount;
+
+                        return '<span>' + data.amount.value + ' ' + data.amount.currency + '</span>';
                     }
                 },
                 {
