@@ -1,144 +1,139 @@
 var table;
 
 $(function () {
-    var accountType = $('form input[name="accountType"]').val();
-    if (accountType === '') {
-        alert('口座タイプを指定してください');
-    } else {
-        table = $("#actions-table").DataTable({
-            processing: true,
-            serverSide: true,
-            pagingType: 'simple',
-            language: {
-                info: 'Showing page _PAGE_',
-                infoFiltered: ''
-            },
-            ajax: {
-                url: '/projects/' + PROJECT_ID + '/actions/moneyTransfer?' + $('form').serialize(),
-                data: function (d) {
-                    d.limit = d.length;
-                    d.page = (d.start / d.length) + 1;
-                    // d.name = d.search.value;
-                    d.format = 'datatable';
+    table = $("#actions-table").DataTable({
+        processing: true,
+        serverSide: true,
+        pagingType: 'simple',
+        language: {
+            info: 'Showing page _PAGE_',
+            infoFiltered: ''
+        },
+        ajax: {
+            url: '/projects/' + PROJECT_ID + '/actions/moneyTransfer?' + $('form').serialize(),
+            data: function (d) {
+                d.limit = d.length;
+                d.page = (d.start / d.length) + 1;
+                // d.name = d.search.value;
+                d.format = 'datatable';
+            }
+        },
+        lengthChange: false,
+        searching: false,
+        order: [[1, 'asc']], // デフォルトは枝番号昇順
+        ordering: false,
+        columns: [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<span>' + moment(data.startDate).utc().format() + '</span>';
                 }
             },
-            lengthChange: false,
-            searching: false,
-            order: [[1, 'asc']], // デフォルトは枝番号昇順
-            ordering: false,
-            columns: [
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        return '<span>' + moment(data.startDate).utc().format() + '</span>';
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
+                    if (typeof data.endDate === 'string') {
+                        html += '<span>' + moment(data.endDate).utc().format() + '</span>';
                     }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        var html = '';
-                        if (typeof data.endDate === 'string') {
-                            html += '<span>' + moment(data.endDate).utc().format() + '</span>';
-                        }
 
-                        return html;
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        return '<span class="badge badge-secondary ' + data.actionStatus + '">' + data.actionStatus + '</span>';
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        var fromLocation = data.fromLocation;
-                        var html = '<span>' + '<span class="badge badge-light ' + fromLocation.typeOf + '">' + fromLocation.typeOf + '</span></span>';
-
-                        if (fromLocation.accountType !== undefined) {
-                            var href = '/projects/' + PROJECT_ID + '/accounts/' + fromLocation.accountNumber
-                            html += ' <span class="badge badge-light ' + fromLocation.accountType + '">' + fromLocation.accountType + '</span>'
-                                + ' <span><a target="_blank" href="' + href + '">' + fromLocation.accountNumber + '</a></span>';
-                        }
-
-                        if (fromLocation !== undefined && fromLocation !== null) {
-                            var name = fromLocation.name;
-                            if (typeof name === 'string' && name.length > 10) {
-                                name = name.slice(0, 10) + '...';
-                            }
-
-                            html += '<br><a href="#" data-toggle="tooltip" title="' + fromLocation.name + '"><span>' + name + '</span></a>';
-                        }
-
-                        return html;
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        var toLocation = data.toLocation;
-                        var html = '<span class="badge badge-light ' + toLocation.typeOf + '">' + toLocation.typeOf + '</span>';
-
-                        if (toLocation.accountType !== undefined) {
-                            var href = '/projects/' + PROJECT_ID + '/accounts/' + toLocation.accountNumber
-                            html += ' <span class="badge badge-light ' + toLocation.accountType + '">' + toLocation.accountType + '</span>'
-                                + ' <span><a target="_blank" href="' + href + '">' + toLocation.accountNumber + '</a></span>';
-                        }
-
-                        if (toLocation !== undefined && toLocation !== null) {
-                            var name = toLocation.name;
-                            if (typeof name === 'string' && name.length > 10) {
-                                name = name.slice(0, 10) + '...';
-                            }
-
-                            html += '<br><a href="#" data-toggle="tooltip" title="' + toLocation.name + '"><span>' + name + '</span></a>';
-                        }
-
-                        return html;
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        var amount = (typeof data.amount === 'number')
-                            // 互換性維持対応
-                            ? { currency: 'Point', value: data.amount }
-                            : data.amount;
-
-                        return '<span>' + amount.value + ' ' + amount.currency + '</span>';
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        var html = '';
-                        var description = data.description;
-
-                        if (typeof description === 'string' && description.length > 10) {
-                            description = description.slice(0, 10) + '...';
-                        }
-
-                        html += '<a href="#" data-toggle="tooltip" title="' + data.description + '"><span>' + description + '</span></a>';
-
-                        return html;
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        var html = '<a href="#" class="showPurpose" data-id="' + data.id + '"><span class="badge badge-light ' + data.purpose.typeOf + '">' + data.purpose.typeOf + '</span></a>';
-
-                        if (typeof data.purpose.transactionNumber === 'string') {
-                            html += '<br>' + data.purpose.transactionNumber;
-                        }
-
-                        return html;
-                    }
+                    return html;
                 }
-            ]
-        });
-    }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<span class="badge badge-secondary ' + data.actionStatus + '">' + data.actionStatus + '</span>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var fromLocation = data.fromLocation;
+                    var html = '<span>' + '<span class="badge badge-light ' + fromLocation.typeOf + '">' + fromLocation.typeOf + '</span></span>';
+
+                    if (fromLocation.accountType !== undefined) {
+                        var href = '/projects/' + PROJECT_ID + '/accounts/' + fromLocation.accountNumber
+                        html += ' <span class="badge badge-light ' + fromLocation.accountType + '">' + fromLocation.accountType + '</span>'
+                            + ' <span><a target="_blank" href="' + href + '">' + fromLocation.accountNumber + '</a></span>';
+                    }
+
+                    if (fromLocation !== undefined && fromLocation !== null) {
+                        var name = fromLocation.name;
+                        if (typeof name === 'string' && name.length > 10) {
+                            name = name.slice(0, 10) + '...';
+                        }
+
+                        html += '<br><a href="#" data-toggle="tooltip" title="' + fromLocation.name + '"><span>' + name + '</span></a>';
+                    }
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var toLocation = data.toLocation;
+                    var html = '<span class="badge badge-light ' + toLocation.typeOf + '">' + toLocation.typeOf + '</span>';
+
+                    if (toLocation.accountType !== undefined) {
+                        var href = '/projects/' + PROJECT_ID + '/accounts/' + toLocation.accountNumber
+                        html += ' <span class="badge badge-light ' + toLocation.accountType + '">' + toLocation.accountType + '</span>'
+                            + ' <span><a target="_blank" href="' + href + '">' + toLocation.accountNumber + '</a></span>';
+                    }
+
+                    if (toLocation !== undefined && toLocation !== null) {
+                        var name = toLocation.name;
+                        if (typeof name === 'string' && name.length > 10) {
+                            name = name.slice(0, 10) + '...';
+                        }
+
+                        html += '<br><a href="#" data-toggle="tooltip" title="' + toLocation.name + '"><span>' + name + '</span></a>';
+                    }
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var amount = (typeof data.amount === 'number')
+                        // 互換性維持対応
+                        ? { currency: 'Point', value: data.amount }
+                        : data.amount;
+
+                    return '<span>' + amount.value + ' ' + amount.currency + '</span>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
+                    var description = data.description;
+
+                    if (typeof description === 'string' && description.length > 10) {
+                        description = description.slice(0, 10) + '...';
+                    }
+
+                    html += '<a href="#" data-toggle="tooltip" title="' + data.description + '"><span>' + description + '</span></a>';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '<a href="#" class="showPurpose" data-id="' + data.id + '"><span class="badge badge-light ' + data.purpose.typeOf + '">' + data.purpose.typeOf + '</span></a>';
+
+                    if (typeof data.purpose.transactionNumber === 'string') {
+                        html += '<br>' + data.purpose.transactionNumber;
+                    }
+
+                    return html;
+                }
+            }
+        ]
+    });
 
     $(document).on('click', '.btn.search', function () {
         $('form').submit();

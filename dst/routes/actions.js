@@ -22,7 +22,7 @@ const actionsRouter = express.Router();
  * 出入金検索
  */
 actionsRouter.get('/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    var _a, _b, _c;
     try {
         const actionService = new pecorinoapi.service.Action({
             endpoint: process.env.API_ENDPOINT,
@@ -36,16 +36,29 @@ actionsRouter.get('/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0
             page: req.query.page,
             sort: { startDate: pecorinoapi.factory.sortType.Descending },
             project: { id: { $eq: req.project.id } },
-            accountType: (typeof req.query.accountType === 'string' && req.query.accountType.length > 0) ?
-                req.query.accountType :
-                undefined,
-            accountNumber: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0) ?
-                req.query.accountNumber :
-                undefined,
             actionStatus: {
                 $in: (typeof actionStatusEq === 'string' && actionStatusEq.length > 0)
                     ? [actionStatusEq]
                     : undefined
+            },
+            amount: {
+                currency: {
+                    $eq: (typeof req.query.accountType === 'string' && req.query.accountType.length > 0)
+                        ? req.query.accountType
+                        : undefined
+                }
+            },
+            location: {
+                accountNumber: {
+                    $eq: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0)
+                        ? req.query.accountNumber
+                        : undefined
+                },
+                typeOf: {
+                    $eq: (typeof ((_c = req.query.location) === null || _c === void 0 ? void 0 : _c.typeOf) === 'string' && req.query.location.typeOf.length > 0)
+                        ? req.query.location.typeOf
+                        : undefined
+                }
             },
             purpose: {
                 typeOf: { $eq: (typeof purposeTypeOfEq === 'string' && purposeTypeOfEq.length > 0) ? purposeTypeOfEq : undefined },
