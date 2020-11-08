@@ -17,7 +17,7 @@ const createDebug = require("debug");
 const express = require("express");
 const http_status_1 = require("http-status");
 const moment = require("moment");
-const chevreapi = require("../chevreapi");
+const cinerinoapi = require("../cinerinoapi");
 const debug = createDebug('pecorino-console:router');
 const accountsRouter = express.Router();
 /**
@@ -67,21 +67,26 @@ accountsRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             });
         }
         else {
-            const categoryCodeService = new chevreapi.service.CategoryCode({
+            const categoryCodeService = new cinerinoapi.service.CategoryCode({
                 endpoint: process.env.CHEVRE_API_ENDPOINT,
                 auth: req.user.authClient
             });
             const searchAccountTypesResult = yield categoryCodeService.search({
                 project: { id: { $eq: req.project.id } },
-                inCodeSet: { identifier: { $eq: chevreapi.factory.categoryCode.CategorySetIdentifier.AccountType } }
+                inCodeSet: { identifier: { $eq: cinerinoapi.factory.chevre.categoryCode.CategorySetIdentifier.AccountType } }
             });
-            const productService = new chevreapi.service.Product({
+            const productService = new cinerinoapi.service.Product({
                 endpoint: process.env.CHEVRE_API_ENDPOINT,
                 auth: req.user.authClient
             });
             const searchPaymentCardsResult = yield productService.search({
                 project: { id: { $eq: req.project.id } },
-                typeOf: { $in: [chevreapi.factory.product.ProductType.Account, chevreapi.factory.product.ProductType.PaymentCard] }
+                typeOf: {
+                    $in: [
+                        cinerinoapi.factory.chevre.product.ProductType.Account,
+                        cinerinoapi.factory.chevre.product.ProductType.PaymentCard
+                    ]
+                }
             });
             res.render('accounts/index', {
                 query: req.query,

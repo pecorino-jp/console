@@ -5,7 +5,7 @@ import * as pecorinoapi from '@pecorino/api-nodejs-client';
 import * as createDebug from 'debug';
 import * as express from 'express';
 
-import * as chevreapi from '../chevreapi';
+import * as cinerinoapi from '../cinerinoapi';
 
 const debug = createDebug('pecorino-console:router');
 const actionsRouter = express.Router();
@@ -72,22 +72,27 @@ actionsRouter.get(
                     data: data
                 });
             } else {
-                const categoryCodeService = new chevreapi.service.CategoryCode({
+                const categoryCodeService = new cinerinoapi.service.CategoryCode({
                     endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
                     auth: req.user.authClient
                 });
                 const searchAccountTypesResult = await categoryCodeService.search({
                     project: { id: { $eq: req.project.id } },
-                    inCodeSet: { identifier: { $eq: chevreapi.factory.categoryCode.CategorySetIdentifier.AccountType } }
+                    inCodeSet: { identifier: { $eq: cinerinoapi.factory.chevre.categoryCode.CategorySetIdentifier.AccountType } }
                 });
 
-                const productService = new chevreapi.service.Product({
+                const productService = new cinerinoapi.service.Product({
                     endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
                     auth: req.user.authClient
                 });
                 const searchPaymentCardsResult = await productService.search({
                     project: { id: { $eq: req.project.id } },
-                    typeOf: { $eq: 'PaymentCard' }
+                    typeOf: <any>{
+                        $in: [
+                            cinerinoapi.factory.chevre.product.ProductType.Account,
+                            cinerinoapi.factory.chevre.product.ProductType.PaymentCard
+                        ]
+                    }
                 });
 
                 res.render('actions/moneyTransfer/index', {

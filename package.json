@@ -10,7 +10,6 @@
   ],
   "config": {},
   "dependencies": {
-    "@chevre/api-nodejs-client": "^3.45.1",
     "@cinerino/sdk": "^1.16.1",
     "@motionpicture/express-middleware": "^0.1.1",
     "@pecorino/api-nodejs-client": "^5.4.1",
