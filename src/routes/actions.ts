@@ -30,16 +30,29 @@ actionsRouter.get(
                 page: req.query.page,
                 sort: { startDate: pecorinoapi.factory.sortType.Descending },
                 project: { id: { $eq: req.project.id } },
-                accountType: (typeof req.query.accountType === 'string' && req.query.accountType.length > 0) ?
-                    <string>req.query.accountType :
-                    undefined,
-                accountNumber: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0) ?
-                    <string>req.query.accountNumber :
-                    undefined,
                 actionStatus: {
                     $in: (typeof actionStatusEq === 'string' && actionStatusEq.length > 0)
                         ? [<pecorinoapi.factory.actionStatusType>actionStatusEq]
                         : undefined
+                },
+                amount: {
+                    currency: {
+                        $eq: (typeof req.query.accountType === 'string' && req.query.accountType.length > 0)
+                            ? <string>req.query.accountType
+                            : undefined
+                    }
+                },
+                location: {
+                    accountNumber: {
+                        $eq: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0)
+                            ? req.query.accountNumber
+                            : undefined
+                    },
+                    typeOf: {
+                        $eq: (typeof req.query.location?.typeOf === 'string' && req.query.location.typeOf.length > 0)
+                            ? req.query.location.typeOf
+                            : undefined
+                    }
                 },
                 purpose: {
                     typeOf: { $eq: (typeof purposeTypeOfEq === 'string' && purposeTypeOfEq.length > 0) ? purposeTypeOfEq : undefined },

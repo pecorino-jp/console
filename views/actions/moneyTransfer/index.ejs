@@ -45,10 +45,28 @@
                             <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="accountType">口座タイプ</label>
+                                        <label for="location[typeOf]">口座種別</label>
+                                        <select class="form-control form-control-sm" id="location[typeOf]"
+                                            name="location[typeOf]">
+                                            <option value="">---</option>
+                                            <% paymentCards.forEach((paymentCard) => { %>
+                                            <option value="<%= paymentCard.serviceOutput.typeOf %>"
+                                                <% if (query.location !== undefined && query.location.typeOf === paymentCard.serviceOutput.typeOf) { %>
+                                                selected<% } %>>
+                                                <%= paymentCard.serviceOutput.typeOf %> <%= paymentCard.name.ja %>
+                                            </option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="accountType">通貨</label>
                                         <select class="form-control form-control-sm" id="accountType"
                                             name="accountType">
                                             <option value="">---</option>
+                                            <option value="JPY" <% if (query.accountType ==='JPY') { %> selected<% } %>>
+                                                JPY</option>
                                             <% accountTypes.forEach((accountType) => { %>
                                             <option value="<%= accountType.codeValue %>"
                                                 <% if (query.accountType === accountType.codeValue) { %>

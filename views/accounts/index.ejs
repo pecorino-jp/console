@@ -61,10 +61,12 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="accountType">口座タイプ</label>
+                                        <label for="accountType">通貨</label>
                                         <select class="form-control form-control-sm" id="accountType"
                                             name="accountType">
                                             <option value="">---</option>
+                                            <option value="JPY" <% if (query.accountType ==='JPY') { %> selected<% } %>>
+                                                JPY</option>
                                             <% accountTypes.forEach((accountType) => { %>
                                             <option value="<%= accountType.codeValue %>"
                                                 <% if (query.accountType === accountType.codeValue) { %>
@@ -110,7 +112,7 @@
                                 <thead>
                                     <tr>
                                         <th>口座種別</th>
-                                        <th>口座タイプ</th>
+                                        <th>通貨</th>
                                         <th>ステータス</th>
                                         <th>口座番号</th>
                                         <th>名義</th>

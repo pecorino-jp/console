@@ -18,6 +18,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Security
 
+## v1.9.0 - 2020-11-08
+
+- 出入金検索条件拡張
+
 ## v1.8.1 - 2020-11-06
 
 ### Changed
