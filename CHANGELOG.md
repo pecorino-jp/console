@@ -10,8 +10,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
 
-- 出入金検索条件拡張
-
 ### Deprecated
 
 ### Removed
@@ -19,6 +17,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 
 ### Security
+
+## v1.9.0 - 2020-11-08
+
+- 出入金検索条件拡張
 
 ## v1.8.1 - 2020-11-06
 
