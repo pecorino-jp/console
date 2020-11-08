@@ -18,6 +18,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Security
 
+## v1.9.1 - 2020-11-08
+
+### Changed
+
+- chevreapiへの依存を削除
+
 ## v1.9.0 - 2020-11-08
 
 - 出入金検索条件拡張
