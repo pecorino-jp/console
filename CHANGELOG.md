@@ -10,8 +10,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
 
-- 出入金検索結果に取引識別子を表示
-
 ### Deprecated
 
 ### Removed
@@ -19,6 +17,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 
 ### Security
+
+## v1.9.2 - 2020-12-08
+
+### Changed
+
+- 出入金検索結果に取引識別子を表示
 
 ## v1.9.1 - 2020-11-08
 
