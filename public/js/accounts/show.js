@@ -77,10 +77,7 @@ function searchMoneyTransferActions(cb) {
                 + action.fromLocation.typeOf
                 + '</span>';
             if (action.fromLocation.accountType !== undefined) {
-                html += ' <span class="badge badge-light ' + action.fromLocation.accountType + '">'
-                    + action.fromLocation.accountType
-                    + '</span>'
-                    + '<span>'
+                html += ' <span>'
                     + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/accounts/' + action.fromLocation.accountNumber + '">'
                     + action.fromLocation.accountNumber
                     + '</a>'
@@ -93,10 +90,7 @@ function searchMoneyTransferActions(cb) {
                 + '</span>';
 
             if (action.toLocation.accountType !== undefined) {
-                html += ' <span class="badge badge-light ' + action.toLocation.accountType + '">'
-                    + action.toLocation.accountType
-                    + '</span>'
-                    + '<span>'
+                html += ' <span>'
                     + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/accounts/' + action.toLocation.accountNumber + '">'
                     + action.toLocation.accountNumber
                     + '</a>'
@@ -164,6 +158,11 @@ function showPurpose(id) {
             .append($('<dd>').addClass('col-md-9').append(purpose.id))
             .append($('<dt>').addClass('col-md-3').append($('<span>').text('取引番号')))
             .append($('<dd>').addClass('col-md-9').append(purpose.transactionNumber));
+
+        if (typeof purpose.identifier === 'string') {
+            body.append($('<dt>').addClass('col-md-3').append($('<span>').text('識別子')))
+                .append($('<dd>').addClass('col-md-9').append(purpose.identifier));
+        }
     }
 
     modal.find('.modal-title').html(title);
