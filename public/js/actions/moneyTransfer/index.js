@@ -54,18 +54,15 @@ $(function () {
 
                     if (fromLocation.accountType !== undefined) {
                         var href = '/projects/' + PROJECT_ID + '/accounts/' + fromLocation.accountNumber
-                        html += ' <span class="badge badge-light ' + fromLocation.accountType + '">' + fromLocation.accountType + '</span>'
-                            + ' <span><a target="_blank" href="' + href + '">' + fromLocation.accountNumber + '</a></span>';
+                        html += ' <span><a target="_blank" href="' + href + '">' + fromLocation.accountNumber + '</a></span>';
                     }
 
-                    if (fromLocation !== undefined && fromLocation !== null) {
-                        var name = fromLocation.name;
-                        if (typeof name === 'string' && name.length > 10) {
-                            name = name.slice(0, 10) + '...';
-                        }
-
-                        html += '<br><a href="#" data-toggle="tooltip" title="' + fromLocation.name + '"><span>' + name + '</span></a>';
+                    var name = fromLocation.name;
+                    if (typeof name === 'string' && name.length > 10) {
+                        name = name.slice(0, 10) + '...';
                     }
+
+                    html += '<br><a href="#" data-toggle="tooltip" title="' + fromLocation.name + '"><span>' + name + '</span></a>';
 
                     return html;
                 }
@@ -78,18 +75,15 @@ $(function () {
 
                     if (toLocation.accountType !== undefined) {
                         var href = '/projects/' + PROJECT_ID + '/accounts/' + toLocation.accountNumber
-                        html += ' <span class="badge badge-light ' + toLocation.accountType + '">' + toLocation.accountType + '</span>'
-                            + ' <span><a target="_blank" href="' + href + '">' + toLocation.accountNumber + '</a></span>';
+                        html += ' <span><a target="_blank" href="' + href + '">' + toLocation.accountNumber + '</a></span>';
                     }
 
-                    if (toLocation !== undefined && toLocation !== null) {
-                        var name = toLocation.name;
-                        if (typeof name === 'string' && name.length > 10) {
-                            name = name.slice(0, 10) + '...';
-                        }
-
-                        html += '<br><a href="#" data-toggle="tooltip" title="' + toLocation.name + '"><span>' + name + '</span></a>';
+                    var name = toLocation.name;
+                    if (typeof name === 'string' && name.length > 10) {
+                        name = name.slice(0, 10) + '...';
                     }
+
+                    html += '<br><a href="#" data-toggle="tooltip" title="' + toLocation.name + '"><span>' + name + '</span></a>';
 
                     return html;
                 }
@@ -179,6 +173,11 @@ function showPurpose(id) {
             .append($('<dd>').addClass('col-md-9').append(purpose.id))
             .append($('<dt>').addClass('col-md-3').append($('<span>').text('取引番号')))
             .append($('<dd>').addClass('col-md-9').append(purpose.transactionNumber));
+
+        if (typeof purpose.identifier === 'string') {
+            body.append($('<dt>').addClass('col-md-3').append($('<span>').text('識別子')))
+                .append($('<dd>').addClass('col-md-9').append(purpose.identifier));
+        }
     }
 
     modal.find('.modal-title').html(title);

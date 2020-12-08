@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
 
+- 出入金検索結果に取引識別子を表示
+
 ### Deprecated
 
 ### Removed
