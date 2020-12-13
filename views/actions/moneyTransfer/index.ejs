@@ -83,7 +83,25 @@
                                             name="accountNumber" placeholder="口座番号" value="<%= query.accountNumber %>">
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <label for="actionStatus">ステータス</label>
+                                        <select class="form-control form-control-sm" id="actionStatus"
+                                            name="actionStatus">
+                                            <option value="">---</option>
+                                            <option value="ActiveActionStatus"
+                                                <% if ( query.actionStatus === 'ActiveActionStatus') { %>
+                                                selected<% } %>>進行中</option>
+                                            <option value="CanceledActionStatus"
+                                                <% if ( query.actionStatus === 'CanceledActionStatus') { %>
+                                                selected<% } %>>中止</option>
+                                            <option value="CompletedActionStatus"
+                                                <% if (query.actionStatus === 'CompletedActionStatus') { %>
+                                                selected<% } %>>完了</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
                                     <div class="form-group">
                                         <label for="purpose[typeOf]">取引タイプ</label>
                                         <select class="form-control form-control-sm" id="purpose[typeOf]"
@@ -111,20 +129,10 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="actionStatus">ステータス</label>
-                                        <select class="form-control form-control-sm" id="actionStatus"
-                                            name="actionStatus">
-                                            <option value="">---</option>
-                                            <option value="ActiveActionStatus"
-                                                <% if ( query.actionStatus === 'ActiveActionStatus') { %>
-                                                selected<% } %>>進行中</option>
-                                            <option value="CanceledActionStatus"
-                                                <% if ( query.actionStatus === 'CanceledActionStatus') { %>
-                                                selected<% } %>>中止</option>
-                                            <option value="CompletedActionStatus"
-                                                <% if (query.actionStatus === 'CompletedActionStatus') { %>
-                                                selected<% } %>>完了</option>
-                                        </select>
+                                        <label for="purpose[identifier]">取引識別子</label>
+                                        <input type="text" class="form-control form-control-sm" id="purpose[identifier]"
+                                            name="purpose[identifier]" placeholder="取引識別子"
+                                            value="<%= (query.purpose !== undefined) ? query.purpose.identifier : '' %>">
                                     </div>
                                 </div>
                             </div>

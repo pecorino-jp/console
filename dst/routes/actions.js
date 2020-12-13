@@ -22,7 +22,7 @@ const actionsRouter = express.Router();
  * 出入金検索
  */
 actionsRouter.get('/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c;
+    var _a, _b, _c, _d;
     try {
         const actionService = new pecorinoapi.service.Action({
             endpoint: process.env.API_ENDPOINT,
@@ -62,7 +62,11 @@ actionsRouter.get('/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0
             },
             purpose: {
                 typeOf: { $eq: (typeof purposeTypeOfEq === 'string' && purposeTypeOfEq.length > 0) ? purposeTypeOfEq : undefined },
-                id: { $eq: (typeof purposeIdEq === 'string' && purposeIdEq.length > 0) ? purposeIdEq : undefined }
+                id: { $eq: (typeof purposeIdEq === 'string' && purposeIdEq.length > 0) ? purposeIdEq : undefined },
+                identifier: {
+                    $eq: (typeof ((_d = req.query.purpose) === null || _d === void 0 ? void 0 : _d.identifier) === 'string'
+                        && req.query.purpose.identifier.length > 0) ? req.query.purpose.identifier : undefined
+                }
             }
         };
         if (req.query.format === 'datatable') {
