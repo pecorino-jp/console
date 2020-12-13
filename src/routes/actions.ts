@@ -56,7 +56,11 @@ actionsRouter.get(
                 },
                 purpose: {
                     typeOf: { $eq: (typeof purposeTypeOfEq === 'string' && purposeTypeOfEq.length > 0) ? purposeTypeOfEq : undefined },
-                    id: { $eq: (typeof purposeIdEq === 'string' && purposeIdEq.length > 0) ? purposeIdEq : undefined }
+                    id: { $eq: (typeof purposeIdEq === 'string' && purposeIdEq.length > 0) ? purposeIdEq : undefined },
+                    identifier: {
+                        $eq: (typeof req.query.purpose?.identifier === 'string'
+                            && req.query.purpose.identifier.length > 0) ? req.query.purpose.identifier : undefined
+                    }
                 }
             };
 
