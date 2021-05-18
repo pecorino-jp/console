@@ -62,7 +62,8 @@ accountsRouter.get(
             } else {
                 const categoryCodeService = new cinerinoapi.service.CategoryCode({
                     endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
-                    auth: req.user.authClient
+                    auth: req.user.authClient,
+                    project: { id: req.project.id }
                 });
                 const searchAccountTypesResult = await categoryCodeService.search({
                     project: { id: { $eq: req.project.id } },
@@ -71,7 +72,8 @@ accountsRouter.get(
 
                 const productService = new cinerinoapi.service.Product({
                     endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
-                    auth: req.user.authClient
+                    auth: req.user.authClient,
+                    project: { id: req.project.id }
                 });
                 const searchPaymentCardsResult = await productService.search({
                     project: { id: { $eq: req.project.id } },

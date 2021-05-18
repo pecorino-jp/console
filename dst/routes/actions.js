@@ -84,7 +84,8 @@ actionsRouter.get('/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0
         else {
             const categoryCodeService = new cinerinoapi.service.CategoryCode({
                 endpoint: process.env.CHEVRE_API_ENDPOINT,
-                auth: req.user.authClient
+                auth: req.user.authClient,
+                project: { id: req.project.id }
             });
             const searchAccountTypesResult = yield categoryCodeService.search({
                 project: { id: { $eq: req.project.id } },
@@ -92,7 +93,8 @@ actionsRouter.get('/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0
             });
             const productService = new cinerinoapi.service.Product({
                 endpoint: process.env.CHEVRE_API_ENDPOINT,
-                auth: req.user.authClient
+                auth: req.user.authClient,
+                project: { id: req.project.id }
             });
             const searchPaymentCardsResult = yield productService.search({
                 project: { id: { $eq: req.project.id } },
