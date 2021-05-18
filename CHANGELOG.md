@@ -18,6 +18,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Security
 
+## v1.10.1 - 2021-05-18
+
+### Changed
+
+- Chevreサービスにプロジェクトを明示的に指定
+
 ## v1.10.0 - 2020-12-13
 
 ### Changed
