@@ -1,0 +1,8 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.19.0
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:lodash:20180130':
+    - '@chevre/api-nodejs-client > @chevre/api-abstract-client > @chevre/factory > @movieticket/reserve-api-nodejs-client > @movieticket/reserve-api-abstract-client > @motionpicture/mvtk-reserve-service > soap > lodash':
+        patched: '2021-05-21T03:50:40.052Z'
