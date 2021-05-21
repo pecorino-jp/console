@@ -1,7 +1,7 @@
 /**
  * アクションルーター
  */
-import * as pecorinoapi from '@pecorino/api-nodejs-client';
+import * as chevreapi from '@chevre/api-nodejs-client';
 import * as createDebug from 'debug';
 import * as express from 'express';
 
@@ -17,22 +17,23 @@ actionsRouter.get(
     '/moneyTransfer',
     async (req, res, next) => {
         try {
-            const actionService = new pecorinoapi.service.Action({
-                endpoint: <string>process.env.API_ENDPOINT,
-                auth: req.user.authClient
+            const actionService = new chevreapi.service.AccountAction({
+                endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
             });
 
             const actionStatusEq = req.query.actionStatus;
             const purposeTypeOfEq = req.query.purpose?.typeOf;
             const purposeIdEq = req.query.purpose?.id;
-            const searchConditions: pecorinoapi.factory.action.transfer.moneyTransfer.ISearchConditions = {
+            const searchConditions: chevreapi.factory.account.action.moneyTransfer.ISearchConditions = {
                 limit: req.query.limit,
                 page: req.query.page,
-                sort: { startDate: pecorinoapi.factory.sortType.Descending },
+                sort: { startDate: chevreapi.factory.sortType.Descending },
                 project: { id: { $eq: req.project.id } },
                 actionStatus: {
                     $in: (typeof actionStatusEq === 'string' && actionStatusEq.length > 0)
-                        ? [<pecorinoapi.factory.actionStatusType>actionStatusEq]
+                        ? [<chevreapi.factory.actionStatusType>actionStatusEq]
                         : undefined
                 },
                 amount: {
@@ -66,7 +67,7 @@ actionsRouter.get(
 
             if (req.query.format === 'datatable') {
                 debug('searching accounts...', req.query);
-                const { data } = await actionService.searchMoneyTransferActions(searchConditions);
+                const { data } = await actionService.search(searchConditions);
                 res.json({
                     draw: req.query.draw,
                     // recordsTotal: data.length,

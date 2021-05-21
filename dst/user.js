@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const pecorinoapi = require("@pecorino/api-nodejs-client");
+const chevreapi = require("@chevre/api-nodejs-client");
 const createDebug = require("debug");
 const jwt = require("jsonwebtoken");
 const debug = createDebug('pecorino-console:user');
@@ -21,7 +21,7 @@ class User {
         this.host = configurations.host;
         this.session = configurations.session;
         this.state = configurations.state;
-        this.authClient = new pecorinoapi.auth.OAuth2({
+        this.authClient = new chevreapi.auth.OAuth2({
             domain: process.env.API_AUTHORIZE_SERVER_DOMAIN,
             clientId: process.env.API_CLIENT_ID,
             clientSecret: process.env.API_CLIENT_SECRET,
