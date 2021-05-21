@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * アクションルーター
  */
-const pecorinoapi = require("@pecorino/api-nodejs-client");
+const chevreapi = require("@chevre/api-nodejs-client");
 const createDebug = require("debug");
 const express = require("express");
 const cinerinoapi = require("../cinerinoapi");
@@ -24,9 +24,10 @@ const actionsRouter = express.Router();
 actionsRouter.get('/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d;
     try {
-        const actionService = new pecorinoapi.service.Action({
-            endpoint: process.env.API_ENDPOINT,
-            auth: req.user.authClient
+        const actionService = new chevreapi.service.AccountAction({
+            endpoint: process.env.CHEVRE_API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
         });
         const actionStatusEq = req.query.actionStatus;
         const purposeTypeOfEq = (_a = req.query.purpose) === null || _a === void 0 ? void 0 : _a.typeOf;
@@ -34,7 +35,7 @@ actionsRouter.get('/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0
         const searchConditions = {
             limit: req.query.limit,
             page: req.query.page,
-            sort: { startDate: pecorinoapi.factory.sortType.Descending },
+            sort: { startDate: chevreapi.factory.sortType.Descending },
             project: { id: { $eq: req.project.id } },
             actionStatus: {
                 $in: (typeof actionStatusEq === 'string' && actionStatusEq.length > 0)
@@ -71,7 +72,7 @@ actionsRouter.get('/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0
         };
         if (req.query.format === 'datatable') {
             debug('searching accounts...', req.query);
-            const { data } = yield actionService.searchMoneyTransferActions(searchConditions);
+            const { data } = yield actionService.search(searchConditions);
             res.json({
                 draw: req.query.draw,
                 // recordsTotal: data.length,

@@ -1,7 +1,7 @@
 /**
  * 口座ルーター
  */
-import * as pecorinoapi from '@pecorino/api-nodejs-client';
+import * as chevreapi from '@chevre/api-nodejs-client';
 import * as createDebug from 'debug';
 import * as express from 'express';
 import { NO_CONTENT } from 'http-status';
@@ -19,14 +19,15 @@ accountsRouter.get(
     '/',
     async (req, res, next) => {
         try {
-            const accountService = new pecorinoapi.service.Account({
-                endpoint: <string>process.env.API_ENDPOINT,
-                auth: req.user.authClient
+            const accountService = new chevreapi.service.Account({
+                endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
             });
-            const searchConditions: pecorinoapi.factory.account.ISearchConditions = {
+            const searchConditions: chevreapi.factory.account.ISearchConditions = {
                 limit: req.query.limit,
                 page: req.query.page,
-                sort: { openDate: pecorinoapi.factory.sortType.Descending },
+                sort: { openDate: chevreapi.factory.sortType.Descending },
                 project: { id: { $eq: req.project.id } },
                 accountType: (typeof req.query.accountType === 'string' && req.query.accountType.length > 0)
                     ? req.query.accountType
@@ -106,9 +107,10 @@ accountsRouter.all(
         try {
             let message;
 
-            const accountService = new pecorinoapi.service.Account({
-                endpoint: <string>process.env.API_ENDPOINT,
-                auth: req.user.authClient
+            const accountService = new chevreapi.service.Account({
+                endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
             });
             const { data } = await accountService.search({
                 limit: 1,
@@ -116,7 +118,7 @@ accountsRouter.all(
                 accountNumbers: [req.params.accountNumber]
             });
             if (data.length < 1) {
-                throw new pecorinoapi.factory.errors.NotFound('Account');
+                throw new chevreapi.factory.errors.NotFound('Account');
             }
             const account = data[0];
 
@@ -157,14 +159,15 @@ accountsRouter.get(
     '/:accountNumber/actions/moneyTransfer',
     async (req, res, next) => {
         try {
-            const accountService = new pecorinoapi.service.Account({
-                endpoint: <string>process.env.API_ENDPOINT,
-                auth: req.user.authClient
+            const accountService = new chevreapi.service.Account({
+                endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
             });
             const searchActionsResult = await accountService.searchMoneyTransferActions({
                 limit: req.query.limit,
                 page: req.query.page,
-                sort: { startDate: pecorinoapi.factory.sortType.Descending },
+                sort: { startDate: chevreapi.factory.sortType.Descending },
                 project: { id: { $eq: req.project.id } },
                 accountNumber: req.params.accountNumber,
                 startDate: {

@@ -10,7 +10,7 @@ import actionsRouter from './actions';
 import homeRouter from './home';
 import transactionsRouter from './transactions';
 
-const API_ENDPOINT = <string>process.env.API_ENDPOINT;
+// const API_ENDPOINT = <string>process.env.API_ENDPOINT;
 
 const projectsRouter = express.Router();
 
@@ -19,8 +19,8 @@ projectsRouter.all(
     async (req, _, next) => {
         req.project = {
             typeOf: cinerinoapi.factory.chevre.organizationType.Project,
-            id: req.params.id,
-            settings: { id: req.params.id, API_ENDPOINT: API_ENDPOINT }
+            id: req.params.id
+            // settings: { id: req.params.id, API_ENDPOINT: API_ENDPOINT }
         };
 
         next();
