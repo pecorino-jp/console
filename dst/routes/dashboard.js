@@ -12,19 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * ダッシュボードルーター
  */
-// import * as createDebug from 'debug';
+const chevre = require("@chevre/api-nodejs-client");
 const express = require("express");
-// import * as moment from 'moment';
-const cinerinoapi = require("../cinerinoapi");
-// const debug = createDebug('cinerino-console:routes');
 const dashboardRouter = express.Router();
 dashboardRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const projectService = new cinerinoapi.service.Project({
-            endpoint: process.env.CINERINO_API_ENDPOINT,
-            auth: req.user.authClient
+        // 管理プロジェクト検索
+        const meService = new chevre.service.Me({
+            endpoint: process.env.CHEVRE_API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: '' }
         });
-        const searchProjectsResult = yield projectService.search({});
+        const searchProjectsResult = yield meService.searchProjects({ limit: 100 });
         const projects = searchProjectsResult.data;
         res.render('dashboard', {
             layout: 'layouts/dashboard',

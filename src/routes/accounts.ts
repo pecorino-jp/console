@@ -7,8 +7,6 @@ import * as express from 'express';
 import { NO_CONTENT } from 'http-status';
 import * as moment from 'moment';
 
-import * as cinerinoapi from '../cinerinoapi';
-
 const debug = createDebug('pecorino-console:router');
 const accountsRouter = express.Router();
 
@@ -40,7 +38,7 @@ accountsRouter.get(
                         ? req.query.accountNumber
                         : undefined
                 },
-                name: <any>{
+                name: {
                     $regex: (typeof req.query.name === 'string' && req.query.name.length > 0) ? req.query.name : undefined
                 },
                 typeOf: {
@@ -61,27 +59,26 @@ accountsRouter.get(
                     data: data
                 });
             } else {
-                const categoryCodeService = new cinerinoapi.service.CategoryCode({
+                const categoryCodeService = new chevreapi.service.CategoryCode({
                     endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
                     auth: req.user.authClient,
                     project: { id: req.project.id }
                 });
                 const searchAccountTypesResult = await categoryCodeService.search({
                     project: { id: { $eq: req.project.id } },
-                    inCodeSet: { identifier: { $eq: cinerinoapi.factory.chevre.categoryCode.CategorySetIdentifier.AccountType } }
+                    inCodeSet: { identifier: { $eq: chevreapi.factory.categoryCode.CategorySetIdentifier.AccountType } }
                 });
 
-                const productService = new cinerinoapi.service.Product({
+                const productService = new chevreapi.service.Product({
                     endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
                     auth: req.user.authClient,
                     project: { id: req.project.id }
                 });
                 const searchPaymentCardsResult = await productService.search({
                     project: { id: { $eq: req.project.id } },
-                    typeOf: <any>{
+                    typeOf: {
                         $in: [
-                            cinerinoapi.factory.chevre.product.ProductType.Account,
-                            cinerinoapi.factory.chevre.product.ProductType.PaymentCard
+                            chevreapi.factory.product.ProductType.PaymentCard
                         ]
                     }
                 });

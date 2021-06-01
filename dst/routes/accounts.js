@@ -17,7 +17,6 @@ const createDebug = require("debug");
 const express = require("express");
 const http_status_1 = require("http-status");
 const moment = require("moment");
-const cinerinoapi = require("../cinerinoapi");
 const debug = createDebug('pecorino-console:router');
 const accountsRouter = express.Router();
 /**
@@ -68,16 +67,16 @@ accountsRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             });
         }
         else {
-            const categoryCodeService = new cinerinoapi.service.CategoryCode({
+            const categoryCodeService = new chevreapi.service.CategoryCode({
                 endpoint: process.env.CHEVRE_API_ENDPOINT,
                 auth: req.user.authClient,
                 project: { id: req.project.id }
             });
             const searchAccountTypesResult = yield categoryCodeService.search({
                 project: { id: { $eq: req.project.id } },
-                inCodeSet: { identifier: { $eq: cinerinoapi.factory.chevre.categoryCode.CategorySetIdentifier.AccountType } }
+                inCodeSet: { identifier: { $eq: chevreapi.factory.categoryCode.CategorySetIdentifier.AccountType } }
             });
-            const productService = new cinerinoapi.service.Product({
+            const productService = new chevreapi.service.Product({
                 endpoint: process.env.CHEVRE_API_ENDPOINT,
                 auth: req.user.authClient,
                 project: { id: req.project.id }
@@ -86,8 +85,7 @@ accountsRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
                 project: { id: { $eq: req.project.id } },
                 typeOf: {
                     $in: [
-                        cinerinoapi.factory.chevre.product.ProductType.Account,
-                        cinerinoapi.factory.chevre.product.ProductType.PaymentCard
+                        chevreapi.factory.product.ProductType.PaymentCard
                     ]
                 }
             });

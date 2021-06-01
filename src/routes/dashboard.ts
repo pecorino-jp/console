@@ -1,25 +1,22 @@
 /**
  * ダッシュボードルーター
  */
-// import * as createDebug from 'debug';
+import * as chevre from '@chevre/api-nodejs-client';
 import * as express from 'express';
-// import * as moment from 'moment';
 
-import * as cinerinoapi from '../cinerinoapi';
-
-// const debug = createDebug('cinerino-console:routes');
 const dashboardRouter = express.Router();
 
 dashboardRouter.get(
     '/',
     async (req, res, next) => {
         try {
-            const projectService = new cinerinoapi.service.Project({
-                endpoint: <string>process.env.CINERINO_API_ENDPOINT,
-                auth: req.user.authClient
+            // 管理プロジェクト検索
+            const meService = new chevre.service.Me({
+                endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: '' }
             });
-
-            const searchProjectsResult = await projectService.search({});
+            const searchProjectsResult = await meService.searchProjects({ limit: 100 });
             const projects = searchProjectsResult.data;
 
             res.render('dashboard', {
