@@ -14,7 +14,6 @@
 | Name                          | Required | Purpose            | Value                                 |
 | ----------------------------- | -------- | ------------------ | ------------------------------------- |
 | `DEBUG`                       | false    | pecorino-console:* | Debug                                 |
-| `API_ENDPOINT`                | true     |                    | API credentials                       |
 | `API_AUTHORIZE_SERVER_DOMAIN` | true     |                    | API credentials                       |
 | `API_CLIENT_ID`               | true     |                    | API credentials                       |
 | `API_CLIENT_SECRET`           | true     |                    | API credentials                       |
@@ -22,7 +21,6 @@
 | `BASIC_AUTH_NAME`             | false    |                    | Basic auth settings                   |
 | `BASIC_AUTH_PASS`             | false    |                    | Basic auth settings                   |
 | `CHEVRE_API_ENDPOINT`         | true     |                    | Chevre API Endpoint                   |
-| `CINERINO_API_ENDPOINT`       | true     |                    | Cinerino API Endpoint                 |
 | `REDIS_HOST`                  | true     |                    | Redis connection settings for session |
 | `REDIS_PORT`                  | true     |                    | Redis connection settings for session |
 | `REDIS_KEY`                   | true     |                    | Redis connection settings for session |

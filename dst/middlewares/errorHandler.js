@@ -9,7 +9,8 @@ exports.default = (err, __, res, next) => {
     }
     // エラーオブジェクトの場合は、キャッチされた例外でクライント依存のエラーの可能性が高い
     if (err instanceof Error) {
-        res.status(http_status_1.BAD_REQUEST).json({
+        res.status(http_status_1.BAD_REQUEST)
+            .json({
             errors: [
                 {
                     title: err.name,
@@ -19,7 +20,8 @@ exports.default = (err, __, res, next) => {
         });
     }
     else {
-        res.status(http_status_1.INTERNAL_SERVER_ERROR).json({
+        res.status(http_status_1.INTERNAL_SERVER_ERROR)
+            .json({
             errors: [
                 {
                     title: 'internal server error',

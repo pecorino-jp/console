@@ -1,7 +1,7 @@
 /**
  * 取引ルーター
  */
-import * as pecorinoapi from '@pecorino/api-nodejs-client';
+import * as chevreapi from '@chevre/api-nodejs-client';
 import * as createDebug from 'debug';
 import * as express from 'express';
 import * as moment from 'moment';
@@ -36,38 +36,41 @@ transactionsRouter.all(
                 values = req.body;
 
                 try {
-                    let transaction: pecorinoapi.factory.transaction.ITransaction<any>;
+                    let transaction: chevreapi.factory.account.transaction.ITransaction<chevreapi.factory.account.transactionType>;
 
                     switch (req.body.transactionType) {
-                        case pecorinoapi.factory.transactionType.Deposit:
-                            const depositService = new pecorinoapi.service.transaction.Deposit({
-                                endpoint: <string>process.env.API_ENDPOINT,
-                                auth: req.user.authClient
+                        case chevreapi.factory.account.transactionType.Deposit:
+                            const depositService = new chevreapi.service.accountTransaction.Deposit({
+                                endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
+                                auth: req.user.authClient,
+                                project: { id: req.project.id }
                             });
                             transaction = await depositService.start(
-                                <pecorinoapi.factory.transaction.deposit.IStartParamsWithoutDetail>createStartParams(req)
+                                <chevreapi.factory.account.transaction.deposit.IStartParamsWithoutDetail>createStartParams(req)
                             );
 
                             break;
 
-                        case pecorinoapi.factory.transactionType.Transfer:
-                            const transferService = new pecorinoapi.service.transaction.Transfer({
-                                endpoint: <string>process.env.API_ENDPOINT,
-                                auth: req.user.authClient
+                        case chevreapi.factory.account.transactionType.Transfer:
+                            const transferService = new chevreapi.service.accountTransaction.Transfer({
+                                endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
+                                auth: req.user.authClient,
+                                project: { id: req.project.id }
                             });
                             transaction = await transferService.start(
-                                <pecorinoapi.factory.transaction.transfer.IStartParamsWithoutDetail>createStartParams(req)
+                                <chevreapi.factory.account.transaction.transfer.IStartParamsWithoutDetail>createStartParams(req)
                             );
 
                             break;
 
-                        case pecorinoapi.factory.transactionType.Withdraw:
-                            const withdrawService = new pecorinoapi.service.transaction.Withdraw({
-                                endpoint: <string>process.env.API_ENDPOINT,
-                                auth: req.user.authClient
+                        case chevreapi.factory.account.transactionType.Withdraw:
+                            const withdrawService = new chevreapi.service.accountTransaction.Withdraw({
+                                endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
+                                auth: req.user.authClient,
+                                project: { id: req.project.id }
                             });
                             transaction = await withdrawService.start(
-                                <pecorinoapi.factory.transaction.withdraw.IStartParamsWithoutDetail>createStartParams(req)
+                                <chevreapi.factory.account.transaction.withdraw.IStartParamsWithoutDetail>createStartParams(req)
                             );
 
                             break;
@@ -105,38 +108,41 @@ transactionsRouter.all(
     async (req, res, next) => {
         try {
             let message;
-            let fromAccount: pecorinoapi.factory.account.IAccount | undefined;
-            let toAccount: pecorinoapi.factory.account.IAccount | undefined;
+            let fromAccount: chevreapi.factory.account.IAccount | undefined;
+            let toAccount: chevreapi.factory.account.IAccount | undefined;
             const transaction = (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
             if (transaction === undefined) {
-                throw new pecorinoapi.factory.errors.NotFound('Transaction in session');
+                throw new chevreapi.factory.errors.NotFound('Transaction in session');
             }
 
             if (req.method === 'POST') {
                 // 確定
                 switch (transaction.typeOf) {
-                    case pecorinoapi.factory.transactionType.Deposit:
-                        const depositService = new pecorinoapi.service.transaction.Deposit({
-                            endpoint: <string>process.env.API_ENDPOINT,
-                            auth: req.user.authClient
+                    case chevreapi.factory.account.transactionType.Deposit:
+                        const depositService = new chevreapi.service.accountTransaction.Deposit({
+                            endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
+                            auth: req.user.authClient,
+                            project: { id: req.project.id }
                         });
                         await depositService.confirm(transaction);
 
                         break;
 
-                    case pecorinoapi.factory.transactionType.Transfer:
-                        const transferService = new pecorinoapi.service.transaction.Transfer({
-                            endpoint: <string>process.env.API_ENDPOINT,
-                            auth: req.user.authClient
+                    case chevreapi.factory.account.transactionType.Transfer:
+                        const transferService = new chevreapi.service.accountTransaction.Transfer({
+                            endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
+                            auth: req.user.authClient,
+                            project: { id: req.project.id }
                         });
                         await transferService.confirm(transaction);
 
                         break;
 
-                    case pecorinoapi.factory.transactionType.Withdraw:
-                        const withdrawService = new pecorinoapi.service.transaction.Withdraw({
-                            endpoint: <string>process.env.API_ENDPOINT,
-                            auth: req.user.authClient
+                    case chevreapi.factory.account.transactionType.Withdraw:
+                        const withdrawService = new chevreapi.service.accountTransaction.Withdraw({
+                            endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
+                            auth: req.user.authClient,
+                            project: { id: req.project.id }
                         });
                         await withdrawService.confirm(transaction);
 
@@ -149,6 +155,7 @@ transactionsRouter.all(
                 debug('取引確定です。');
                 message = '取引を実行しました。';
                 // セッション削除
+                // tslint:disable-next-line:no-dynamic-delete
                 delete (<Express.Session>req.session)[`transaction:${req.params.transactionId}`];
                 req.flash('message', '取引を実行しました。');
                 res.redirect(`/projects/${req.project.id}/transactions/start`);
@@ -156,9 +163,10 @@ transactionsRouter.all(
                 return;
             } else {
                 // 転送元、転送先口座情報を検索
-                const accountService = new pecorinoapi.service.Account({
-                    endpoint: <string>process.env.API_ENDPOINT,
-                    auth: req.user.authClient
+                const accountService = new chevreapi.service.Account({
+                    endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
+                    auth: req.user.authClient,
+                    project: { id: req.project.id }
                 });
                 if (transaction.object.fromLocation !== undefined) {
                     const searchAccountsResult = await accountService.search({
@@ -197,33 +205,35 @@ transactionsRouter.all(
 // tslint:disable-next-line:max-func-body-length
 function createStartParams(
     req: express.Request
-): pecorinoapi.factory.transaction.deposit.IStartParamsWithoutDetail
-    | pecorinoapi.factory.transaction.transfer.IStartParamsWithoutDetail
-    | pecorinoapi.factory.transaction.withdraw.IStartParamsWithoutDetail {
+): chevreapi.factory.account.transaction.deposit.IStartParamsWithoutDetail
+    | chevreapi.factory.account.transaction.transfer.IStartParamsWithoutDetail
+    | chevreapi.factory.account.transaction.withdraw.IStartParamsWithoutDetail {
 
-    const expires = moment().add(1, 'minutes').toDate();
+    const expires = moment()
+        .add(1, 'minutes')
+        .toDate();
     const agent = {
-        typeOf: 'Person',
+        typeOf: chevreapi.factory.personType.Person,
         id: req.user.profile.sub,
         name: req.body.fromName
     };
     const recipient = {
-        typeOf: 'Person',
+        typeOf: chevreapi.factory.personType.Person,
         id: '',
         name: req.body.recipientName
     };
-    const amount = Number(req.body.amount);
+    const amount = { value: Number(req.body.amount) };
     const description = req.body.description;
 
-    let startParams: pecorinoapi.factory.transaction.deposit.IStartParamsWithoutDetail
-        | pecorinoapi.factory.transaction.transfer.IStartParamsWithoutDetail
-        | pecorinoapi.factory.transaction.withdraw.IStartParamsWithoutDetail;
+    let startParams: chevreapi.factory.account.transaction.deposit.IStartParamsWithoutDetail
+        | chevreapi.factory.account.transaction.transfer.IStartParamsWithoutDetail
+        | chevreapi.factory.account.transaction.withdraw.IStartParamsWithoutDetail;
 
     switch (req.body.transactionType) {
-        case pecorinoapi.factory.transactionType.Deposit:
+        case chevreapi.factory.account.transactionType.Deposit:
             startParams = {
                 project: req.project,
-                typeOf: pecorinoapi.factory.transactionType.Deposit,
+                typeOf: chevreapi.factory.account.transactionType.Deposit,
                 expires,
                 agent,
                 recipient,
@@ -238,10 +248,10 @@ function createStartParams(
 
             break;
 
-        case pecorinoapi.factory.transactionType.Transfer:
+        case chevreapi.factory.account.transactionType.Transfer:
             startParams = {
                 project: req.project,
-                typeOf: pecorinoapi.factory.transactionType.Transfer,
+                typeOf: chevreapi.factory.account.transactionType.Transfer,
                 expires,
                 agent,
                 recipient,
@@ -259,10 +269,10 @@ function createStartParams(
 
             break;
 
-        case pecorinoapi.factory.transactionType.Withdraw:
+        case chevreapi.factory.account.transactionType.Withdraw:
             startParams = {
                 project: req.project,
-                typeOf: pecorinoapi.factory.transactionType.Withdraw,
+                typeOf: chevreapi.factory.account.transactionType.Withdraw,
                 expires,
                 agent,
                 recipient,
@@ -281,7 +291,7 @@ function createStartParams(
             throw new Error(`Transaction type ${req.body.transactionType} not implemented`);
     }
 
-    return <any>startParams;
+    return startParams;
 }
 
 export default transactionsRouter;

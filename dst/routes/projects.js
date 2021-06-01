@@ -12,28 +12,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * プロジェクトルーター
  */
+const chevre = require("@chevre/api-nodejs-client");
 const express = require("express");
-const cinerinoapi = require("../cinerinoapi");
 const accounts_1 = require("./accounts");
 const actions_1 = require("./actions");
 const home_1 = require("./home");
 const transactions_1 = require("./transactions");
-// const API_ENDPOINT = <string>process.env.API_ENDPOINT;
 const projectsRouter = express.Router();
 projectsRouter.all('/:id/*', (req, _, next) => __awaiter(void 0, void 0, void 0, function* () {
     req.project = {
-        typeOf: cinerinoapi.factory.chevre.organizationType.Project,
+        typeOf: chevre.factory.organizationType.Project,
         id: req.params.id
-        // settings: { id: req.params.id, API_ENDPOINT: API_ENDPOINT }
     };
     next();
 }));
 projectsRouter.get('/:id/logo', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let logo = 'https://s3-ap-northeast-1.amazonaws.com/cinerino/logos/cinerino.png';
     try {
-        const projectService = new cinerinoapi.service.Project({
-            endpoint: process.env.CINERINO_API_ENDPOINT,
-            auth: req.user.authClient
+        const projectService = new chevre.service.Project({
+            endpoint: process.env.CHEVRE_API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: '' }
         });
         const project = yield projectService.findById({ id: req.project.id });
         if (typeof project.logo === 'string') {

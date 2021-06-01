@@ -1,16 +1,13 @@
 /**
  * プロジェクトルーター
  */
+import * as chevre from '@chevre/api-nodejs-client';
 import * as express from 'express';
-
-import * as cinerinoapi from '../cinerinoapi';
 
 import accountsRouter from './accounts';
 import actionsRouter from './actions';
 import homeRouter from './home';
 import transactionsRouter from './transactions';
-
-// const API_ENDPOINT = <string>process.env.API_ENDPOINT;
 
 const projectsRouter = express.Router();
 
@@ -18,9 +15,8 @@ projectsRouter.all(
     '/:id/*',
     async (req, _, next) => {
         req.project = {
-            typeOf: cinerinoapi.factory.chevre.organizationType.Project,
+            typeOf: chevre.factory.organizationType.Project,
             id: req.params.id
-            // settings: { id: req.params.id, API_ENDPOINT: API_ENDPOINT }
         };
 
         next();
@@ -33,9 +29,10 @@ projectsRouter.get(
         let logo = 'https://s3-ap-northeast-1.amazonaws.com/cinerino/logos/cinerino.png';
 
         try {
-            const projectService = new cinerinoapi.service.Project({
-                endpoint: <string>process.env.CINERINO_API_ENDPOINT,
-                auth: req.user.authClient
+            const projectService = new chevre.service.Project({
+                endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: '' }
             });
             const project = await projectService.findById({ id: req.project.id });
 
