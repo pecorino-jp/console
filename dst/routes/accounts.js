@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 口座ルーター
  */
-const chevreapi = require("@chevre/api-nodejs-client");
+const sdk_1 = require("@cinerino/sdk");
 const createDebug = require("debug");
 const express = require("express");
 const http_status_1 = require("http-status");
@@ -24,7 +24,7 @@ const accountsRouter = express.Router();
  */
 accountsRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const accountService = new chevreapi.service.Account({
+        const accountService = new sdk_1.chevre.service.Account({
             endpoint: process.env.CHEVRE_API_ENDPOINT,
             auth: req.user.authClient,
             project: { id: req.project.id }
@@ -32,7 +32,7 @@ accountsRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         const searchConditions = {
             limit: req.query.limit,
             page: req.query.page,
-            sort: { openDate: chevreapi.factory.sortType.Descending },
+            sort: { openDate: sdk_1.chevre.factory.sortType.Descending },
             project: { id: { $eq: req.project.id } },
             accountType: (typeof req.query.accountType === 'string' && req.query.accountType.length > 0)
                 ? req.query.accountType
@@ -67,32 +67,18 @@ accountsRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             });
         }
         else {
-            const categoryCodeService = new chevreapi.service.CategoryCode({
+            const categoryCodeService = new sdk_1.chevre.service.CategoryCode({
                 endpoint: process.env.CHEVRE_API_ENDPOINT,
                 auth: req.user.authClient,
                 project: { id: req.project.id }
             });
             const searchAccountTypesResult = yield categoryCodeService.search({
                 project: { id: { $eq: req.project.id } },
-                inCodeSet: { identifier: { $eq: chevreapi.factory.categoryCode.CategorySetIdentifier.AccountType } }
-            });
-            const productService = new chevreapi.service.Product({
-                endpoint: process.env.CHEVRE_API_ENDPOINT,
-                auth: req.user.authClient,
-                project: { id: req.project.id }
-            });
-            const searchPaymentCardsResult = yield productService.search({
-                project: { id: { $eq: req.project.id } },
-                typeOf: {
-                    $in: [
-                        chevreapi.factory.product.ProductType.PaymentCard
-                    ]
-                }
+                inCodeSet: { identifier: { $eq: sdk_1.chevre.factory.categoryCode.CategorySetIdentifier.CurrencyType } }
             });
             res.render('accounts/index', {
                 query: req.query,
-                accountTypes: searchAccountTypesResult.data,
-                paymentCards: searchPaymentCardsResult.data
+                accountTypes: searchAccountTypesResult.data
             });
         }
     }
@@ -106,7 +92,7 @@ accountsRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 accountsRouter.all('/:accountNumber', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let message;
-        const accountService = new chevreapi.service.Account({
+        const accountService = new sdk_1.chevre.service.Account({
             endpoint: process.env.CHEVRE_API_ENDPOINT,
             auth: req.user.authClient,
             project: { id: req.project.id }
@@ -117,7 +103,7 @@ accountsRouter.all('/:accountNumber', (req, res, next) => __awaiter(void 0, void
             accountNumbers: [req.params.accountNumber]
         });
         if (data.length < 1) {
-            throw new chevreapi.factory.errors.NotFound('Account');
+            throw new sdk_1.chevre.factory.errors.NotFound('Account');
         }
         const account = data[0];
         if (req.method === 'DELETE') {
@@ -153,7 +139,7 @@ accountsRouter.all('/:accountNumber', (req, res, next) => __awaiter(void 0, void
  */
 accountsRouter.get('/:accountNumber/actions/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const accountService = new chevreapi.service.Account({
+        const accountService = new sdk_1.chevre.service.Account({
             endpoint: process.env.CHEVRE_API_ENDPOINT,
             auth: req.user.authClient,
             project: { id: req.project.id }
@@ -161,7 +147,7 @@ accountsRouter.get('/:accountNumber/actions/moneyTransfer', (req, res, next) => 
         const searchActionsResult = yield accountService.searchMoneyTransferActions({
             limit: req.query.limit,
             page: req.query.page,
-            sort: { startDate: chevreapi.factory.sortType.Descending },
+            sort: { startDate: sdk_1.chevre.factory.sortType.Descending },
             project: { id: { $eq: req.project.id } },
             accountNumber: req.params.accountNumber,
             startDate: {

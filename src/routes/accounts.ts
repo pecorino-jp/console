@@ -1,7 +1,7 @@
 /**
  * 口座ルーター
  */
-import * as chevreapi from '@chevre/api-nodejs-client';
+import { chevre as chevreapi } from '@cinerino/sdk';
 import * as createDebug from 'debug';
 import * as express from 'express';
 import { NO_CONTENT } from 'http-status';
@@ -66,27 +66,12 @@ accountsRouter.get(
                 });
                 const searchAccountTypesResult = await categoryCodeService.search({
                     project: { id: { $eq: req.project.id } },
-                    inCodeSet: { identifier: { $eq: chevreapi.factory.categoryCode.CategorySetIdentifier.AccountType } }
-                });
-
-                const productService = new chevreapi.service.Product({
-                    endpoint: <string>process.env.CHEVRE_API_ENDPOINT,
-                    auth: req.user.authClient,
-                    project: { id: req.project.id }
-                });
-                const searchPaymentCardsResult = await productService.search({
-                    project: { id: { $eq: req.project.id } },
-                    typeOf: {
-                        $in: [
-                            chevreapi.factory.product.ProductType.PaymentCard
-                        ]
-                    }
+                    inCodeSet: { identifier: { $eq: chevreapi.factory.categoryCode.CategorySetIdentifier.CurrencyType } }
                 });
 
                 res.render('accounts/index', {
                     query: req.query,
-                    accountTypes: searchAccountTypesResult.data,
-                    paymentCards: searchPaymentCardsResult.data
+                    accountTypes: searchAccountTypesResult.data
                 });
             }
         } catch (error) {

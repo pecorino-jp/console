@@ -46,21 +46,6 @@
                             <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="typeOf">口座種別</label>
-                                        <select class="form-control form-control-sm" id="typeOf" name="typeOf">
-                                            <option value="">---</option>
-                                            <% paymentCards.forEach((paymentCard) => { %>
-                                            <option value="<%= paymentCard.serviceOutput.typeOf %>"
-                                                <% if (query.typeOf === paymentCard.serviceOutput.typeOf) { %>
-                                                selected<% } %>>
-                                                <%= paymentCard.serviceOutput.typeOf %> <%= paymentCard.name.ja %>
-                                            </option>
-                                            <% }) %>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
                                         <label for="accountType">通貨</label>
                                         <select class="form-control form-control-sm" id="accountType"
                                             name="accountType">
@@ -111,7 +96,6 @@
                             <table id="accounts-table" class="table table-sm table-hover dataTable">
                                 <thead>
                                     <tr>
-                                        <th>口座種別</th>
                                         <th>通貨</th>
                                         <th>ステータス</th>
                                         <th>口座番号</th>

@@ -1,4 +1,4 @@
-import * as chevreapi from '@chevre/api-nodejs-client';
+import { auth } from '@cinerino/sdk';
 import * as createDebug from 'debug';
 import * as jwt from 'jsonwebtoken';
 
@@ -28,7 +28,7 @@ export default class User {
     public host: string;
     public session: Express.Session;
     public state: string;
-    public authClient: chevreapi.auth.OAuth2;
+    public authClient: auth.OAuth2;
     public profile: IProfile;
 
     constructor(configurations: IConfigurations) {
@@ -36,7 +36,7 @@ export default class User {
         this.session = configurations.session;
         this.state = configurations.state;
 
-        this.authClient = new chevreapi.auth.OAuth2({
+        this.authClient = new auth.OAuth2({
             domain: <string>process.env.API_AUTHORIZE_SERVER_DOMAIN,
             clientId: <string>process.env.API_CLIENT_ID,
             clientSecret: <string>process.env.API_CLIENT_SECRET,

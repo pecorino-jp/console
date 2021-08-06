@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 取引ルーター
  */
-const chevreapi = require("@chevre/api-nodejs-client");
+const sdk_1 = require("@cinerino/sdk");
 const createDebug = require("debug");
 const express = require("express");
 const moment = require("moment");
@@ -42,24 +42,24 @@ transactionsRouter.all('/start', (req, res, next) => __awaiter(void 0, void 0, v
             try {
                 let transaction;
                 switch (req.body.transactionType) {
-                    case chevreapi.factory.account.transactionType.Deposit:
-                        const depositService = new chevreapi.service.accountTransaction.Deposit({
+                    case sdk_1.chevre.factory.account.transactionType.Deposit:
+                        const depositService = new sdk_1.chevre.service.accountTransaction.Deposit({
                             endpoint: process.env.CHEVRE_API_ENDPOINT,
                             auth: req.user.authClient,
                             project: { id: req.project.id }
                         });
                         transaction = yield depositService.start(createStartParams(req));
                         break;
-                    case chevreapi.factory.account.transactionType.Transfer:
-                        const transferService = new chevreapi.service.accountTransaction.Transfer({
+                    case sdk_1.chevre.factory.account.transactionType.Transfer:
+                        const transferService = new sdk_1.chevre.service.accountTransaction.Transfer({
                             endpoint: process.env.CHEVRE_API_ENDPOINT,
                             auth: req.user.authClient,
                             project: { id: req.project.id }
                         });
                         transaction = yield transferService.start(createStartParams(req));
                         break;
-                    case chevreapi.factory.account.transactionType.Withdraw:
-                        const withdrawService = new chevreapi.service.accountTransaction.Withdraw({
+                    case sdk_1.chevre.factory.account.transactionType.Withdraw:
+                        const withdrawService = new sdk_1.chevre.service.accountTransaction.Withdraw({
                             endpoint: process.env.CHEVRE_API_ENDPOINT,
                             auth: req.user.authClient,
                             project: { id: req.project.id }
@@ -97,29 +97,29 @@ transactionsRouter.all('/:transactionId/confirm', (req, res, next) => __awaiter(
         let toAccount;
         const transaction = req.session[`transaction:${req.params.transactionId}`];
         if (transaction === undefined) {
-            throw new chevreapi.factory.errors.NotFound('Transaction in session');
+            throw new sdk_1.chevre.factory.errors.NotFound('Transaction in session');
         }
         if (req.method === 'POST') {
             // 確定
             switch (transaction.typeOf) {
-                case chevreapi.factory.account.transactionType.Deposit:
-                    const depositService = new chevreapi.service.accountTransaction.Deposit({
+                case sdk_1.chevre.factory.account.transactionType.Deposit:
+                    const depositService = new sdk_1.chevre.service.accountTransaction.Deposit({
                         endpoint: process.env.CHEVRE_API_ENDPOINT,
                         auth: req.user.authClient,
                         project: { id: req.project.id }
                     });
                     yield depositService.confirm(transaction);
                     break;
-                case chevreapi.factory.account.transactionType.Transfer:
-                    const transferService = new chevreapi.service.accountTransaction.Transfer({
+                case sdk_1.chevre.factory.account.transactionType.Transfer:
+                    const transferService = new sdk_1.chevre.service.accountTransaction.Transfer({
                         endpoint: process.env.CHEVRE_API_ENDPOINT,
                         auth: req.user.authClient,
                         project: { id: req.project.id }
                     });
                     yield transferService.confirm(transaction);
                     break;
-                case chevreapi.factory.account.transactionType.Withdraw:
-                    const withdrawService = new chevreapi.service.accountTransaction.Withdraw({
+                case sdk_1.chevre.factory.account.transactionType.Withdraw:
+                    const withdrawService = new sdk_1.chevre.service.accountTransaction.Withdraw({
                         endpoint: process.env.CHEVRE_API_ENDPOINT,
                         auth: req.user.authClient,
                         project: { id: req.project.id }
@@ -140,7 +140,7 @@ transactionsRouter.all('/:transactionId/confirm', (req, res, next) => __awaiter(
         }
         else {
             // 転送元、転送先口座情報を検索
-            const accountService = new chevreapi.service.Account({
+            const accountService = new sdk_1.chevre.service.Account({
                 endpoint: process.env.CHEVRE_API_ENDPOINT,
                 auth: req.user.authClient,
                 project: { id: req.project.id }
@@ -182,12 +182,12 @@ function createStartParams(req) {
         .add(1, 'minutes')
         .toDate();
     const agent = {
-        typeOf: chevreapi.factory.personType.Person,
+        typeOf: sdk_1.chevre.factory.personType.Person,
         id: req.user.profile.sub,
         name: req.body.fromName
     };
     const recipient = {
-        typeOf: chevreapi.factory.personType.Person,
+        typeOf: sdk_1.chevre.factory.personType.Person,
         id: '',
         name: req.body.recipientName
     };
@@ -195,10 +195,10 @@ function createStartParams(req) {
     const description = req.body.description;
     let startParams;
     switch (req.body.transactionType) {
-        case chevreapi.factory.account.transactionType.Deposit:
+        case sdk_1.chevre.factory.account.transactionType.Deposit:
             startParams = {
                 project: req.project,
-                typeOf: chevreapi.factory.account.transactionType.Deposit,
+                typeOf: sdk_1.chevre.factory.account.transactionType.Deposit,
                 expires,
                 agent,
                 recipient,
@@ -211,10 +211,10 @@ function createStartParams(req) {
                 }
             };
             break;
-        case chevreapi.factory.account.transactionType.Transfer:
+        case sdk_1.chevre.factory.account.transactionType.Transfer:
             startParams = {
                 project: req.project,
-                typeOf: chevreapi.factory.account.transactionType.Transfer,
+                typeOf: sdk_1.chevre.factory.account.transactionType.Transfer,
                 expires,
                 agent,
                 recipient,
@@ -230,10 +230,10 @@ function createStartParams(req) {
                 }
             };
             break;
-        case chevreapi.factory.account.transactionType.Withdraw:
+        case sdk_1.chevre.factory.account.transactionType.Withdraw:
             startParams = {
                 project: req.project,
-                typeOf: chevreapi.factory.account.transactionType.Withdraw,
+                typeOf: sdk_1.chevre.factory.account.transactionType.Withdraw,
                 expires,
                 agent,
                 recipient,

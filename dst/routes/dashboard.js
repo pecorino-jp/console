@@ -12,13 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * ダッシュボードルーター
  */
-const chevre = require("@chevre/api-nodejs-client");
+const sdk_1 = require("@cinerino/sdk");
 const express = require("express");
 const dashboardRouter = express.Router();
 dashboardRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // 管理プロジェクト検索
-        const meService = new chevre.service.Me({
+        const meService = new sdk_1.chevre.service.Me({
             endpoint: process.env.CHEVRE_API_ENDPOINT,
             auth: req.user.authClient,
             project: { id: '' }
