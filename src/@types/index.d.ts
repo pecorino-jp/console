@@ -2,7 +2,7 @@
  * middlewares/authenticationにて、expressのrequestオブジェクトにAPIユーザー情報を追加している。
  * ユーザーの型をここで定義しています。
  */
-import * as chevreapi from '@chevre/api-nodejs-client';
+import { chevre } from '@cinerino/sdk';
 
 import User from '../user';
 declare global {
@@ -10,7 +10,7 @@ declare global {
         // tslint:disable-next-line:interface-name
         export interface Request {
             user: User;
-            project: chevreapi.factory.project.IProject;
+            project: chevre.factory.project.IProject;
         }
     }
 }

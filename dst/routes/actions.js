@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * アクションルーター
  */
-const chevreapi = require("@chevre/api-nodejs-client");
+const sdk_1 = require("@cinerino/sdk");
 const createDebug = require("debug");
 const express = require("express");
 const debug = createDebug('pecorino-console:router');
@@ -23,7 +23,7 @@ const actionsRouter = express.Router();
 actionsRouter.get('/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d;
     try {
-        const actionService = new chevreapi.service.AccountAction({
+        const actionService = new sdk_1.chevre.service.AccountAction({
             endpoint: process.env.CHEVRE_API_ENDPOINT,
             auth: req.user.authClient,
             project: { id: req.project.id }
@@ -34,7 +34,7 @@ actionsRouter.get('/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0
         const searchConditions = {
             limit: req.query.limit,
             page: req.query.page,
-            sort: { startDate: chevreapi.factory.sortType.Descending },
+            sort: { startDate: sdk_1.chevre.factory.sortType.Descending },
             project: { id: { $eq: req.project.id } },
             actionStatus: {
                 $in: (typeof actionStatusEq === 'string' && actionStatusEq.length > 0)
@@ -82,32 +82,18 @@ actionsRouter.get('/moneyTransfer', (req, res, next) => __awaiter(void 0, void 0
             });
         }
         else {
-            const categoryCodeService = new chevreapi.service.CategoryCode({
+            const categoryCodeService = new sdk_1.chevre.service.CategoryCode({
                 endpoint: process.env.CHEVRE_API_ENDPOINT,
                 auth: req.user.authClient,
                 project: { id: req.project.id }
             });
             const searchAccountTypesResult = yield categoryCodeService.search({
                 project: { id: { $eq: req.project.id } },
-                inCodeSet: { identifier: { $eq: chevreapi.factory.categoryCode.CategorySetIdentifier.AccountType } }
-            });
-            const productService = new chevreapi.service.Product({
-                endpoint: process.env.CHEVRE_API_ENDPOINT,
-                auth: req.user.authClient,
-                project: { id: req.project.id }
-            });
-            const searchPaymentCardsResult = yield productService.search({
-                project: { id: { $eq: req.project.id } },
-                typeOf: {
-                    $in: [
-                        chevreapi.factory.product.ProductType.PaymentCard
-                    ]
-                }
+                inCodeSet: { identifier: { $eq: sdk_1.chevre.factory.categoryCode.CategorySetIdentifier.CurrencyType } }
             });
             res.render('actions/moneyTransfer/index', {
                 query: req.query,
-                accountTypes: searchAccountTypesResult.data,
-                paymentCards: searchPaymentCardsResult.data
+                accountTypes: searchAccountTypesResult.data
             });
         }
     }

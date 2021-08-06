@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * プロジェクトルーター
  */
-const chevre = require("@chevre/api-nodejs-client");
+const sdk_1 = require("@cinerino/sdk");
 const express = require("express");
 const accounts_1 = require("./accounts");
 const actions_1 = require("./actions");
@@ -21,7 +21,7 @@ const transactions_1 = require("./transactions");
 const projectsRouter = express.Router();
 projectsRouter.all('/:id/*', (req, _, next) => __awaiter(void 0, void 0, void 0, function* () {
     req.project = {
-        typeOf: chevre.factory.organizationType.Project,
+        typeOf: sdk_1.chevre.factory.organizationType.Project,
         id: req.params.id
     };
     next();
@@ -29,7 +29,7 @@ projectsRouter.all('/:id/*', (req, _, next) => __awaiter(void 0, void 0, void 0,
 projectsRouter.get('/:id/logo', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let logo = 'https://s3-ap-northeast-1.amazonaws.com/cinerino/logos/cinerino.png';
     try {
-        const projectService = new chevre.service.Project({
+        const projectService = new sdk_1.chevre.service.Project({
             endpoint: process.env.CHEVRE_API_ENDPOINT,
             auth: req.user.authClient,
             project: { id: '' }
