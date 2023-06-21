@@ -11,7 +11,7 @@
   "config": {},
   "dependencies": {
     "@cinerino/sdk": "3.16.2",
-    "@motionpicture/express-middleware": "0.1.1",
+    "@motionpicture/express-middleware": "1.1.0",
     "admin-lte": "3.0.1",
     "body-parser": "^1.19.0",
     "connect-redis": "^3.4.2",
@@ -23,7 +23,7 @@
     "express-flash": "0.0.2",
     "express-session": "^1.17.0",
     "http-status": "^1.4.2",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "moment": "^2.24.0",
     "redis": "^2.8.0",
     "request": "^2.88.2",
